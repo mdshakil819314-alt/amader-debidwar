@@ -24,7 +24,7 @@
     --bg-soft:#F3F7F5;
     --ink:#16211C;
     --muted:#6B7A73;
-    --card-radius:16px;
+    --card-radius:22px;
     --shadow:0 2px 6px rgba(15,50,35,.08), 0 1px 2px rgba(15,50,35,.06);
     --shadow-lg:0 10px 24px rgba(15,50,35,.14);
   }
@@ -74,13 +74,35 @@
     color:#fff;
     padding:26px 18px 34px;
     text-align:center;
+    border-radius:0 0 28px 28px;
   }
   .hero h1{
     font-family:'Tiro Bangla',serif;
     font-weight:700;
-    font-size:1.7rem;
-    margin:0 0 8px;
+    font-size:1.35rem;
+    line-height:1.5;
+    margin:0 auto 16px;
+    max-width:480px;
   }
+  .hero .trust-lines{
+    max-width:480px;
+    margin:0 auto 18px;
+    display:flex;
+    flex-direction:column;
+    gap:10px;
+  }
+  .hero .trust-lines .trust-line{
+    display:flex;
+    align-items:flex-start;
+    gap:8px;
+    background:rgba(255,255,255,.12);
+    border-radius:10px;
+    padding:10px 12px;
+    text-align:left;
+    font-size:.82rem;
+    line-height:1.6;
+  }
+  .hero .trust-lines .trust-line .ic{font-size:1rem;flex:0 0 auto;}
   .hero p{
     margin:0 auto 18px;
     max-width:420px;
@@ -150,13 +172,13 @@
     line-height:1;
     width:92px;height:110px;
     flex:0 0 auto;
-    border-radius:12px;
+    border-radius:16px;
     background:var(--bg-soft);
     display:flex;align-items:center;justify-content:center;
     overflow:hidden;
   }
   .slide .slide-emoji img{
-    width:100%;height:100%;object-fit:contain;border-radius:12px;display:block;
+    width:100%;height:100%;object-fit:contain;border-radius:16px;display:block;
   }
   .slide .slide-body{flex:1;}
   .slide .slide-tag{
@@ -323,13 +345,13 @@
     font-size:3.4rem;
     display:flex;align-items:center;justify-content:center;
     background:var(--bg-soft);
-    border-radius:14px;
+    border-radius:18px;
     margin-bottom:12px;
     position:relative;
     overflow:hidden;
   }
   .card .thumb img{
-    width:100%;height:140px;object-fit:cover;border-radius:14px;display:block;
+    width:100%;height:140px;object-fit:cover;border-radius:18px;display:block;
   }
   .card .discount-badge{
     position:absolute;top:8px;left:8px;
@@ -343,7 +365,7 @@
   }
   .card .mini-thumb{
     width:38px;height:38px;
-    border-radius:8px;
+    border-radius:10px;
     overflow:hidden;
     border:2px solid transparent;
     padding:0;background:var(--bg-soft);
@@ -372,7 +394,7 @@
     display:none;
     margin-top:6px;
     background:var(--bg-soft);
-    border-radius:8px;
+    border-radius:12px;
     padding:8px 10px;
     font-size:.78rem;
     line-height:1.7;
@@ -391,7 +413,7 @@
   .card .order-actions a{
     flex:1;
     display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;
-    border-radius:11px;
+    border-radius:14px;
     padding:10px 0 9px;
     font-weight:700;
     font-size:.76rem;
@@ -411,6 +433,7 @@
     background:var(--primary-dark);
     color:#fff;
     padding:30px 20px 22px;
+    border-radius:28px 28px 0 0;
   }
   footer .f-brand{
     font-family:'Tiro Bangla',serif;
@@ -502,8 +525,11 @@
 </header>
 
 <section class="hero">
-  <h1>এক জায়গাতেই দেবিদ্বারের সব দোকান</h1>
-  <p>কাপড়, মুদি, সবজি, কসমেটিক — পছন্দের দোকান থেকে সরাসরি অর্ডার করুন। ক্যাশ অন ডেলিভারি বা বিকাশ।</p>
+  <h1>আপনাদের বিশ্বাস আর ভালোবাসা, আগামী পথচলায় আমাদের অনুপ্রেরণা</h1>
+  <div class="trust-lines">
+    <div class="trust-line"><span class="ic">🤲</span><span>আমরা জেনে-শুনে যদি আপনাদের কোনো খারাপ প্রোডাক্ট দিয়ে থাকি, তাহলে আল্লাহর কাঠগড়ায় আমাদের এর জবাবদিহিতা করতে হবে।</span></div>
+    <div class="trust-line"><span class="ic">✅</span><span>ডেলিভারি ম্যান আপনার কাছে পৌঁছানোর পর যদি প্রোডাক্ট পছন্দ না হয়, অবশ্যই আপনার টাকা আপনি ফেরত পাবেন।</span></div>
+  </div>
   <div class="search-bar">
     <input id="searchInput" type="text" placeholder="প্রোডাক্ট বা দোকান খুঁজুন...">
     <div class="icon">🔍</div>
@@ -611,12 +637,13 @@
   ফাঁকা রাখলে emoji দেখাবে।
 */
 const CATEGORIES = [
-  { key:"clothes",       label:"কাপড়",           emoji:"👗", image:"https://raw.githubusercontent.com/mdshakil819314-alt/amader-debidwar/main/images/panjabi1.jpg" },
+  { key:"panjabi",       label:"পাঞ্জাবি",         emoji:"👘", image:"https://raw.githubusercontent.com/mdshakil819314-alt/amader-debidwar/main/images/panjabi1.jpg" },
+  { key:"threepiece",    label:"থ্রি-পিস",        emoji:"👚", image:"" },
+  { key:"saree",         label:"শাড়ি",           emoji:"🥻", image:"" },
   { key:"grocery",       label:"মুদি দোকান",      emoji:"🛒", image:"" },
   { key:"vegetable",     label:"সবজি",            emoji:"🥬", image:"" },
   { key:"cosmetic",      label:"কসমেটিক",        emoji:"💄", image:"" },
   { key:"women-fashion", label:"মহিলাদের ফ্যাশন", emoji:"👗", image:"" },
-  { key:"threepiece",    label:"থ্রি-পিস",        emoji:"👚", image:"" },
   { key:"hijab",         label:"হিজাব",           emoji:"🧕", image:"" },
   { key:"orna",          label:"ওড়না",           emoji:"🧣", image:"" },
   { key:"churi",         label:"চুড়ি",           emoji:"💍", image:"" },

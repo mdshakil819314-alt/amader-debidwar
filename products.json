@@ -1,11 +1,23 @@
 [
   { "id":1, "name":"পাঞ্জাবি (সুতি, সাদা)", "category":"panjabi", "shop":"আমাদের শপ", "price":850, "originalPrice":1100, "stock":15, "deliveryFee":60, "images":["https://raw.githubusercontent.com/mdshakil819314-alt/amader-debidwar/main/images/panjabi1.jpg","https://raw.githubusercontent.com/mdshakil819314-alt/amader-debidwar/main/images/panjabi1.jpg","https://raw.githubusercontent.com/mdshakil819314-alt/amader-debidwar/main/images/panjabi1.jpg"], "emoji":"👘" },
+  { "id":18, "name":"পাঞ্জাবি (এমব্রয়ডারি, নীল)", "category":"panjabi", "shop":"আমাদের শপ", "price":950, "originalPrice":1150, "stock":12, "deliveryFee":60, "image":"", "emoji":"👘" },
+  { "id":19, "name":"পাঞ্জাবি (সিল্ক, কালো)", "category":"panjabi", "shop":"আমাদের শপ", "price":1200, "originalPrice":null, "stock":9, "deliveryFee":60, "image":"", "emoji":"👘" },
+  { "id":20, "name":"পাঞ্জাবি (লিনেন, অফ-হোয়াইট)", "category":"panjabi", "shop":"আমাদের শপ", "price":780, "originalPrice":null, "stock":14, "deliveryFee":60, "image":"", "emoji":"👘" },
 
   { "id":2, "name":"মেয়েদের থ্রি-পিস", "category":"threepiece", "shop":"আমাদের শপ", "price":1200, "originalPrice":null, "stock":10, "deliveryFee":60, "image":"https://raw.githubusercontent.com/mdshakil819314-alt/amader-debidwar/main/images/thiripis1.jpg", "emoji":"👚" },
+  { "id":21, "name":"থ্রি-পিস (জর্জেট প্রিন্ট)", "category":"threepiece", "shop":"আমাদের শপ", "price":1450, "originalPrice":1650, "stock":8, "deliveryFee":60, "image":"", "emoji":"👚" },
+  { "id":22, "name":"থ্রি-পিস (কটন, এমব্রয়ডারি)", "category":"threepiece", "shop":"আমাদের শপ", "price":980, "originalPrice":null, "stock":11, "deliveryFee":60, "image":"", "emoji":"👚" },
+  { "id":23, "name":"থ্রি-পিস (লিনেন)", "category":"threepiece", "shop":"আমাদের শপ", "price":1100, "originalPrice":1300, "stock":7, "deliveryFee":60, "image":"", "emoji":"👚" },
 
   { "id":3, "name":"শাড়ি (হাফ সিল্ক)", "category":"saree", "shop":"আমাদের শপ", "price":1650, "originalPrice":1950, "stock":8, "deliveryFee":60, "image":"", "emoji":"🥻" },
+  { "id":24, "name":"শাড়ি (কাতান)", "category":"saree", "shop":"আমাদের শপ", "price":2200, "originalPrice":2500, "stock":5, "deliveryFee":60, "image":"", "emoji":"🥻" },
+  { "id":25, "name":"শাড়ি (জামদানি)", "category":"saree", "shop":"আমাদের শপ", "price":3200, "originalPrice":null, "stock":4, "deliveryFee":60, "image":"", "emoji":"🥻" },
+  { "id":26, "name":"শাড়ি (সুতি, প্রিন্ট)", "category":"saree", "shop":"আমাদের শপ", "price":850, "originalPrice":null, "stock":15, "deliveryFee":60, "image":"", "emoji":"🥻" },
 
   { "id":17, "name":"সাপ্তাহিক বাজার কম্বো প্যাক", "category":"combo", "shop":"আমাদের শপ", "price":1450, "originalPrice":1650, "stock":12, "deliveryFee":0, "description":"৫ কেজি চাল, ১ কেজি আলু, ১ কেজি সয়াবিন তেল, ১ কেজি মসুর ডাল, ১ কেজি চিনি, ১ কেজি মুড়ি", "image":"", "emoji":"📦" },
+  { "id":27, "name":"ঈদ স্পেশাল কম্বো", "category":"combo", "shop":"আমাদের শপ", "price":650, "originalPrice":750, "stock":20, "deliveryFee":0, "description":"৩ কেজি চাল, ১ লিটার সয়াবিন তেল, ১ কেজি চিনি", "image":"", "emoji":"📦" },
+  { "id":28, "name":"বেবি কেয়ার কম্বো", "category":"combo", "shop":"আমাদের শপ", "price":950, "originalPrice":1100, "stock":14, "deliveryFee":0, "description":"ডায়াপার প্যাক, ফিডার, বেবি লোশন", "image":"", "emoji":"📦" },
+  { "id":29, "name":"কসমেটিক কম্বো", "category":"combo", "shop":"আমাদের শপ", "price":550, "originalPrice":650, "stock":18, "deliveryFee":0, "description":"ফেসওয়াশ, বডি লোশন, লিপস্টিক", "image":"", "emoji":"📦" },
 
   { "id":5, "name":"চাল (মিনিকেট, ৫ কেজি)", "category":"grocery", "shop":"আমাদের শপ", "price":340, "originalPrice":null, "stock":30, "deliveryFee":40, "image":"", "emoji":"🌾" },
   { "id":6, "name":"সয়াবিন তেল (৫ লিটার)", "category":"grocery", "shop":"আমাদের শপ", "price":780, "originalPrice":850, "stock":18, "deliveryFee":40, "image":"", "emoji":"🛢️" },
@@ -22,5 +34,58 @@
   { "id":15, "name":"বডি লোশন", "category":"cosmetic", "shop":"আমাদের শপ", "price":260, "originalPrice":null, "stock":12, "deliveryFee":50, "image":"", "emoji":"🧴" },
   { "id":16, "name":"আতর (ছোট শিশি)", "category":"cosmetic", "shop":"আমাদের শপ", "price":150, "originalPrice":null, "stock":19, "deliveryFee":50, "image":"", "emoji":"🌸" },
 
-  { "id":4, "name":"বাচ্চাদের জামা", "category":"baby-dress", "shop":"আমাদের শপ", "price":450, "originalPrice":null, "stock":20, "deliveryFee":50, "image":"", "emoji":"👕" }
+  { "id":33, "name":"কুর্তি (প্রিন্টেড)", "category":"women-fashion", "shop":"আমাদের শপ", "price":750, "originalPrice":900, "stock":15, "deliveryFee":60, "image":"", "emoji":"👗" },
+  { "id":34, "name":"প্যান্ট-কুর্তি সেট", "category":"women-fashion", "shop":"আমাদের শপ", "price":1350, "originalPrice":null, "stock":9, "deliveryFee":60, "image":"", "emoji":"👗" },
+  { "id":35, "name":"লং গাউন", "category":"women-fashion", "shop":"আমাদের শপ", "price":1500, "originalPrice":1800, "stock":6, "deliveryFee":60, "image":"", "emoji":"👗" },
+  { "id":36, "name":"ক্যাজুয়াল টপ", "category":"women-fashion", "shop":"আমাদের শপ", "price":450, "originalPrice":null, "stock":20, "deliveryFee":60, "image":"", "emoji":"👗" },
+
+  { "id":37, "name":"হিজাব (জর্জেট, প্লেইন)", "category":"hijab", "shop":"আমাদের শপ", "price":180, "originalPrice":220, "stock":30, "deliveryFee":40, "image":"", "emoji":"🧕" },
+  { "id":38, "name":"হিজাব (চাইনা সিল্ক)", "category":"hijab", "shop":"আমাদের শপ", "price":250, "originalPrice":null, "stock":22, "deliveryFee":40, "image":"", "emoji":"🧕" },
+  { "id":39, "name":"হিজাব (প্রিন্টেড)", "category":"hijab", "shop":"আমাদের শপ", "price":200, "originalPrice":null, "stock":25, "deliveryFee":40, "image":"", "emoji":"🧕" },
+  { "id":40, "name":"আল-আমিরা হিজাব ক্যাপ", "category":"hijab", "shop":"আমাদের শপ", "price":150, "originalPrice":null, "stock":28, "deliveryFee":40, "image":"", "emoji":"🧕" },
+
+  { "id":41, "name":"ওড়না (কটন, এমব্রয়ডারি)", "category":"orna", "shop":"আমাদের শপ", "price":280, "originalPrice":null, "stock":20, "deliveryFee":40, "image":"", "emoji":"🧣" },
+  { "id":42, "name":"ওড়না (সিল্ক)", "category":"orna", "shop":"আমাদের শপ", "price":450, "originalPrice":500, "stock":14, "deliveryFee":40, "image":"", "emoji":"🧣" },
+  { "id":43, "name":"ওড়না (নেট প্রিন্ট)", "category":"orna", "shop":"আমাদের শপ", "price":320, "originalPrice":null, "stock":18, "deliveryFee":40, "image":"", "emoji":"🧣" },
+  { "id":44, "name":"ওড়না (ভয়েল)", "category":"orna", "shop":"আমাদের শপ", "price":220, "originalPrice":null, "stock":24, "deliveryFee":40, "image":"", "emoji":"🧣" },
+
+  { "id":45, "name":"কাচের চুড়ি (৬ পিস সেট)", "category":"churi", "shop":"আমাদের শপ", "price":150, "originalPrice":null, "stock":35, "deliveryFee":40, "image":"", "emoji":"💍" },
+  { "id":46, "name":"মেটাল চুড়ি সেট", "category":"churi", "shop":"আমাদের শপ", "price":250, "originalPrice":300, "stock":20, "deliveryFee":40, "image":"", "emoji":"💍" },
+  { "id":47, "name":"পুঁতির চুড়ি সেট", "category":"churi", "shop":"আমাদের শপ", "price":180, "originalPrice":null, "stock":25, "deliveryFee":40, "image":"", "emoji":"💍" },
+  { "id":48, "name":"ব্যাংগেল সেট (৪ পিস)", "category":"churi", "shop":"আমাদের শপ", "price":320, "originalPrice":null, "stock":15, "deliveryFee":40, "image":"", "emoji":"💍" },
+
+  { "id":49, "name":"লেডিস হ্যান্ডব্যাগ (লেদার)", "category":"handbag", "shop":"আমাদের শপ", "price":850, "originalPrice":1000, "stock":10, "deliveryFee":60, "image":"", "emoji":"👜" },
+  { "id":50, "name":"স্লিং ব্যাগ", "category":"handbag", "shop":"আমাদের শপ", "price":550, "originalPrice":null, "stock":14, "deliveryFee":60, "image":"", "emoji":"👜" },
+  { "id":51, "name":"পার্টি ক্লাচ", "category":"handbag", "shop":"আমাদের শপ", "price":450, "originalPrice":500, "stock":16, "deliveryFee":60, "image":"", "emoji":"👜" },
+  { "id":52, "name":"টোট ব্যাগ", "category":"handbag", "shop":"আমাদের শপ", "price":650, "originalPrice":null, "stock":12, "deliveryFee":60, "image":"", "emoji":"👜" },
+
+  { "id":53, "name":"বেবি ফিডিং সেট", "category":"kids-products", "shop":"আমাদের শপ", "price":380, "originalPrice":null, "stock":18, "deliveryFee":50, "image":"", "emoji":"🧸" },
+  { "id":54, "name":"কিডস হাইজিন কিট", "category":"kids-products", "shop":"আমাদের শপ", "price":450, "originalPrice":500, "stock":15, "deliveryFee":50, "image":"", "emoji":"🧸" },
+  { "id":55, "name":"বেবি ক্যারিয়ার", "category":"kids-products", "shop":"আমাদের শপ", "price":950, "originalPrice":1100, "stock":8, "deliveryFee":50, "image":"", "emoji":"🧸" },
+  { "id":56, "name":"কিডস কম্ব-ব্রাশ সেট", "category":"kids-products", "shop":"আমাদের শপ", "price":120, "originalPrice":null, "stock":30, "deliveryFee":50, "image":"", "emoji":"🧸" },
+
+  { "id":4, "name":"বাচ্চাদের জামা", "category":"baby-dress", "shop":"আমাদের শপ", "price":450, "originalPrice":null, "stock":20, "deliveryFee":50, "image":"", "emoji":"👕" },
+  { "id":30, "name":"বেবি ড্রেস (ফ্রক, প্রিন্ট)", "category":"baby-dress", "shop":"আমাদের শপ", "price":380, "originalPrice":null, "stock":18, "deliveryFee":50, "image":"", "emoji":"👶" },
+  { "id":31, "name":"বেবি রোম্পার সেট", "category":"baby-dress", "shop":"আমাদের শপ", "price":420, "originalPrice":500, "stock":16, "deliveryFee":50, "image":"", "emoji":"👶" },
+  { "id":32, "name":"বেবি ড্রেস (পার্টি ওয়্যার)", "category":"baby-dress", "shop":"আমাদের শপ", "price":650, "originalPrice":750, "stock":10, "deliveryFee":50, "image":"", "emoji":"👶" },
+
+  { "id":57, "name":"ফিডার বোতল (১২০ মিলি)", "category":"feeder", "shop":"আমাদের শপ", "price":180, "originalPrice":null, "stock":25, "deliveryFee":40, "image":"", "emoji":"🍼" },
+  { "id":58, "name":"ফিডার বোতল (২৫০ মিলি)", "category":"feeder", "shop":"আমাদের শপ", "price":220, "originalPrice":250, "stock":22, "deliveryFee":40, "image":"", "emoji":"🍼" },
+  { "id":59, "name":"সিলিকন নিপল সেট", "category":"feeder", "shop":"আমাদের শপ", "price":90, "originalPrice":null, "stock":30, "deliveryFee":40, "image":"", "emoji":"🍼" },
+  { "id":60, "name":"ফিডার ক্লিনিং ব্রাশ", "category":"feeder", "shop":"আমাদের শপ", "price":60, "originalPrice":null, "stock":35, "deliveryFee":40, "image":"", "emoji":"🍼" },
+
+  { "id":61, "name":"রিমোট কন্ট্রোল গাড়ি", "category":"toys", "shop":"আমাদের শপ", "price":650, "originalPrice":750, "stock":12, "deliveryFee":50, "image":"", "emoji":"🎠" },
+  { "id":62, "name":"স্টাফড টেডি বিয়ার", "category":"toys", "shop":"আমাদের শপ", "price":350, "originalPrice":null, "stock":20, "deliveryFee":50, "image":"", "emoji":"🎠" },
+  { "id":63, "name":"পাজল সেট", "category":"toys", "shop":"আমাদের শপ", "price":220, "originalPrice":null, "stock":25, "deliveryFee":50, "image":"", "emoji":"🎠" },
+  { "id":64, "name":"বেবি র‍্যাটল সেট", "category":"toys", "shop":"আমাদের শপ", "price":150, "originalPrice":null, "stock":28, "deliveryFee":50, "image":"", "emoji":"🎠" },
+
+  { "id":65, "name":"স্কুল ব্যাগ (প্রাইমারি)", "category":"school-bag", "shop":"আমাদের শপ", "price":450, "originalPrice":500, "stock":16, "deliveryFee":50, "image":"", "emoji":"🎒" },
+  { "id":66, "name":"স্কুল ব্যাগ (কার্টুন প্রিন্ট)", "category":"school-bag", "shop":"আমাদের শপ", "price":380, "originalPrice":null, "stock":18, "deliveryFee":50, "image":"", "emoji":"🎒" },
+  { "id":67, "name":"টিফিন বক্স সেট", "category":"school-bag", "shop":"আমাদের শপ", "price":220, "originalPrice":250, "stock":22, "deliveryFee":50, "image":"", "emoji":"🎒" },
+  { "id":68, "name":"ওয়াটার বোতল (স্কুল)", "category":"school-bag", "shop":"আমাদের শপ", "price":150, "originalPrice":null, "stock":26, "deliveryFee":50, "image":"", "emoji":"🎒" },
+
+  { "id":69, "name":"আতর (উদ)", "category":"perfume-attar", "shop":"আমাদের শপ", "price":350, "originalPrice":400, "stock":20, "deliveryFee":40, "image":"", "emoji":"🌸" },
+  { "id":70, "name":"আতর (গোলাপ)", "category":"perfume-attar", "shop":"আমাদের শপ", "price":250, "originalPrice":null, "stock":24, "deliveryFee":40, "image":"", "emoji":"🌸" },
+  { "id":71, "name":"আতর (মেশক)", "category":"perfume-attar", "shop":"আমাদের শপ", "price":300, "originalPrice":null, "stock":18, "deliveryFee":40, "image":"", "emoji":"🌸" },
+  { "id":72, "name":"বডি স্প্রে (আনসেন্টেড)", "category":"perfume-attar", "shop":"আমাদের শপ", "price":180, "originalPrice":null, "stock":26, "deliveryFee":40, "image":"", "emoji":"🌸" }
 ]

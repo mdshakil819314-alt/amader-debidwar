@@ -194,5 +194,18 @@
     "deliveryFee": 50,
     "image": "",
     "emoji": "🌸"
+  },
+  {
+    "id": 17,
+    "name": "সাপ্তাহিক বাজার কম্বো প্যাক",
+    "category": "combo",
+    "shop": "আমাদের শপ",
+    "price": 1450,
+    "originalPrice": 1650,
+    "stock": 12,
+    "deliveryFee": 0,
+    "description": "৫ কেজি চাল, ১ কেজি আলু, ১ কেজি সয়াবিন তেল, ১ কেজি মসুর ডাল, ১ কেজি চিনি, ১ কেজি মুড়ি",
+    "image": "",
+    "emoji": "📦"
   }
 ]

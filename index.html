@@ -238,6 +238,13 @@
     transform:translateY(-2px) scale(1.05);
   }
   .cat-item span.label{font-size:.74rem;font-weight:600;color:var(--ink);text-align:center;}
+  .cat-item.cat-more .circle{
+    background:#fff;
+    border:1.5px dashed var(--secondary);
+    color:var(--secondary);
+    font-size:1.2rem;
+  }
+  .cat-item.cat-more span.label{color:var(--secondary);}
 
   /* ---------- offers banner ---------- */
   .offer-strip{
@@ -726,6 +733,8 @@ let SHOPS = [
 let activeFilter = "all";
 let activeShop = null;
 let searchTerm = "";
+let catExpanded = false;
+const CAT_PREVIEW_COUNT = 7;
 
 function waLink(product){
   const msg = `আসসালামু আলাইকুম, আমি "${product.name}" (${product.shop}) প্রোডাক্টটি অর্ডার করতে চাই। মূল্য: ৳${product.price}`;
@@ -735,7 +744,10 @@ function waLink(product){
 function buildCatGrid(){
   const wrap = document.getElementById("catGrid");
   wrap.innerHTML = "";
-  CATEGORIES.forEach(cat => {
+  const showAll = catExpanded || CATEGORIES.length <= CAT_PREVIEW_COUNT;
+  const list = showAll ? CATEGORIES : CATEGORIES.slice(0, CAT_PREVIEW_COUNT);
+
+  list.forEach(cat => {
     const btn = document.createElement("button");
     btn.className = "cat-item" + (activeFilter === cat.key ? " active" : "");
     const thumbInner = cat.image ? `<img src="${cat.image}" alt="${cat.label}" loading="lazy">` : cat.emoji;
@@ -747,6 +759,16 @@ function buildCatGrid(){
     };
     wrap.appendChild(btn);
   });
+
+  if(CATEGORIES.length > CAT_PREVIEW_COUNT){
+    const toggleBtn = document.createElement("button");
+    toggleBtn.className = "cat-item cat-more";
+    toggleBtn.innerHTML = showAll
+      ? `<div class="circle">➖</div><span class="label">কম দেখুন</span>`
+      : `<div class="circle">➕</div><span class="label">সব ক্যাটাগরি</span>`;
+    toggleBtn.onclick = () => { catExpanded = !catExpanded; buildCatGrid(); };
+    wrap.appendChild(toggleBtn);
+  }
 }
 
 function buildShopScroll(){
@@ -859,10 +881,11 @@ function render(){
   wrap.innerHTML = "";
 
   const term = searchTerm.trim().toLowerCase();
+  const catLabelMap = Object.fromEntries(CATEGORIES.map(c => [c.key, c.label.toLowerCase()]));
   const matches = p =>
     (activeFilter === "all" || p.category === activeFilter) &&
     (!activeShop || p.shop === activeShop) &&
-    (!term || p.name.toLowerCase().includes(term) || p.shop.toLowerCase().includes(term));
+    (!term || p.name.toLowerCase().includes(term) || p.shop.toLowerCase().includes(term) || (catLabelMap[p.category] || "").includes(term));
 
   const visibleCats = activeFilter === "all" ? CATEGORIES : CATEGORIES.filter(c => c.key === activeFilter);
   let anyProduct = false;

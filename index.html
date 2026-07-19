@@ -328,6 +328,20 @@
     font-size:.7rem;font-weight:800;
     padding:4px 10px;border-radius:7px;
   }
+  .card .mini-thumbs{
+    display:flex;gap:6px;
+    margin-top:8px;
+  }
+  .card .mini-thumb{
+    width:38px;height:38px;
+    border-radius:8px;
+    overflow:hidden;
+    border:2px solid transparent;
+    padding:0;background:var(--bg-soft);
+    flex:0 0 auto;
+  }
+  .card .mini-thumb.active{border-color:var(--primary);}
+  .card .mini-thumb img{width:100%;height:100%;object-fit:cover;display:block;}
   .card .info{display:flex;flex-direction:column;}
   .card .name{font-weight:700;font-size:1.02rem;line-height:1.35;}
   .card .shop{font-size:.8rem;color:var(--secondary);font-weight:600;margin-top:4px;}
@@ -546,7 +560,11 @@
   কোডে হাত দেওয়া লাগবে না, শুধু JSON ফাইল এডিট-কমিট করলেই হবে।
 
   ফিল্ড ব্যাখ্যা (products.json):
-  - image: আসল ছবির লিংক, ফাঁকা রাখলে emoji দেখাবে
+  - image: একটা মাত্র ছবি হলে এখানে লিংক দিন, ফাঁকা রাখলে emoji দেখাবে
+  - images: একাধিক ছবি (সামনে/পিছনে/সাইড) দেখাতে চাইলে এখানে লিংকগুলোর
+    অ্যারে দিন, যেমন: "images": ["link1", "link2", "link3"]
+    (images দিলে সেটাই ব্যবহার হবে, image ফিল্ড আর লাগবে না — কার্ডে প্রথম
+    ছবিটা বড় করে দেখাবে, নিচে ছোট ছবিগুলো থাকবে, ট্যাপ করলে বড় ছবি বদলে যাবে)
   - originalPrice: ছাড়ের আগের দাম, ফাঁকা/null রাখলে ডিসকাউন্ট ব্যাজ দেখাবে না
 */
 
@@ -717,7 +735,16 @@ function buildShopScroll(){
 function productCard(p){
   const hasDiscount = p.originalPrice && p.originalPrice > p.price;
   const discountPct = hasDiscount ? Math.round(100 - (p.price / p.originalPrice) * 100) : 0;
-  const thumbInner = p.image ? `<img src="${p.image}" alt="${p.name}" loading="lazy">` : p.emoji;
+  const images = (p.images && p.images.length) ? p.images : (p.image ? [p.image] : []);
+  const thumbInner = images.length ? `<img src="${images[0]}" alt="${p.name}" loading="lazy">` : p.emoji;
+
+  const miniThumbsHTML = images.length > 1
+    ? `<div class="mini-thumbs">${images.map((img, i) =>
+        `<button class="mini-thumb${i === 0 ? " active" : ""}" data-img="${img}">
+           <img src="${img}" alt="${p.name} ${i+1}" loading="lazy">
+         </button>`
+      ).join("")}</div>`
+    : "";
 
   const card = document.createElement("div");
   card.className = "card";
@@ -736,6 +763,7 @@ function productCard(p){
         </div>
       </div>
     </div>
+    ${miniThumbsHTML}
     <div class="order-actions">
       <a class="call-btn" href="tel:+971542758007">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.91.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
@@ -747,6 +775,18 @@ function productCard(p){
       </a>
     </div>
   `;
+  if(images.length > 1){
+    const mainImg = card.querySelector(".thumb img");
+    card.querySelectorAll(".mini-thumb").forEach(btn => {
+      btn.addEventListener("click", (e) => {
+        e.preventDefault();
+        if(mainImg) mainImg.src = btn.dataset.img;
+        card.querySelectorAll(".mini-thumb").forEach(b => b.classList.remove("active"));
+        btn.classList.add("active");
+      });
+    });
+  }
+
   return card;
 }
 

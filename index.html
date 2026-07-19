@@ -364,8 +364,11 @@
   /* ---------- product grid ---------- */
   .grid{
     display:grid;
-    grid-template-columns:repeat(auto-fill,minmax(165px,1fr));
+    grid-template-columns:repeat(auto-fit,minmax(165px,1fr));
     gap:16px;
+  }
+  .grid.grid-single{
+    grid-template-columns:minmax(165px, 48%);
   }
   .card{
     background:#fff;
@@ -974,7 +977,7 @@ function render(){
     section.appendChild(head);
 
     const grid = document.createElement("div");
-    grid.className = "grid";
+    grid.className = "grid" + (items.length === 1 ? " grid-single" : "");
     items.forEach(p => grid.appendChild(productCard(p)));
     section.appendChild(grid);
 

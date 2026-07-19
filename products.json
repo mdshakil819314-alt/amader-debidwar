@@ -1,5 +1,5 @@
 [
-  { "id":1, "name":"পাঞ্জাবি (সুতি, সাদা)", "category":"clothes", "shop":"রহিম টেইলার্স", "price":850, "originalPrice":1100, "image":"https://raw.githubusercontent.com/mdshakil819314-alt/amader-debidwar/main/images/panjabi1.jpg", "emoji":"👘" },
+  { "id":1, "name":"পাঞ্জাবি (সুতি, সাদা)", "category":"clothes", "shop":"রহিম টেইলার্স", "price":850, "originalPrice":1100, "images":["https://raw.githubusercontent.com/mdshakil819314-alt/amader-debidwar/main/images/panjabi1.jpg","https://raw.githubusercontent.com/mdshakil819314-alt/amader-debidwar/main/images/panjabi1.jpg","https://raw.githubusercontent.com/mdshakil819314-alt/amader-debidwar/main/images/panjabi1.jpg"], "emoji":"👘" },
   { "id":2, "name":"মেয়েদের থ্রি-পিস", "category":"clothes", "shop":"নূর ফ্যাশন", "price":1200, "originalPrice":null, "image":"https://raw.githubusercontent.com/mdshakil819314-alt/amader-debidwar/main/images/thiripis1.jpg", "emoji":"👚" },
   { "id":3, "name":"শাড়ি (হাফ সিল্ক)", "category":"clothes", "shop":"নূর ফ্যাশন", "price":1650, "originalPrice":1950, "image":"", "emoji":"🥻" },
   { "id":4, "name":"বাচ্চাদের জামা", "category":"clothes", "shop":"রহিম টেইলার্স", "price":450, "originalPrice":null, "image":"", "emoji":"👕" },

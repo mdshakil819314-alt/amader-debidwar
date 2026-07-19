@@ -153,6 +153,11 @@
     border-radius:50%;
     background:var(--bg-soft);
     display:flex;align-items:center;justify-content:center;
+    overflow:hidden;
+  }
+  .slide .slide-emoji img{
+    width:52px;height:52px;object-fit:cover;border-radius:50%;display:block;
+  }
   }
   .slide .slide-body{flex:1;}
   .slide .slide-tag{
@@ -221,6 +226,10 @@
     background:var(--bg-soft);
     box-shadow:var(--shadow);
     transition:transform .15s ease, background .15s ease;
+    overflow:hidden;
+  }
+  .cat-item .circle img{
+    width:56px;height:56px;object-fit:cover;border-radius:50%;display:block;
   }
   .cat-item.active .circle{
     background:var(--primary);
@@ -276,6 +285,10 @@
     background:var(--bg-soft);
     display:flex;align-items:center;justify-content:center;
     font-size:1.3rem;
+    overflow:hidden;
+  }
+  .shop-card .circle img{
+    width:44px;height:44px;object-fit:cover;border-radius:50%;display:block;
   }
   .shop-card .name{font-size:.78rem;font-weight:700;line-height:1.3;}
   .shop-card .stars{font-size:.7rem;color:var(--gold);margin-top:4px;font-weight:700;}
@@ -537,11 +550,16 @@
   - originalPrice: ছাড়ের আগের দাম, ফাঁকা/null রাখলে ডিসকাউন্ট ব্যাজ দেখাবে না
 */
 
+/*
+  ক্যাটাগরি ডাটা — সরাসরি কোডে রাখা (খুব কম বদলায় বলে JSON-এ সরানো হয়নি)।
+  ছবি বসাতে চাইলে "image" ফিল্ডে GitHub-এ আপলোড করা ছবির raw লিংক বসান,
+  ফাঁকা রাখলে emoji দেখাবে।
+*/
 const CATEGORIES = [
-  { key:"clothes",   label:"কাপড়",       emoji:"👗" },
-  { key:"grocery",   label:"মুদি দোকান",  emoji:"🛒" },
-  { key:"vegetable", label:"সবজি",        emoji:"🥬" },
-  { key:"cosmetic",  label:"কসমেটিক",    emoji:"💄" },
+  { key:"clothes",   label:"কাপড়",       emoji:"👗", image:"" },
+  { key:"grocery",   label:"মুদি দোকান",  emoji:"🛒", image:"" },
+  { key:"vegetable", label:"সবজি",        emoji:"🥬", image:"" },
+  { key:"cosmetic",  label:"কসমেটিক",    emoji:"💄", image:"" },
 ];
 
 let PRODUCTS = [
@@ -571,10 +589,10 @@ let PRODUCTS = [
   প্রতিটা আইটেমে: emoji, tag, title, sub, price (price ফাঁকা রাখলে দাম দেখাবে না)
 */
 let SLIDER_ITEMS = [
-  { emoji:"🥻", tag:"নতুন এসেছে", title:"ঈদ স্পেশাল শাড়ি কালেকশন", sub:"নূর ফ্যাশন", price:"৳১৬৫০ থেকে" },
-  { emoji:"🛒", tag:"সাপ্তাহিক অফার", title:"মুদি বাজার ১০% ছাড়ে", sub:"করিম স্টোর", price:"" },
-  { emoji:"🥬", tag:"তাজা", title:"আজকের তাজা সবজি", sub:"তাজা সবজি ঘর", price:"" },
-  { emoji:"💄", tag:"জনপ্রিয়", title:"কসমেটিক কম্বো প্যাক", sub:"বিউটি কর্নার", price:"৳৪৫০" },
+  { emoji:"🥻", image:"", tag:"নতুন এসেছে", title:"ঈদ স্পেশাল শাড়ি কালেকশন", sub:"নূর ফ্যাশন", price:"৳১৬৫০ থেকে" },
+  { emoji:"🛒", image:"", tag:"সাপ্তাহিক অফার", title:"মুদি বাজার ১০% ছাড়ে", sub:"করিম স্টোর", price:"" },
+  { emoji:"🥬", image:"", tag:"তাজা", title:"আজকের তাজা সবজি", sub:"তাজা সবজি ঘর", price:"" },
+  { emoji:"💄", image:"", tag:"জনপ্রিয়", title:"কসমেটিক কম্বো প্যাক", sub:"বিউটি কর্নার", price:"৳৪৫০" },
 ];
 
 let sliderIndex = 0;
@@ -598,8 +616,9 @@ function renderSlider(){
     slide.href = sliderWaLink(s);
     slide.target = "_blank";
     slide.rel = "noopener";
+    const thumbInner = s.image ? `<img src="${s.image}" alt="${s.title}" loading="lazy">` : s.emoji;
     slide.innerHTML = `
-      <div class="slide-emoji">${s.emoji}</div>
+      <div class="slide-emoji">${thumbInner}</div>
       <div class="slide-body">
         <span class="slide-tag">${s.tag}</span>
         <div class="slide-title">${s.title}</div>
@@ -636,12 +655,12 @@ function startSliderAutoplay(){
   name অবশ্যই PRODUCTS-এর shop ফিল্ডের সাথে হুবহু মিলতে হবে।
 */
 let SHOPS = [
-  { name:"রহিম টেইলার্স", emoji:"👘", rating:"৪.৮" },
-  { name:"নূর ফ্যাশন", emoji:"🥻", rating:"৪.৭" },
-  { name:"করিম স্টোর", emoji:"🛒", rating:"৪.৯" },
-  { name:"বিসমিল্লাহ স্টোর", emoji:"🌾", rating:"৪.৬" },
-  { name:"তাজা সবজি ঘর", emoji:"🥬", rating:"৪.৮" },
-  { name:"বিউটি কর্নার", emoji:"💄", rating:"৪.৭" },
+  { name:"রহিম টেইলার্স", emoji:"👘", image:"", rating:"৪.৮" },
+  { name:"নূর ফ্যাশন", emoji:"🥻", image:"", rating:"৪.৭" },
+  { name:"করিম স্টোর", emoji:"🛒", image:"", rating:"৪.৯" },
+  { name:"বিসমিল্লাহ স্টোর", emoji:"🌾", image:"", rating:"৪.৬" },
+  { name:"তাজা সবজি ঘর", emoji:"🥬", image:"", rating:"৪.৮" },
+  { name:"বিউটি কর্নার", emoji:"💄", image:"", rating:"৪.৭" },
 ];
 
 let activeFilter = "all";
@@ -659,7 +678,8 @@ function buildCatGrid(){
   CATEGORIES.forEach(cat => {
     const btn = document.createElement("button");
     btn.className = "cat-item" + (activeFilter === cat.key ? " active" : "");
-    btn.innerHTML = `<div class="circle">${cat.emoji}</div><span class="label">${cat.label}</span>`;
+    const thumbInner = cat.image ? `<img src="${cat.image}" alt="${cat.label}" loading="lazy">` : cat.emoji;
+    btn.innerHTML = `<div class="circle">${thumbInner}</div><span class="label">${cat.label}</span>`;
     btn.onclick = () => {
       activeFilter = (activeFilter === cat.key) ? "all" : cat.key;
       render();
@@ -679,8 +699,9 @@ function buildShopScroll(){
   SHOPS.forEach(shop => {
     const card = document.createElement("div");
     card.className = "shop-card" + (activeShop === shop.name ? " active" : "");
+    const thumbInner = shop.image ? `<img src="${shop.image}" alt="${shop.name}" loading="lazy">` : shop.emoji;
     card.innerHTML = `
-      <div class="circle">${shop.emoji}</div>
+      <div class="circle">${thumbInner}</div>
       <div class="name">${shop.name}</div>
       <div class="stars">⭐ ${shop.rating}</div>
     `;

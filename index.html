@@ -347,6 +347,31 @@
   .card .info{display:flex;flex-direction:column;}
   .card .name{font-weight:700;font-size:1.02rem;line-height:1.35;}
   .card .shop{font-size:.8rem;color:var(--secondary);font-weight:600;margin-top:4px;}
+  .card .detail-toggle{
+    margin-top:3px;
+    background:none;border:none;padding:0;
+    display:flex;align-items:center;gap:3px;
+    font-size:.72rem;
+    color:var(--muted);
+    font-weight:600;
+  }
+  .card .detail-toggle .chev{
+    display:inline-block;
+    transition:transform .15s ease;
+    font-size:.65rem;
+  }
+  .card .detail-toggle.open .chev{transform:rotate(180deg);}
+  .card .detail-panel{
+    display:none;
+    margin-top:6px;
+    background:var(--bg-soft);
+    border-radius:8px;
+    padding:8px 10px;
+    font-size:.78rem;
+    line-height:1.7;
+  }
+  .card .detail-panel.open{display:block;}
+  .card .detail-panel .total-line{font-weight:700;color:var(--primary-dark);}
   .card .price-row{margin-top:8px;display:flex;align-items:baseline;gap:8px;flex-wrap:wrap;}
   .card .price{font-family:'Hind Siliguri',sans-serif;font-weight:700;color:var(--red);font-size:1.22rem;}
   .card .price.no-discount{color:var(--primary-dark);}
@@ -568,6 +593,9 @@
     (images দিলে সেটাই ব্যবহার হবে, image ফিল্ড আর লাগবে না — কার্ডে প্রথম
     ছবিটা বড় করে দেখাবে, নিচে ছোট ছবিগুলো থাকবে, ট্যাপ করলে বড় ছবি বদলে যাবে)
   - originalPrice: ছাড়ের আগের দাম, ফাঁকা/null রাখলে ডিসকাউন্ট ব্যাজ দেখাবে না
+  - stock: কত পিস স্টকে আছে (সংখ্যা), না দিলে "বিস্তারিত" বাটনই দেখাবে না
+  - deliveryFee: ডেলিভারি ফি (সংখ্যা), দিলে "বিস্তারিত"-এ দাম+ডেলিভারি যোগ করে
+    সর্বমোট অটোমেটিক দেখাবে; না দিলে বা 0/null রাখলে এই লাইন দেখাবে না
 */
 
 /*
@@ -748,6 +776,16 @@ function productCard(p){
       ).join("")}</div>`
     : "";
 
+  const hasDetails = !!(p.stock || p.deliveryFee);
+  const hasDeliveryFee = !!(p.deliveryFee && p.deliveryFee > 0);
+  const detailToggleHTML = hasDetails
+    ? `<button class="detail-toggle"><span class="chev">▾</span> বিস্তারিত</button>
+       <div class="detail-panel">
+         ${p.stock ? `<div>স্টক: ${p.stock} পিস</div>` : ""}
+         ${hasDeliveryFee ? `<div>ডেলিভারি ফি: ৳${p.deliveryFee}</div><div class="total-line">সর্বমোট: ৳${p.price + p.deliveryFee}</div>` : ""}
+       </div>`
+    : "";
+
   const card = document.createElement("div");
   card.className = "card";
   card.innerHTML = `
@@ -759,6 +797,7 @@ function productCard(p){
       <div class="info">
         <div class="name">${p.name}</div>
         <div class="shop">${p.shop}</div>
+        ${detailToggleHTML}
         <div class="price-row">
           <span class="price${hasDiscount ? "" : " no-discount"}">৳${p.price}</span>
           ${hasDiscount ? `<span class="old-price">৳${p.originalPrice}</span>` : ""}
@@ -777,6 +816,14 @@ function productCard(p){
       </a>
     </div>
   `;
+  if(hasDetails){
+    const toggle = card.querySelector(".detail-toggle");
+    const panel = card.querySelector(".detail-panel");
+    toggle.addEventListener("click", () => {
+      toggle.classList.toggle("open");
+      panel.classList.toggle("open");
+    });
+  }
   if(images.length > 1){
     const mainImg = card.querySelector(".thumb img");
     card.querySelectorAll(".mini-thumb").forEach(btn => {

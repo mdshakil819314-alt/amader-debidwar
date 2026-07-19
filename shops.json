@@ -1,8 +1,8 @@
 [
-  { "name":"রহিম টেইলার্স", "emoji":"👘", "rating":"৪.৮" },
-  { "name":"নূর ফ্যাশন", "emoji":"🥻", "rating":"৪.৭" },
-  { "name":"করিম স্টোর", "emoji":"🛒", "rating":"৪.৯" },
-  { "name":"বিসমিল্লাহ স্টোর", "emoji":"🌾", "rating":"৪.৬" },
-  { "name":"তাজা সবজি ঘর", "emoji":"🥬", "rating":"৪.৮" },
-  { "name":"বিউটি কর্নার", "emoji":"💄", "rating":"৪.৭" }
+  { "name":"রহিম টেইলার্স", "emoji":"👘", "image":"https://raw.githubusercontent.com/mdshakil819314-alt/amader-debidwar/main/images/panjabi1.jpg", "rating":"৪.৮" },
+  { "name":"নূর ফ্যাশন", "emoji":"🥻", "image":"https://raw.githubusercontent.com/mdshakil819314-alt/amader-debidwar/main/images/thiripis1.jpg", "rating":"৪.৭" },
+  { "name":"করিম স্টোর", "emoji":"🛒", "image":"", "rating":"৪.৯" },
+  { "name":"বিসমিল্লাহ স্টোর", "emoji":"🌾", "image":"", "rating":"৪.৬" },
+  { "name":"তাজা সবজি ঘর", "emoji":"🥬", "image":"", "rating":"৪.৮" },
+  { "name":"বিউটি কর্নার", "emoji":"💄", "image":"", "rating":"৪.৭" }
 ]

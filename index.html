@@ -459,6 +459,13 @@
     font-weight:700;
     font-size:.76rem;
     white-space:nowrap;
+    animation:gentle-bounce 2.2s ease-in-out infinite;
+  }
+  .card .order-actions .call-btn{animation-delay:0s;}
+  .card .order-actions .wa-btn{animation-delay:.3s;}
+  @keyframes gentle-bounce{
+    0%, 100%{transform:translateY(0);}
+    50%{transform:translateY(-3px);}
   }
   .card .order-actions a svg{width:19px;height:19px;flex:0 0 auto;}
   .card .order-actions .call-btn{background:#fff;border:1.5px solid var(--secondary);color:var(--secondary);}
@@ -548,6 +555,7 @@
     html{scroll-behavior:auto;}
     .card,.cat-item .circle{transition:none;}
     .install-banner{transition:none;}
+    .card .order-actions a{animation:none;}
   }
 </style>
 </head>

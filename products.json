@@ -1,0 +1,21 @@
+[
+  { "id":1, "name":"পাঞ্জাবি (সুতি, সাদা)", "category":"clothes", "shop":"রহিম টেইলার্স", "price":850, "originalPrice":1100, "image":"", "emoji":"👘" },
+  { "id":2, "name":"মেয়েদের থ্রি-পিস", "category":"clothes", "shop":"নূর ফ্যাশন", "price":1200, "originalPrice":null, "image":"", "emoji":"👚" },
+  { "id":3, "name":"শাড়ি (হাফ সিল্ক)", "category":"clothes", "shop":"নূর ফ্যাশন", "price":1650, "originalPrice":1950, "image":"", "emoji":"🥻" },
+  { "id":4, "name":"বাচ্চাদের জামা", "category":"clothes", "shop":"রহিম টেইলার্স", "price":450, "originalPrice":null, "image":"", "emoji":"👕" },
+
+  { "id":5, "name":"চাল (মিনিকেট, ৫ কেজি)", "category":"grocery", "shop":"করিম স্টোর", "price":340, "originalPrice":null, "image":"", "emoji":"🌾" },
+  { "id":6, "name":"সয়াবিন তেল (৫ লিটার)", "category":"grocery", "shop":"করিম স্টোর", "price":780, "originalPrice":850, "image":"", "emoji":"🛢️" },
+  { "id":7, "name":"চিনি (১ কেজি)", "category":"grocery", "shop":"বিসমিল্লাহ স্টোর", "price":130, "originalPrice":null, "image":"", "emoji":"🍬" },
+  { "id":8, "name":"মসুর ডাল (১ কেজি)", "category":"grocery", "shop":"বিসমিল্লাহ স্টোর", "price":150, "originalPrice":null, "image":"", "emoji":"🫘" },
+
+  { "id":9, "name":"দেশি টমেটো (১ কেজি)", "category":"vegetable", "shop":"তাজা সবজি ঘর", "price":60, "originalPrice":null, "image":"", "emoji":"🍅" },
+  { "id":10, "name":"আলু (১ কেজি)", "category":"vegetable", "shop":"তাজা সবজি ঘর", "price":35, "originalPrice":null, "image":"", "emoji":"🥔" },
+  { "id":11, "name":"কাঁচা মরিচ (২৫০ গ্রাম)", "category":"vegetable", "shop":"তাজা সবজি ঘর", "price":40, "originalPrice":null, "image":"", "emoji":"🌶️" },
+  { "id":12, "name":"লাউ (১ পিস)", "category":"vegetable", "shop":"গ্রামীণ বাজার", "price":50, "originalPrice":null, "image":"", "emoji":"🥒" },
+
+  { "id":13, "name":"ফেসওয়াশ (হারবাল)", "category":"cosmetic", "shop":"বিউটি কর্নার", "price":220, "originalPrice":280, "image":"", "emoji":"🧴" },
+  { "id":14, "name":"লিপস্টিক", "category":"cosmetic", "shop":"বিউটি কর্নার", "price":180, "originalPrice":null, "image":"", "emoji":"💄" },
+  { "id":15, "name":"বডি লোশন", "category":"cosmetic", "shop":"সাজঘর কসমেটিকস", "price":260, "originalPrice":null, "image":"", "emoji":"🧴" },
+  { "id":16, "name":"আতর (ছোট শিশি)", "category":"cosmetic", "shop":"সাজঘর কসমেটিকস", "price":150, "originalPrice":null, "image":"", "emoji":"🌸" }
+]

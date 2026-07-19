@@ -200,6 +200,9 @@
     display:flex;align-items:center;gap:8px;
     margin:0;
   }
+  .section-head h2 img{
+    width:22px;height:22px;object-fit:cover;border-radius:50%;display:block;
+  }
   .section-head .reset{
     font-size:.78rem;
     color:var(--secondary);
@@ -817,7 +820,8 @@ function render(){
 
     const head = document.createElement("div");
     head.className = "section-head";
-    head.innerHTML = `<h2>${cat.emoji} ${cat.label}</h2>`;
+    const headIcon = cat.image ? `<img src="${cat.image}" alt="${cat.label}">` : cat.emoji;
+    head.innerHTML = `<h2>${headIcon} ${cat.label}</h2>`;
     section.appendChild(head);
 
     const grid = document.createElement("div");

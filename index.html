@@ -398,6 +398,11 @@
     background:var(--red);color:#fff;
     font-size:.7rem;font-weight:800;
     padding:4px 10px;border-radius:7px;
+    animation:badge-pulse 1.6s ease-in-out infinite;
+  }
+  @keyframes badge-pulse{
+    0%, 100%{transform:scale(1);}
+    50%{transform:scale(1.1);}
   }
   .card .mini-thumbs{
     display:flex;gap:6px;
@@ -556,6 +561,7 @@
     .card,.cat-item .circle{transition:none;}
     .install-banner{transition:none;}
     .card .order-actions a{animation:none;}
+    .card .discount-badge{animation:none;}
   }
 </style>
 </head>

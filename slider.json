@@ -1,6 +1,34 @@
 [
-  { "emoji":"🥻", "image":"https://raw.githubusercontent.com/mdshakil819314-alt/amader-debidwar/main/images/thiripis1.jpg", "tag":"নতুন এসেছে", "title":"ঈদ স্পেশাল কালেকশন", "sub":"নূর ফ্যাশন", "price":"৳১২০০ থেকে" },
-  { "emoji":"🛒", "image":"", "tag":"সাপ্তাহিক অফার", "title":"মুদি বাজার ১০% ছাড়ে", "sub":"করিম স্টোর", "price":"" },
-  { "emoji":"🥬", "image":"", "tag":"তাজা", "title":"আজকের তাজা সবজি", "sub":"তাজা সবজি ঘর", "price":"" },
-  { "emoji":"👘", "image":"https://raw.githubusercontent.com/mdshakil819314-alt/amader-debidwar/main/images/panjabi1.jpg", "tag":"জনপ্রিয়", "title":"সুতির পাঞ্জাবি ২৩% ছাড়ে", "sub":"রহিম টেইলার্স", "price":"৳৮৫০" }
+  {
+    "emoji": "🥻",
+    "image": "https:\/\/raw.githubusercontent.com\/mdshakil819314-alt\/amader-debidwar\/main\/images\/thiripis1.jpg",
+    "tag": "নতুন এসেছে",
+    "title": "ঈদ স্পেশাল কালেকশন",
+    "sub": "নূর ফ্যাশন",
+    "price": "৳১২০০ থেকে"
+  },
+  {
+    "emoji": "🛒",
+    "image": "",
+    "tag": "সাপ্তাহিক অফার",
+    "title": "মুদি বাজার ১০% ছাড়ে",
+    "sub": "করিম স্টোর",
+    "price": ""
+  },
+  {
+    "emoji": "🥬",
+    "image": "",
+    "tag": "তাজা",
+    "title": "আজকের তাজা সবজি",
+    "sub": "তাজা সবজি ঘর",
+    "price": ""
+  },
+  {
+    "emoji": "👘",
+    "image": "https:\/\/raw.githubusercontent.com\/mdshakil819314-alt\/amader-debidwar\/main\/images\/panjabi1.jpg",
+    "tag": "জনপ্রিয়",
+    "title": "সুতির পাঞ্জাবি ২৩% ছাড়ে",
+    "sub": "ফ্যামিলির শপ",
+    "price": "৳৮৫০"
+  }
 ]

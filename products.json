@@ -30,16 +30,23 @@
   },
   {
     "id": 18,
-    "name": "পাঞ্জাবি (এমব্রয়ডারি, নীল)",
+    "name": "পাঞ্জাবি (এমব্রয়ডার)",
     "category": "panjabi",
     "shop": "ফ্যামিলি শপ",
     "price": 950,
     "originalPrice": 1150,
-    "stock": 12,
+    "stock": 3,
     "deliveryFee": 60,
     "image": "https:\/\/raw.githubusercontent.com\/mdshakil819314-alt\/amader-debidwar\/main\/images\/img_1784571291632_07f602.jpg",
     "emoji": "👘",
-    "sold": 1
+    "sold": 1,
+    "code": "P1",
+    "sizes": [
+      "S"
+    ],
+    "colors": [
+      "সাদা"
+    ]
   },
   {
     "id": 19,

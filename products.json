@@ -49,8 +49,7 @@
   { "id":43, "name":"ওড়না (নেট প্রিন্ট)", "category":"orna", "shop":"ফ্যামিলি শপ", "price":320, "originalPrice":null, "stock":18, "deliveryFee":40, "image":"", "emoji":"🧣" },
   { "id":44, "name":"ওড়না (ভয়েল)", "category":"orna", "shop":"ফ্যামিলি শপ", "price":220, "originalPrice":null, "stock":24, "deliveryFee":40, "image":"", "emoji":"🧣" },
 
-  { "id":45, "name":"কাচের চুড়ি (৬ পিস সেট)", "category":"churi", "shop":"ফ্যামিলি শপ", "price":150, "originalPrice":null, "stock":35, "deliveryFee":40, "image":["https://raw.githubusercontent.com/mdshakil819314-alt/amader-debidwar/main/images/chori1.jpg","https://raw.githubusercontent.com/mdshakil819314-alt/amader-debidwar/main/images/chori2.jpg", "https://raw.githubusercontent.com/mdshakil819314-alt/amader-debidwar/main/images/chori3.jpg "], "emoji":"💍" },
-  { "id":46, "name":"মেটাল চুড়ি সেট", "category":"churi", "shop":"ফ্যামিলি শপ", "price":250, "originalPrice":300, "stock":20, "deliveryFee":40, "image":"", "emoji":"💍" },
+[  { "id":46, "name":"মেটাল চুড়ি সেট", "category":"churi", "shop":"ফ্যামিলি শপ", "price":250, "originalPrice":300, "stock":20, "deliveryFee":40, "image":"", "emoji":"💍" },
   { "id":47, "name":"পুঁতির চুড়ি সেট", "category":"churi", "shop":"ফ্যামিলি শপ", "price":180, "originalPrice":null, "stock":25, "deliveryFee":40, "image":"", "emoji":"💍" },
   { "id":48, "name":"ব্যাংগেল সেট (৪ পিস)", "category":"churi", "shop":"ফ্যামিলি শপ", "price":320, "originalPrice":null, "stock":15, "deliveryFee":40, "image":"", "emoji":"💍" },
 

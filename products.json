@@ -73,7 +73,7 @@
     "category": "threepiece",
     "shop": "ফ্যামিলি শপ",
     "price": 1200,
-    "originalPrice": null,
+    "originalPrice": 1500,
     "stock": 10,
     "deliveryFee": 60,
     "images": [
@@ -82,7 +82,18 @@
       "https:\/\/raw.githubusercontent.com\/mdshakil819314-alt\/amader-debidwar\/main\/images\/img_1784570570895_152286.jpg"
     ],
     "emoji": "👚",
-    "sold": 0
+    "sold": 0,
+    "code": "P11",
+    "sizes": [
+      "S",
+      "XXL",
+      "M"
+    ],
+    "colors": [
+      "সাদা",
+      "খয়েরি",
+      "লাল"
+    ]
   },
   {
     "id": 21,

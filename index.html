@@ -1003,6 +1003,9 @@
     </div>
     <div class="modal-product" id="modalProductInfo"></div>
 
+    <label class="m-label">আপনার নাম *</label>
+    <input type="text" id="ord_name" class="m-input" placeholder="যেমন: করিম উদ্দিন">
+
     <label class="m-label">ইউনিয়ন *</label>
     <input type="text" id="ord_union" class="m-input" placeholder="যেমন: দেবিদ্বার সদর">
 
@@ -1358,6 +1361,7 @@ document.getElementById("locationBtn").addEventListener("click", () => {
 
 function buildOrderMessage(){
   const items = currentOrderItems;
+  const name = document.getElementById("ord_name").value.trim();
   const union = document.getElementById("ord_union").value.trim();
   const ward = document.getElementById("ord_ward").value.trim();
   const phone = document.getElementById("ord_phone").value.trim();
@@ -1365,7 +1369,7 @@ function buildOrderMessage(){
   const address = document.getElementById("ord_address").value.trim();
   const errBox = document.getElementById("ord_error");
 
-  if(!union || !ward || !phone || !village){
+  if(!name || !union || !ward || !phone || !village){
     errBox.textContent = "দয়া করে * চিহ্নিত সবগুলো বক্স পূরণ করুন।";
     return null;
   }
@@ -1392,6 +1396,7 @@ function buildOrderMessage(){
   if(hasAnyDeliveryFee) msg += `ডেলিভারি ফি: ৳${maxDeliveryFee}\n`;
   msg += `সর্বমোট: ৳${total}\n`;
   msg += `---\n`;
+  msg += `নাম: ${name}\n`;
   msg += `ইউনিয়ন: ${union}\n`;
   msg += `ওয়ার্ড: ${ward}\n`;
   msg += `ফোন: ${phone}\n`;

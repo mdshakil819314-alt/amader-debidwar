@@ -37,7 +37,10 @@
     "originalPrice": 1150,
     "stock": 3,
     "deliveryFee": 60,
-    "image": "https:\/\/raw.githubusercontent.com\/mdshakil819314-alt\/amader-debidwar\/main\/images\/img_1784571291632_07f602.jpg",
+    "images": [
+      "https:\/\/raw.githubusercontent.com\/mdshakil819314-alt\/amader-debidwar\/main\/images\/img_1784571291632_07f602.jpg",
+      "https:\/\/raw.githubusercontent.com\/mdshakil819314-alt\/amader-debidwar\/main\/images\/img_1784571424606_6adf39.jpg"
+    ],
     "emoji": "👘",
     "sold": 1,
     "code": "P1",

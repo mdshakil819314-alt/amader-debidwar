@@ -459,6 +459,14 @@
     0%, 100%{transform:scale(1);}
     50%{transform:scale(1.1);}
   }
+  .card .sold-badge{
+    position:absolute;top:8px;right:8px;
+    font-size:.68rem;font-weight:800;
+    padding:4px 9px;border-radius:7px;
+    box-shadow:0 2px 5px rgba(0,0,0,.15);
+  }
+  .card .sold-badge.is-new{background:var(--secondary);color:#fff;}
+  .card .sold-badge.is-sold{background:var(--gold);color:#3A2A00;}
   .card .mini-thumbs{
     display:flex;gap:6px;
     margin-top:8px;
@@ -684,6 +692,14 @@
     font-size:.8rem;font-weight:800;
     padding:5px 12px;border-radius:8px;
   }
+  .pd-sold-badge{
+    position:absolute;top:12px;right:12px;
+    font-size:.78rem;font-weight:800;
+    padding:5px 12px;border-radius:8px;
+    box-shadow:0 2px 5px rgba(0,0,0,.15);
+  }
+  .pd-sold-badge.is-new{background:var(--secondary);color:#fff;}
+  .pd-sold-badge.is-sold{background:var(--gold);color:#3A2A00;}
   .pd-thumbs{display:flex;gap:8px;margin-top:12px;overflow-x:auto;padding-bottom:2px;}
   .pd-thumbs button{
     width:64px;height:64px;flex:0 0 auto;
@@ -1200,9 +1216,15 @@ function openProductDetail(p){
       ).join("")}</div>`
     : "";
 
+  const pdSoldCount = p.sold || 0;
+  const pdSoldBadgeHTML = pdSoldCount > 0
+    ? `<span class="pd-sold-badge is-sold">🔥 ${pdSoldCount} বার অর্ডার</span>`
+    : `<span class="pd-sold-badge is-new">🆕 নতুন</span>`;
+
   document.getElementById("pdBody").innerHTML = `
     <div class="pd-main-img">
       ${hasDiscount ? `<span class="pd-discount-badge">${discountPct}% ছাড়</span>` : ""}
+      ${pdSoldBadgeHTML}
       ${mainInner}
     </div>
     ${thumbsHTML}
@@ -1681,12 +1703,18 @@ function productCard(p){
        </div>`
     : "";
 
+  const soldCount = p.sold || 0;
+  const soldBadgeHTML = soldCount > 0
+    ? `<span class="sold-badge is-sold">🔥 ${soldCount} বার অর্ডার</span>`
+    : `<span class="sold-badge is-new">🆕 নতুন</span>`;
+
   const card = document.createElement("div");
   card.className = "card";
   card.innerHTML = `
     <div class="card-top">
       <div class="thumb">
         ${hasDiscount ? `<span class="discount-badge">${discountPct}% ছাড়</span>` : ""}
+        ${soldBadgeHTML}
         ${thumbInner}
       </div>
       <div class="info">
@@ -1765,6 +1793,7 @@ function render(){
   const catItemsList = [];
   visibleCats.forEach(cat => {
     const items = PRODUCTS.filter(p => p.category === cat.key && matches(p));
+    items.sort((a, b) => (b.sold || 0) - (a.sold || 0));
     if(items.length > 0) catItemsList.push({ cat, items });
   });
 

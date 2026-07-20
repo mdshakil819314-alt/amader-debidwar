@@ -389,6 +389,7 @@
     margin-bottom:12px;
     position:relative;
     overflow:hidden;
+    cursor:pointer;
   }
   .card .thumb img{
     width:100%;height:140px;object-fit:cover;border-radius:18px;display:block;
@@ -560,6 +561,83 @@
     background:none;border:none;color:var(--muted);font-size:1.2rem;
     padding:4px 6px;line-height:1;
   }
+
+  /* ---------- product detail full-screen ---------- */
+  .pd-overlay{
+    display:none;
+    position:fixed;inset:0;
+    background:#fff;
+    z-index:95;
+    overflow-y:auto;
+  }
+  .pd-overlay.open{display:block;}
+  .pd-header{
+    position:sticky;top:0;z-index:2;
+    background:#fff;
+    display:flex;align-items:center;gap:12px;
+    padding:14px 16px;
+    box-shadow:var(--shadow);
+  }
+  .pd-back{
+    width:36px;height:36px;border-radius:50%;
+    background:var(--bg-soft);color:var(--primary-dark);
+    display:flex;align-items:center;justify-content:center;
+    border:none;flex:0 0 auto;
+  }
+  .pd-back svg{width:18px;height:18px;}
+  .pd-header-title{font-family:'Tiro Bangla',serif;font-weight:700;font-size:1.05rem;color:var(--primary-dark);}
+  .pd-body{max-width:640px;margin:0 auto;padding:16px 16px 40px;}
+  .pd-main-img{
+    width:100%;
+    aspect-ratio:1/1;
+    background:var(--bg-soft);
+    border-radius:var(--radius, 18px);
+    display:flex;align-items:center;justify-content:center;
+    font-size:5rem;
+    overflow:hidden;
+    position:relative;
+  }
+  .pd-main-img img{width:100%;height:100%;object-fit:cover;display:block;}
+  .pd-discount-badge{
+    position:absolute;top:12px;left:12px;
+    background:var(--red);color:#fff;
+    font-size:.8rem;font-weight:800;
+    padding:5px 12px;border-radius:8px;
+  }
+  .pd-thumbs{display:flex;gap:8px;margin-top:12px;overflow-x:auto;padding-bottom:2px;}
+  .pd-thumbs button{
+    width:64px;height:64px;flex:0 0 auto;
+    border-radius:12px;overflow:hidden;
+    border:2px solid transparent;padding:0;background:var(--bg-soft);
+  }
+  .pd-thumbs button.active{border-color:var(--primary);}
+  .pd-thumbs img{width:100%;height:100%;object-fit:cover;display:block;}
+  .pd-name{font-family:'Tiro Bangla',serif;font-weight:700;font-size:1.25rem;margin-top:18px;line-height:1.4;}
+  .pd-shop{font-size:.88rem;color:var(--secondary);font-weight:600;margin-top:6px;}
+  .pd-description{font-size:.85rem;color:var(--muted);line-height:1.7;margin-top:8px;}
+  .pd-price-row{display:flex;align-items:baseline;gap:10px;margin-top:14px;}
+  .pd-price{font-family:'Hind Siliguri',sans-serif;font-weight:700;color:var(--red);font-size:1.7rem;}
+  .pd-price.no-discount{color:var(--primary-dark);}
+  .pd-old-price{font-size:1.05rem;color:#9a9284;text-decoration:line-through;font-weight:500;}
+  .pd-extra{
+    background:var(--bg-soft);
+    border-radius:14px;
+    padding:14px 16px;
+    margin-top:16px;
+    font-size:.86rem;
+    line-height:1.8;
+  }
+  .pd-extra .pd-total{font-weight:700;color:var(--primary-dark);}
+  .pd-actions{display:flex;gap:10px;margin-top:22px;}
+  .pd-actions button{
+    flex:1;
+    display:flex;align-items:center;justify-content:center;gap:8px;
+    border-radius:14px;padding:14px 0;
+    font-weight:700;font-size:.92rem;border:none;
+  }
+  .pd-actions .pd-call{background:#fff;border:1.5px solid var(--secondary);color:var(--secondary);}
+  .pd-actions .pd-order{background:var(--red);color:#fff;}
+  .pd-actions svg{width:19px;height:19px;}
 
   /* ---------- order form modal ---------- */
   .modal-overlay{
@@ -743,6 +821,16 @@
   </div>
 </div>
 
+<div class="pd-overlay" id="productDetail">
+  <div class="pd-header">
+    <button class="pd-back" id="pdCloseBtn">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+    </button>
+    <div class="pd-header-title">প্রোডাক্ট ডিটেইলস</div>
+  </div>
+  <div class="pd-body" id="pdBody"></div>
+</div>
+
 <div class="modal-overlay" id="orderModal">
   <div class="modal-card">
     <div class="modal-head">
@@ -796,6 +884,81 @@
 */
 const ORDER_SMS_NUMBER = "+8801872280095";
 let currentOrderProduct = null;
+
+function openProductDetail(p){
+  const hasDiscount = p.originalPrice && p.originalPrice > p.price;
+  const discountPct = hasDiscount ? Math.round(100 - (p.price / p.originalPrice) * 100) : 0;
+  const images = (p.images && p.images.length) ? p.images : (p.image ? [p.image] : []);
+  const mainInner = images.length ? `<img src="${images[0]}" alt="${p.name}">` : p.emoji;
+
+  const hasDeliveryFee = !!(p.deliveryFee && p.deliveryFee > 0);
+  const total = hasDeliveryFee ? p.price + p.deliveryFee : p.price;
+  const hasExtra = !!(p.stock || hasDeliveryFee);
+
+  const thumbsHTML = images.length > 1
+    ? `<div class="pd-thumbs">${images.map((img, i) =>
+        `<button class="${i === 0 ? "active" : ""}" data-img="${img}"><img src="${img}" alt="${p.name} ${i+1}"></button>`
+      ).join("")}</div>`
+    : "";
+
+  document.getElementById("pdBody").innerHTML = `
+    <div class="pd-main-img">
+      ${hasDiscount ? `<span class="pd-discount-badge">${discountPct}% ছাড়</span>` : ""}
+      ${mainInner}
+    </div>
+    ${thumbsHTML}
+    <div class="pd-name">${p.name}</div>
+    <div class="pd-shop">${p.shop}</div>
+    ${p.description ? `<div class="pd-description">${p.description}</div>` : ""}
+    <div class="pd-price-row">
+      <span class="pd-price${hasDiscount ? "" : " no-discount"}">৳${p.price}</span>
+      ${hasDiscount ? `<span class="pd-old-price">৳${p.originalPrice}</span>` : ""}
+    </div>
+    ${hasExtra ? `
+      <div class="pd-extra">
+        ${p.stock ? `<div>স্টক: ${p.stock} পিস</div>` : ""}
+        ${hasDeliveryFee ? `<div>ডেলিভারি ফি: ৳${p.deliveryFee}</div><div class="pd-total">সর্বমোট: ৳${total}</div>` : ""}
+      </div>
+    ` : ""}
+    <div class="pd-actions">
+      <button class="pd-call" id="pdCallBtn">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.91.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+        কল
+      </button>
+      <button class="pd-order" id="pdOrderBtn">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+        অর্ডার নাও
+      </button>
+    </div>
+  `;
+
+  if(images.length > 1){
+    const mainImgEl = document.querySelector("#pdBody .pd-main-img img");
+    document.querySelectorAll("#pdBody .pd-thumbs button").forEach(btn => {
+      btn.addEventListener("click", () => {
+        if(mainImgEl) mainImgEl.src = btn.dataset.img;
+        document.querySelectorAll("#pdBody .pd-thumbs button").forEach(b => b.classList.remove("active"));
+        btn.classList.add("active");
+      });
+    });
+  }
+
+  document.getElementById("pdCallBtn").addEventListener("click", () => {
+    window.location.href = "tel:+971542758007";
+  });
+  document.getElementById("pdOrderBtn").addEventListener("click", () => {
+    closeProductDetail();
+    openOrderModal(p);
+  });
+
+  document.getElementById("productDetail").classList.add("open");
+  document.getElementById("pdBody").scrollTop = 0;
+}
+
+function closeProductDetail(){
+  document.getElementById("productDetail").classList.remove("open");
+}
+document.getElementById("pdCloseBtn").addEventListener("click", closeProductDetail);
 
 function openOrderModal(p){
   currentOrderProduct = p;
@@ -1134,6 +1297,7 @@ function productCard(p){
     </div>
   `;
   card.querySelector(".order-btn").addEventListener("click", () => openOrderModal(p));
+  card.querySelector(".thumb").addEventListener("click", () => openProductDetail(p));
   if(hasDetails){
     const toggle = card.querySelector(".detail-toggle");
     const panel = card.querySelector(".detail-panel");

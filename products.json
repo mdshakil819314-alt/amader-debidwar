@@ -110,13 +110,24 @@
     "name": "থ্রি-পিস (জর্জেট প্রিন্ট)",
     "category": "threepiece",
     "shop": "ফ্যামিলি শপ",
-    "price": 1450,
+    "price": 1250,
     "originalPrice": 1650,
     "stock": 8,
     "deliveryFee": 60,
-    "image": "",
+    "images": [
+      "https:\/\/raw.githubusercontent.com\/mdshakil819314-alt\/amader-debidwar\/main\/images\/img_1784571440067_3232a3.jpg",
+      "https:\/\/raw.githubusercontent.com\/mdshakil819314-alt\/amader-debidwar\/main\/images\/img_1784571448520_157ba2.jpg"
+    ],
     "emoji": "👚",
-    "sold": 0
+    "sold": 0,
+    "code": "PP",
+    "sizes": [
+      "S",
+      "M"
+    ],
+    "colors": [
+      "নিল"
+    ]
   },
   {
     "id": 22,

@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>আমাদের দেবিদ্বার — লোকাল মার্কেট</title>
+<title>ফ্যামিলি শপ — লোকাল মার্কেট</title>
 <meta name="theme-color" content="#FFFFFF">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -134,22 +134,6 @@
     border-radius:0 0 28px 28px;
     position:relative;
     overflow:hidden;
-  }
-  .hero::before{
-    content:"";
-    position:absolute;
-    top:-60px; right:-60px;
-    width:220px;height:220px;
-    background:radial-gradient(circle, rgba(15,143,95,.10) 0%, transparent 70%);
-    pointer-events:none;
-  }
-  .hero::after{
-    content:"";
-    position:absolute;
-    bottom:-80px; left:-40px;
-    width:200px;height:200px;
-    background:radial-gradient(circle, rgba(227,167,46,.20) 0%, transparent 70%);
-    pointer-events:none;
   }
   .hero h1{
     font-family:'Tiro Bangla',serif;
@@ -453,7 +437,7 @@
   .card .discount-badge{
     position:absolute;top:8px;left:8px;
     background:var(--red);color:#fff;
-    font-size:.50rem;font-weight:800;
+    font-size:.62rem;font-weight:800;
     padding:3px 8px;border-radius:6px;
     animation:badge-pulse 1.6s ease-in-out infinite;
   }
@@ -463,7 +447,7 @@
   }
   .card .sold-badge{
     position:absolute;top:8px;right:8px;
-    font-size:.50rem;font-weight:800;
+    font-size:.62rem;font-weight:800;
     padding:3px 8px;border-radius:6px;
     letter-spacing:.03em;
     box-shadow:0 2px 5px rgba(0,0,0,.15);
@@ -712,12 +696,30 @@
   .pd-thumbs button.active{border-color:var(--primary);}
   .pd-thumbs img{width:100%;height:100%;object-fit:cover;display:block;}
   .pd-name{font-family:'Tiro Bangla',serif;font-weight:700;font-size:1.25rem;margin-top:18px;line-height:1.4;}
+  .pd-code{font-size:.78rem;color:var(--muted);font-weight:600;margin-top:4px;}
   .pd-shop{font-size:.88rem;color:var(--secondary);font-weight:600;margin-top:6px;}
   .pd-description{font-size:.85rem;color:var(--muted);line-height:1.7;margin-top:8px;}
   .pd-price-row{display:flex;align-items:baseline;gap:10px;margin-top:14px;}
   .pd-price{font-family:'Hind Siliguri',sans-serif;font-weight:700;color:var(--red);font-size:1.7rem;}
   .pd-price.no-discount{color:var(--primary-dark);}
   .pd-old-price{font-size:1.05rem;color:#9a9284;text-decoration:line-through;font-weight:500;}
+  .pd-variant-group{margin-top:18px;}
+  .pd-variant-label{font-size:.84rem;font-weight:700;color:var(--ink);margin-bottom:8px;}
+  .pd-variant-chips{display:flex;flex-wrap:wrap;gap:8px;}
+  .variant-chip{
+    background:#fff;
+    border:1.5px solid #E1E8E4;
+    color:var(--ink);
+    padding:8px 16px;
+    border-radius:10px;
+    font-weight:700;
+    font-size:.86rem;
+  }
+  .variant-chip.active{
+    background:var(--primary);
+    border-color:var(--primary);
+    color:#fff;
+  }
   .pd-extra{
     background:var(--bg-soft);
     border-radius:14px;
@@ -831,6 +833,7 @@
   .cart-item .ci-emoji img{width:40px;height:40px;object-fit:cover;border-radius:8px;}
   .cart-item .ci-info{flex:1;min-width:0;}
   .cart-item .ci-name{font-weight:700;font-size:.86rem;}
+  .cart-item .ci-variant{font-size:.74rem;color:var(--secondary);font-weight:600;margin-top:2px;}
   .cart-item .ci-price{font-size:.78rem;color:var(--muted);margin-top:2px;}
   .cart-item .ci-qty{
     display:flex;align-items:center;gap:8px;
@@ -878,7 +881,7 @@
 
 <div class="loading-bar" id="loadingBar"></div>
 <header class="site">
-  <div class="logo"><img class="brand-icon" src="icon-192.png" alt="আমাদের দেবিদ্বার"> আমাদের দেবিদ্বার</div>
+  <div class="logo"><img class="brand-icon" src="icon-192.png" alt="ফ্যামিলি শপ"> ফ্যামিলি শপ</div>
   <div class="header-actions">
     <button class="icon-btn search-toggle" id="searchToggleBtn" aria-label="খুঁজুন">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
@@ -944,7 +947,7 @@
     https://m.me/আপনার-ফেসবুক-পেজের-ইউজারনেম
     (আপনার নিউজ পেজের ইউজারনেম বসালেই কাজ করবে)
   -->
-  <div class="f-brand"><img src="icon-192.png" alt="আমাদের দেবিদ্বার"> আমাদের দেবিদ্বার</div>
+  <div class="f-brand"><img src="icon-192.png" alt="ফ্যামিলি শপ"> ফ্যামিলি শপ</div>
   <div class="f-links">
     <a href="about.html">About</a>
     <a href="privacy.html">Privacy Policy</a>
@@ -974,13 +977,13 @@
     বন্ধুদের সাথে ওয়েবসাইটটি শেয়ার করুন
   </button>
   <div class="share-status" id="shareStatus"></div>
-  <div class="copyright">© ২০২৬ আমাদের দেবিদ্বার — সর্বস্বত্ব সংরক্ষিত</div>
+  <div class="copyright">© ২০২৬ ফ্যামিলি শপ — সর্বস্বত্ব সংরক্ষিত</div>
 </footer>
 
 <div class="cart-toast" id="cartToast"></div>
 
 <div class="install-banner" id="installBanner">
-  <div class="ib-icon"><img src="icon-192.png" alt="আমাদের দেবিদ্বার"></div>
+  <div class="ib-icon"><img src="icon-192.png" alt="ফ্যামিলি শপ"></div>
   <div class="ib-text" id="installText">সহজে ফিরে আসতে হোমস্ক্রিনে যোগ করুন</div>
   <div class="ib-actions">
     <button class="ib-add" id="installBtn">যোগ করুন</button>
@@ -1111,16 +1114,21 @@ function showCartToast(text){
   window._cartToastTimer = setTimeout(() => toast.classList.remove("show"), 1800);
 }
 
-function addToCart(p){
-  const existing = cart.find(item => item.product.id === p.id);
+function addToCart(p, size, color){
+  size = size || null;
+  color = color || null;
+  const existing = cart.find(item =>
+    item.product.id === p.id && item.size === size && item.color === color
+  );
   if(existing){
     existing.qty += 1;
   } else {
-    cart.push({ product: p, qty: 1 });
+    cart.push({ product: p, qty: 1, size, color });
   }
   saveCart();
   updateCartBadge();
-  showCartToast(`"${p.name}" কার্টে যোগ হয়েছে`);
+  const variantText = [size, color].filter(Boolean).join(", ");
+  showCartToast(`"${p.name}"${variantText ? ` (${variantText})` : ""} কার্টে যোগ হয়েছে`);
 }
 
 function renderCartModal(){
@@ -1144,10 +1152,12 @@ function renderCartModal(){
     const thumb = images.length ? `<img src="${images[0]}" alt="${p.name}">` : p.emoji;
     const row = document.createElement("div");
     row.className = "cart-item";
+    const variantText = [item.size, item.color].filter(Boolean).join(" · ");
     row.innerHTML = `
       <div class="ci-emoji">${thumb}</div>
       <div class="ci-info">
         <div class="ci-name">${p.name}</div>
+        ${variantText ? `<div class="ci-variant">${variantText}</div>` : ""}
         <div class="ci-price">৳${p.price} × ${item.qty} = ৳${p.price * item.qty}</div>
       </div>
       <div class="ci-qty">
@@ -1198,7 +1208,7 @@ document.getElementById("cartModal").addEventListener("click", (e) => {
 document.getElementById("cartCheckoutBtn").addEventListener("click", () => {
   if(cart.length === 0) return;
   closeCartModal();
-  openOrderModal(cart.map(item => ({ product: item.product, qty: item.qty })));
+  openOrderModal(cart.map(item => ({ product: item.product, qty: item.qty, size: item.size, color: item.color })));
 });
 
 updateCartBadge();
@@ -1224,6 +1234,23 @@ function openProductDetail(p){
     ? `<span class="pd-sold-badge is-sold">🔥 ${pdSoldCount} বার অর্ডার</span>`
     : `<span class="pd-sold-badge is-new">NEW</span>`;
 
+  const hasSizes = !!(p.sizes && p.sizes.length);
+  const hasColors = !!(p.colors && p.colors.length);
+  const sizesHTML = hasSizes ? `
+    <div class="pd-variant-group">
+      <div class="pd-variant-label">সাইজ বাছাই করুন *</div>
+      <div class="pd-variant-chips" id="pdSizeChips">
+        ${p.sizes.map((s, i) => `<button type="button" class="variant-chip${i===0 ? " active":""}" data-size="${s}">${s}</button>`).join("")}
+      </div>
+    </div>` : "";
+  const colorsHTML = hasColors ? `
+    <div class="pd-variant-group">
+      <div class="pd-variant-label">রঙ বাছাই করুন *</div>
+      <div class="pd-variant-chips" id="pdColorChips">
+        ${p.colors.map((c, i) => `<button type="button" class="variant-chip${i===0 ? " active":""}" data-color="${c}">${c}</button>`).join("")}
+      </div>
+    </div>` : "";
+
   document.getElementById("pdBody").innerHTML = `
     <div class="pd-main-img">
       ${hasDiscount ? `<span class="pd-discount-badge">${discountPct}% ছাড়</span>` : ""}
@@ -1232,12 +1259,15 @@ function openProductDetail(p){
     </div>
     ${thumbsHTML}
     <div class="pd-name">${p.name}</div>
+    ${p.code ? `<div class="pd-code">কোড: ${p.code}</div>` : ""}
     <div class="pd-shop">${p.shop}</div>
     ${p.description ? `<div class="pd-description">${p.description}</div>` : ""}
     <div class="pd-price-row">
       <span class="pd-price${hasDiscount ? "" : " no-discount"}">৳${p.price}</span>
       ${hasDiscount ? `<span class="pd-old-price">৳${p.originalPrice}</span>` : ""}
     </div>
+    ${sizesHTML}
+    ${colorsHTML}
     ${hasExtra ? `
       <div class="pd-extra">
         ${p.stock ? `<div>স্টক: ${p.stock} পিস</div>` : ""}
@@ -1267,16 +1297,38 @@ function openProductDetail(p){
     });
   }
 
+  let selectedSize = hasSizes ? p.sizes[0] : null;
+  let selectedColor = hasColors ? p.colors[0] : null;
+
+  if(hasSizes){
+    document.querySelectorAll("#pdSizeChips .variant-chip").forEach(btn => {
+      btn.addEventListener("click", () => {
+        selectedSize = btn.dataset.size;
+        document.querySelectorAll("#pdSizeChips .variant-chip").forEach(b => b.classList.remove("active"));
+        btn.classList.add("active");
+      });
+    });
+  }
+  if(hasColors){
+    document.querySelectorAll("#pdColorChips .variant-chip").forEach(btn => {
+      btn.addEventListener("click", () => {
+        selectedColor = btn.dataset.color;
+        document.querySelectorAll("#pdColorChips .variant-chip").forEach(b => b.classList.remove("active"));
+        btn.classList.add("active");
+      });
+    });
+  }
+
   document.getElementById("pdCallBtn").addEventListener("click", () => {
     window.location.href = "tel:+8801872280095";
   });
   document.getElementById("pdOrderBtn").addEventListener("click", () => {
-    addToCart(p);
+    addToCart(p, selectedSize, selectedColor);
   });
   document.getElementById("pdShareBtn").addEventListener("click", async () => {
     const shareData = {
       title: p.name,
-      text: `${p.name} — ৳${p.price}, "আমাদের দেবিদ্বার"-এ দেখুন:`,
+      text: `${p.name} — ৳${p.price}, "ফ্যামিলি শপ"-এ দেখুন:`,
       url: window.location.href
     };
     if(navigator.share){
@@ -1307,9 +1359,10 @@ function openOrderModal(items){
   const subtotal = items.reduce((sum, item) => sum + item.product.price * item.qty, 0);
   const total = hasAnyDeliveryFee ? subtotal + maxDeliveryFee : subtotal;
 
-  const itemsListHTML = items.map(item =>
-    `<div class="mp-line">${item.product.name}${item.qty > 1 ? ` × ${item.qty}` : ""} — ৳${item.product.price * item.qty}</div>`
-  ).join("");
+  const itemsListHTML = items.map(item => {
+    const variantText = [item.size, item.color].filter(Boolean).join(" · ");
+    return `<div class="mp-line">${item.product.name}${variantText ? ` (${variantText})` : ""}${item.qty > 1 ? ` × ${item.qty}` : ""} — ৳${item.product.price * item.qty}</div>`;
+  }).join("");
 
   document.getElementById("modalProductInfo").innerHTML = `
     ${itemsListHTML}
@@ -1415,7 +1468,9 @@ function buildOrderMessage(){
 
   let msg = `নতুন অর্ডার - ফ্যামিলি শপ\n`;
   items.forEach(item => {
-    msg += `প্রোডাক্ট: ${item.product.name}${item.qty > 1 ? ` (${item.qty} পিস)` : ""} - ৳${item.product.price * item.qty}\n`;
+    const codeText = item.product.code ? ` [কোড: ${item.product.code}]` : "";
+    const variantText = [item.size, item.color].filter(Boolean).join(" · ");
+    msg += `প্রোডাক্ট: ${item.product.name}${codeText}${variantText ? ` (${variantText})` : ""}${item.qty > 1 ? ` (${item.qty} পিস)` : ""} - ৳${item.product.price * item.qty}\n`;
   });
   if(hasAnyDeliveryFee) msg += `ডেলিভারি ফি: ৳${maxDeliveryFee}\n`;
   msg += `সর্বমোট: ৳${total}\n`;
@@ -1696,11 +1751,12 @@ function productCard(p){
       ).join("")}</div>`
     : "";
 
-  const hasDetails = !!(p.stock || p.deliveryFee);
+  const hasDetails = !!(p.stock || p.deliveryFee || p.code);
   const hasDeliveryFee = !!(p.deliveryFee && p.deliveryFee > 0);
   const detailToggleHTML = hasDetails
     ? `<button class="detail-toggle"><span class="chev">▾</span> বিস্তারিত</button>
        <div class="detail-panel">
+         ${p.code ? `<div>কোড: ${p.code}</div>` : ""}
          ${p.stock ? `<div>স্টক: ${p.stock} পিস</div>` : ""}
          ${hasDeliveryFee ? `<div>ডেলিভারি ফি: ৳${p.deliveryFee}</div><div class="total-line">সর্বমোট: ৳${p.price + p.deliveryFee}</div>` : ""}
        </div>`
@@ -1708,7 +1764,7 @@ function productCard(p){
 
   const soldCount = p.sold || 0;
   const soldBadgeHTML = soldCount > 0
-    ? `<span class="sold-badge is-sold">🔥 ${soldCount}</span>`
+    ? `<span class="sold-badge is-sold">🔥 ${soldCount} সেল</span>`
     : `<span class="sold-badge is-new">NEW</span>`;
 
   const card = document.createElement("div");
@@ -1743,7 +1799,11 @@ function productCard(p){
       </button>
     </div>
   `;
-  card.querySelector(".order-btn").addEventListener("click", () => addToCart(p));
+  const hasVariants = !!((p.sizes && p.sizes.length) || (p.colors && p.colors.length));
+  card.querySelector(".order-btn").addEventListener("click", () => {
+    if(hasVariants) openProductDetail(p);
+    else addToCart(p);
+  });
   card.querySelector(".thumb").addEventListener("click", () => openProductDetail(p));
   if(hasDetails){
     const toggle = card.querySelector(".detail-toggle");
@@ -1990,7 +2050,7 @@ async function loadData(){
 document.getElementById("shareSiteBtn").addEventListener("click", async () => {
   const statusEl = document.getElementById("shareStatus");
   const shareData = {
-    title: "আমাদের দেবিদ্বার",
+    title: "ফ্যামিলি শপ",
     text: "কাপড়, মুদি, সবজি, কসমেটিক — সবকিছু এখন এক জায়গায়! দেখুন আমাদের অনলাইন শপ:",
     url: window.location.href
   };

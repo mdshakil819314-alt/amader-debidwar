@@ -374,11 +374,12 @@
     font-weight:700;
     font-size:.82rem;
     color:#fff;
+    background:var(--primary);
     box-shadow:var(--shadow);
   }
-  .offer-chip:nth-child(1){background:var(--red);}
-  .offer-chip:nth-child(2){background:var(--secondary);}
-  .offer-chip:nth-child(3){background:var(--gold);color:#3A2A00;}
+  .offer-chip:nth-child(3n+1){background:var(--red);}
+  .offer-chip:nth-child(3n+2){background:var(--secondary);}
+  .offer-chip:nth-child(3n){background:var(--gold);color:#3A2A00;}
 
   /* ---------- popular shops ---------- */
   .shop-scroll{
@@ -904,11 +905,7 @@
 
   <section class="section">
     <div class="section-head"><h2>📰 আজকের অফার</h2></div>
-    <div class="offer-strip">
-      <div class="offer-chip">🔥 নির্বাচিত পণ্যে ছাড়</div>
-      <div class="offer-chip">🚚 ফ্রি ডেলিভারি</div>
-      <div class="offer-chip">🆕 নতুন দোকান যুক্ত হয়েছে</div>
-    </div>
+    <div class="offer-strip" id="offerStrip"></div>
   </section>
 
   <section class="section">
@@ -1458,11 +1455,11 @@ document.getElementById("ord_submit_wa").addEventListener("click", () => {
 */
 
 /*
-  ক্যাটাগরি ডাটা — সরাসরি কোডে রাখা (খুব কম বদলায় বলে JSON-এ সরানো হয়নি)।
-  ছবি বসাতে চাইলে "image" ফিল্ডে GitHub-এ আপলোড করা ছবির raw লিংক বসান,
-  ফাঁকা রাখলে emoji দেখাবে।
+  ক্যাটাগরি ডাটা — ফলব্যাক (ডিফল্ট)। আসল কন্ট্রোল categories.json থেকে
+  (নিচের loadData() দেখুন) — GitHub-এ categories.json না পাওয়া গেলে
+  এই ডিফল্ট লিস্টই দেখাবে, সাইট ভাঙবে না।
 */
-const CATEGORIES = [
+let CATEGORIES = [
   { key:"panjabi",       label:"পাঞ্জাবি",         emoji:"👘", image:"https://raw.githubusercontent.com/mdshakil819314-alt/amader-debidwar/main/images/panjabi1.jpg" },
   { key:"threepiece",    label:"থ্রি-পিস",        emoji:"👚", image:"" },
   { key:"saree",         label:"শাড়ি",           emoji:"🥻", image:"" },
@@ -1584,6 +1581,15 @@ let SHOPS = [
   { name:"বিউটি কর্নার", emoji:"💄", image:"", rating:"৪.৭" },
 ];
 
+/*
+  অফার ব্যানার ডাটা — ফলব্যাক। আসল কন্ট্রোল offers.json থেকে (নিচের loadData() দেখুন)।
+*/
+let OFFERS = [
+  { emoji:"🔥", text:"নির্বাচিত পণ্যে ছাড়" },
+  { emoji:"🚚", text:"ফ্রি ডেলিভারি" },
+  { emoji:"🆕", text:"নতুন দোকান যুক্ত হয়েছে" },
+];
+
 let activeFilter = "all";
 let activeShop = null;
 let searchTerm = "";
@@ -1593,6 +1599,17 @@ let visibleLimit = PAGE_SIZE;
 function waLink(product){
   const msg = `আসসালামু আলাইকুম, আমি "${product.name}" (${product.shop}) প্রোডাক্টটি অর্ডার করতে চাই। মূল্য: ৳${product.price}`;
   return `https://wa.me/8801872280095?text=${encodeURIComponent(msg)}`;
+}
+
+function buildOfferStrip(){
+  const wrap = document.getElementById("offerStrip");
+  wrap.innerHTML = "";
+  OFFERS.forEach(offer => {
+    const chip = document.createElement("div");
+    chip.className = "offer-chip";
+    chip.textContent = `${offer.emoji} ${offer.text}`;
+    wrap.appendChild(chip);
+  });
 }
 
 function buildCatGrid(){
@@ -1723,6 +1740,7 @@ function productCard(p){
 function render(){
   buildCatGrid();
   buildShopScroll();
+  buildOfferStrip();
 
   const wrap = document.getElementById("productSections");
   wrap.innerHTML = "";
@@ -1914,15 +1932,19 @@ async function loadData(){
     } catch(e){ return null; }
   };
 
-  const [products, slider, shops] = await Promise.all([
+  const [products, slider, shops, categories, offers] = await Promise.all([
     tryFetch("products.json"),
     tryFetch("slider.json"),
     tryFetch("shops.json"),
+    tryFetch("categories.json"),
+    tryFetch("offers.json"),
   ]);
 
   if(products){ PRODUCTS = products; render(); }
   if(slider){ SLIDER_ITEMS = slider; renderSlider(); }
   if(shops){ SHOPS = shops; render(); }
+  if(categories){ CATEGORIES = categories; render(); }
+  if(offers){ OFFERS = offers; buildOfferStrip(); }
 
   loadingBar.classList.remove("active");
 }

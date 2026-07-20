@@ -13,7 +13,8 @@
       "https:\/\/raw.githubusercontent.com\/mdshakil819314-alt\/amader-debidwar\/main\/images\/panjabi1.jpg",
       "https:\/\/raw.githubusercontent.com\/mdshakil819314-alt\/amader-debidwar\/main\/images\/panjabi1.jpg"
     ],
-    "emoji": "👘"
+    "emoji": "👘",
+    "sold": 0
   },
   {
     "id": 18,
@@ -25,7 +26,8 @@
     "stock": 12,
     "deliveryFee": 60,
     "image": "",
-    "emoji": "👘"
+    "emoji": "👘",
+    "sold": 1
   },
   {
     "id": 19,
@@ -37,7 +39,8 @@
     "stock": 9,
     "deliveryFee": 60,
     "image": "",
-    "emoji": "👘"
+    "emoji": "👘",
+    "sold": 0
   },
   {
     "id": 20,
@@ -49,7 +52,8 @@
     "stock": 14,
     "deliveryFee": 60,
     "image": "",
-    "emoji": "👘"
+    "emoji": "👘",
+    "sold": 0
   },
   {
     "id": 2,
@@ -61,7 +65,8 @@
     "stock": 10,
     "deliveryFee": 60,
     "image": "https:\/\/raw.githubusercontent.com\/mdshakil819314-alt\/amader-debidwar\/main\/images\/thiripis1.jpg",
-    "emoji": "👚"
+    "emoji": "👚",
+    "sold": 0
   },
   {
     "id": 21,
@@ -73,7 +78,8 @@
     "stock": 8,
     "deliveryFee": 60,
     "image": "",
-    "emoji": "👚"
+    "emoji": "👚",
+    "sold": 0
   },
   {
     "id": 22,
@@ -85,7 +91,8 @@
     "stock": 11,
     "deliveryFee": 60,
     "image": "",
-    "emoji": "👚"
+    "emoji": "👚",
+    "sold": 0
   },
   {
     "id": 23,
@@ -97,7 +104,8 @@
     "stock": 7,
     "deliveryFee": 60,
     "image": "",
-    "emoji": "👚"
+    "emoji": "👚",
+    "sold": 0
   },
   {
     "id": 3,
@@ -109,7 +117,8 @@
     "stock": 8,
     "deliveryFee": 60,
     "image": "",
-    "emoji": "🥻"
+    "emoji": "🥻",
+    "sold": 0
   },
   {
     "id": 24,
@@ -121,7 +130,8 @@
     "stock": 5,
     "deliveryFee": 60,
     "image": "",
-    "emoji": "🥻"
+    "emoji": "🥻",
+    "sold": 0
   },
   {
     "id": 25,
@@ -133,7 +143,8 @@
     "stock": 4,
     "deliveryFee": 60,
     "image": "",
-    "emoji": "🥻"
+    "emoji": "🥻",
+    "sold": 0
   },
   {
     "id": 26,
@@ -145,7 +156,8 @@
     "stock": 15,
     "deliveryFee": 60,
     "image": "",
-    "emoji": "🥻"
+    "emoji": "🥻",
+    "sold": 0
   },
   {
     "id": 17,
@@ -158,7 +170,8 @@
     "deliveryFee": 0,
     "description": "৫ কেজি চাল, ১ কেজি আলু, ১ কেজি সয়াবিন তেল, ১ কেজি মসুর ডাল, ১ কেজি চিনি, ১ কেজি মুড়ি",
     "image": "",
-    "emoji": "📦"
+    "emoji": "📦",
+    "sold": 0
   },
   {
     "id": 27,
@@ -171,7 +184,8 @@
     "deliveryFee": 0,
     "description": "৩ কেজি চাল, ১ লিটার সয়াবিন তেল, ১ কেজি চিনি",
     "image": "",
-    "emoji": "📦"
+    "emoji": "📦",
+    "sold": 0
   },
   {
     "id": 28,
@@ -184,7 +198,8 @@
     "deliveryFee": 0,
     "description": "ডায়াপার প্যাক, ফিডার, বেবি লোশন",
     "image": "",
-    "emoji": "📦"
+    "emoji": "📦",
+    "sold": 0
   },
   {
     "id": 29,
@@ -197,7 +212,8 @@
     "deliveryFee": 0,
     "description": "ফেসওয়াশ, বডি লোশন, লিপস্টিক",
     "image": "",
-    "emoji": "📦"
+    "emoji": "📦",
+    "sold": 0
   },
   {
     "id": 5,
@@ -209,7 +225,8 @@
     "stock": 30,
     "deliveryFee": 40,
     "image": "",
-    "emoji": "🌾"
+    "emoji": "🌾",
+    "sold": 0
   },
   {
     "id": 6,
@@ -221,7 +238,8 @@
     "stock": 18,
     "deliveryFee": 40,
     "image": "",
-    "emoji": "🛢️"
+    "emoji": "🛢️",
+    "sold": 0
   },
   {
     "id": 7,
@@ -233,7 +251,8 @@
     "stock": 40,
     "deliveryFee": 40,
     "image": "",
-    "emoji": "🍬"
+    "emoji": "🍬",
+    "sold": 0
   },
   {
     "id": 8,
@@ -245,7 +264,8 @@
     "stock": 25,
     "deliveryFee": 40,
     "image": "",
-    "emoji": "🫘"
+    "emoji": "🫘",
+    "sold": 0
   },
   {
     "id": 9,
@@ -257,7 +277,8 @@
     "stock": 50,
     "deliveryFee": 30,
     "image": "",
-    "emoji": "🍅"
+    "emoji": "🍅",
+    "sold": 0
   },
   {
     "id": 10,
@@ -269,7 +290,8 @@
     "stock": 60,
     "deliveryFee": 30,
     "image": "",
-    "emoji": "🥔"
+    "emoji": "🥔",
+    "sold": 0
   },
   {
     "id": 11,
@@ -281,7 +303,8 @@
     "stock": 35,
     "deliveryFee": 30,
     "image": "",
-    "emoji": "🌶️"
+    "emoji": "🌶️",
+    "sold": 0
   },
   {
     "id": 12,
@@ -293,7 +316,8 @@
     "stock": 22,
     "deliveryFee": 30,
     "image": "",
-    "emoji": "🥒"
+    "emoji": "🥒",
+    "sold": 0
   },
   {
     "id": 13,
@@ -305,7 +329,8 @@
     "stock": 16,
     "deliveryFee": 50,
     "image": "",
-    "emoji": "🧴"
+    "emoji": "🧴",
+    "sold": 0
   },
   {
     "id": 14,
@@ -317,7 +342,8 @@
     "stock": 24,
     "deliveryFee": 50,
     "image": "",
-    "emoji": "💄"
+    "emoji": "💄",
+    "sold": 0
   },
   {
     "id": 15,
@@ -329,7 +355,8 @@
     "stock": 12,
     "deliveryFee": 50,
     "image": "",
-    "emoji": "🧴"
+    "emoji": "🧴",
+    "sold": 0
   },
   {
     "id": 16,
@@ -341,7 +368,8 @@
     "stock": 19,
     "deliveryFee": 50,
     "image": "",
-    "emoji": "🌸"
+    "emoji": "🌸",
+    "sold": 0
   },
   {
     "id": 33,
@@ -353,7 +381,8 @@
     "stock": 15,
     "deliveryFee": 60,
     "image": "",
-    "emoji": "👗"
+    "emoji": "👗",
+    "sold": 0
   },
   {
     "id": 34,
@@ -365,7 +394,8 @@
     "stock": 9,
     "deliveryFee": 60,
     "image": "",
-    "emoji": "👗"
+    "emoji": "👗",
+    "sold": 0
   },
   {
     "id": 35,
@@ -377,7 +407,8 @@
     "stock": 6,
     "deliveryFee": 60,
     "image": "",
-    "emoji": "👗"
+    "emoji": "👗",
+    "sold": 0
   },
   {
     "id": 36,
@@ -389,7 +420,8 @@
     "stock": 20,
     "deliveryFee": 60,
     "image": "",
-    "emoji": "👗"
+    "emoji": "👗",
+    "sold": 0
   },
   {
     "id": 37,
@@ -401,7 +433,8 @@
     "stock": 30,
     "deliveryFee": 40,
     "image": "",
-    "emoji": "🧕"
+    "emoji": "🧕",
+    "sold": 0
   },
   {
     "id": 38,
@@ -413,7 +446,8 @@
     "stock": 22,
     "deliveryFee": 40,
     "image": "",
-    "emoji": "🧕"
+    "emoji": "🧕",
+    "sold": 0
   },
   {
     "id": 39,
@@ -425,7 +459,8 @@
     "stock": 25,
     "deliveryFee": 40,
     "image": "",
-    "emoji": "🧕"
+    "emoji": "🧕",
+    "sold": 0
   },
   {
     "id": 40,
@@ -437,7 +472,8 @@
     "stock": 28,
     "deliveryFee": 40,
     "image": "",
-    "emoji": "🧕"
+    "emoji": "🧕",
+    "sold": 0
   },
   {
     "id": 41,
@@ -449,7 +485,8 @@
     "stock": 20,
     "deliveryFee": 40,
     "image": "",
-    "emoji": "🧣"
+    "emoji": "🧣",
+    "sold": 0
   },
   {
     "id": 42,
@@ -461,7 +498,8 @@
     "stock": 14,
     "deliveryFee": 40,
     "image": "",
-    "emoji": "🧣"
+    "emoji": "🧣",
+    "sold": 0
   },
   {
     "id": 43,
@@ -473,7 +511,8 @@
     "stock": 18,
     "deliveryFee": 40,
     "image": "",
-    "emoji": "🧣"
+    "emoji": "🧣",
+    "sold": 0
   },
   {
     "id": 44,
@@ -485,7 +524,8 @@
     "stock": 24,
     "deliveryFee": 40,
     "image": "",
-    "emoji": "🧣"
+    "emoji": "🧣",
+    "sold": 0
   },
   {
     "id": 45,
@@ -501,7 +541,8 @@
       "https:\/\/raw.githubusercontent.com\/mdshakil819314-alt\/amader-debidwar\/main\/images\/chori2.jpg",
       "https:\/\/raw.githubusercontent.com\/mdshakil819314-alt\/amader-debidwar\/main\/images\/chori3.jpg"
     ],
-    "emoji": "💍"
+    "emoji": "💍",
+    "sold": 0
   },
   {
     "id": 46,
@@ -513,7 +554,8 @@
     "stock": 20,
     "deliveryFee": 40,
     "image": "",
-    "emoji": "💍"
+    "emoji": "💍",
+    "sold": 0
   },
   {
     "id": 47,
@@ -525,7 +567,8 @@
     "stock": 25,
     "deliveryFee": 40,
     "image": "",
-    "emoji": "💍"
+    "emoji": "💍",
+    "sold": 0
   },
   {
     "id": 48,
@@ -537,7 +580,8 @@
     "stock": 15,
     "deliveryFee": 40,
     "image": "",
-    "emoji": "💍"
+    "emoji": "💍",
+    "sold": 0
   },
   {
     "id": 49,
@@ -549,7 +593,8 @@
     "stock": 10,
     "deliveryFee": 60,
     "image": "",
-    "emoji": "👜"
+    "emoji": "👜",
+    "sold": 0
   },
   {
     "id": 50,
@@ -561,7 +606,8 @@
     "stock": 14,
     "deliveryFee": 60,
     "image": "",
-    "emoji": "👜"
+    "emoji": "👜",
+    "sold": 0
   },
   {
     "id": 51,
@@ -573,7 +619,8 @@
     "stock": 16,
     "deliveryFee": 60,
     "image": "",
-    "emoji": "👜"
+    "emoji": "👜",
+    "sold": 0
   },
   {
     "id": 52,
@@ -585,7 +632,8 @@
     "stock": 12,
     "deliveryFee": 60,
     "image": "",
-    "emoji": "👜"
+    "emoji": "👜",
+    "sold": 0
   },
   {
     "id": 53,
@@ -597,7 +645,8 @@
     "stock": 18,
     "deliveryFee": 50,
     "image": "",
-    "emoji": "🧸"
+    "emoji": "🧸",
+    "sold": 0
   },
   {
     "id": 54,
@@ -609,7 +658,8 @@
     "stock": 15,
     "deliveryFee": 50,
     "image": "",
-    "emoji": "🧸"
+    "emoji": "🧸",
+    "sold": 0
   },
   {
     "id": 55,
@@ -621,7 +671,8 @@
     "stock": 8,
     "deliveryFee": 50,
     "image": "",
-    "emoji": "🧸"
+    "emoji": "🧸",
+    "sold": 0
   },
   {
     "id": 56,
@@ -633,7 +684,8 @@
     "stock": 30,
     "deliveryFee": 50,
     "image": "",
-    "emoji": "🧸"
+    "emoji": "🧸",
+    "sold": 0
   },
   {
     "id": 4,
@@ -645,7 +697,8 @@
     "stock": 20,
     "deliveryFee": 50,
     "image": "",
-    "emoji": "👕"
+    "emoji": "👕",
+    "sold": 0
   },
   {
     "id": 30,
@@ -657,7 +710,8 @@
     "stock": 18,
     "deliveryFee": 50,
     "image": "",
-    "emoji": "👶"
+    "emoji": "👶",
+    "sold": 0
   },
   {
     "id": 31,
@@ -669,7 +723,8 @@
     "stock": 16,
     "deliveryFee": 50,
     "image": "",
-    "emoji": "👶"
+    "emoji": "👶",
+    "sold": 0
   },
   {
     "id": 32,
@@ -681,7 +736,8 @@
     "stock": 10,
     "deliveryFee": 50,
     "image": "",
-    "emoji": "👶"
+    "emoji": "👶",
+    "sold": 0
   },
   {
     "id": 57,
@@ -693,7 +749,8 @@
     "stock": 25,
     "deliveryFee": 40,
     "image": "",
-    "emoji": "🍼"
+    "emoji": "🍼",
+    "sold": 0
   },
   {
     "id": 58,
@@ -705,7 +762,8 @@
     "stock": 22,
     "deliveryFee": 40,
     "image": "",
-    "emoji": "🍼"
+    "emoji": "🍼",
+    "sold": 0
   },
   {
     "id": 59,
@@ -717,7 +775,8 @@
     "stock": 30,
     "deliveryFee": 40,
     "image": "",
-    "emoji": "🍼"
+    "emoji": "🍼",
+    "sold": 0
   },
   {
     "id": 60,
@@ -729,7 +788,8 @@
     "stock": 35,
     "deliveryFee": 40,
     "image": "",
-    "emoji": "🍼"
+    "emoji": "🍼",
+    "sold": 0
   },
   {
     "id": 61,
@@ -741,7 +801,8 @@
     "stock": 12,
     "deliveryFee": 50,
     "image": "",
-    "emoji": "🎠"
+    "emoji": "🎠",
+    "sold": 0
   },
   {
     "id": 62,
@@ -753,7 +814,8 @@
     "stock": 20,
     "deliveryFee": 50,
     "image": "",
-    "emoji": "🎠"
+    "emoji": "🎠",
+    "sold": 0
   },
   {
     "id": 63,
@@ -765,7 +827,8 @@
     "stock": 25,
     "deliveryFee": 50,
     "image": "",
-    "emoji": "🎠"
+    "emoji": "🎠",
+    "sold": 0
   },
   {
     "id": 64,
@@ -777,7 +840,8 @@
     "stock": 28,
     "deliveryFee": 50,
     "image": "",
-    "emoji": "🎠"
+    "emoji": "🎠",
+    "sold": 0
   },
   {
     "id": 65,
@@ -789,7 +853,8 @@
     "stock": 16,
     "deliveryFee": 50,
     "image": "",
-    "emoji": "🎒"
+    "emoji": "🎒",
+    "sold": 0
   },
   {
     "id": 66,
@@ -801,7 +866,8 @@
     "stock": 18,
     "deliveryFee": 50,
     "image": "",
-    "emoji": "🎒"
+    "emoji": "🎒",
+    "sold": 0
   },
   {
     "id": 67,
@@ -813,7 +879,8 @@
     "stock": 22,
     "deliveryFee": 50,
     "image": "",
-    "emoji": "🎒"
+    "emoji": "🎒",
+    "sold": 0
   },
   {
     "id": 68,
@@ -825,7 +892,8 @@
     "stock": 26,
     "deliveryFee": 50,
     "image": "",
-    "emoji": "🎒"
+    "emoji": "🎒",
+    "sold": 0
   },
   {
     "id": 69,
@@ -837,7 +905,8 @@
     "stock": 20,
     "deliveryFee": 40,
     "image": "",
-    "emoji": "🌸"
+    "emoji": "🌸",
+    "sold": 0
   },
   {
     "id": 70,
@@ -849,7 +918,8 @@
     "stock": 24,
     "deliveryFee": 40,
     "image": "",
-    "emoji": "🌸"
+    "emoji": "🌸",
+    "sold": 0
   },
   {
     "id": 71,
@@ -861,7 +931,8 @@
     "stock": 18,
     "deliveryFee": 40,
     "image": "",
-    "emoji": "🌸"
+    "emoji": "🌸",
+    "sold": 0
   },
   {
     "id": 72,
@@ -873,6 +944,7 @@
     "stock": 26,
     "deliveryFee": 40,
     "image": "",
-    "emoji": "🌸"
+    "emoji": "🌸",
+    "sold": 0
   }
 ]

@@ -427,7 +427,7 @@
   .card{
     background:#fff;
     border-radius:var(--card-radius);
-    padding:14px 14px 16px;
+    padding:12px 12px 14px;
     box-shadow:var(--shadow);
     display:flex;flex-direction:column;
     transition:transform .15s ease, box-shadow .15s ease;
@@ -435,24 +435,24 @@
   .card:hover{transform:translateY(-3px);box-shadow:var(--shadow-lg);}
   .card .card-top{display:flex;flex-direction:column;}
   .card .thumb{
-    width:100%;height:140px;
-    font-size:3.4rem;
+    width:100%;height:120px;
+    font-size:2.8rem;
     display:flex;align-items:center;justify-content:center;
     background:var(--bg-soft);
-    border-radius:18px;
-    margin-bottom:12px;
+    border-radius:16px;
+    margin-bottom:10px;
     position:relative;
     overflow:hidden;
     cursor:pointer;
   }
   .card .thumb img{
-    width:100%;height:140px;object-fit:cover;border-radius:18px;display:block;
+    width:100%;height:120px;object-fit:cover;border-radius:16px;display:block;
   }
   .card .discount-badge{
     position:absolute;top:8px;left:8px;
     background:var(--red);color:#fff;
-    font-size:.7rem;font-weight:800;
-    padding:4px 10px;border-radius:7px;
+    font-size:.62rem;font-weight:800;
+    padding:3px 8px;border-radius:6px;
     animation:badge-pulse 1.6s ease-in-out infinite;
   }
   @keyframes badge-pulse{
@@ -461,8 +461,9 @@
   }
   .card .sold-badge{
     position:absolute;top:8px;right:8px;
-    font-size:.68rem;font-weight:800;
-    padding:4px 9px;border-radius:7px;
+    font-size:.62rem;font-weight:800;
+    padding:3px 8px;border-radius:6px;
+    letter-spacing:.03em;
     box-shadow:0 2px 5px rgba(0,0,0,.15);
   }
   .card .sold-badge.is-new{background:var(--secondary);color:#fff;}
@@ -1219,7 +1220,7 @@ function openProductDetail(p){
   const pdSoldCount = p.sold || 0;
   const pdSoldBadgeHTML = pdSoldCount > 0
     ? `<span class="pd-sold-badge is-sold">🔥 ${pdSoldCount} বার অর্ডার</span>`
-    : `<span class="pd-sold-badge is-new">🆕 নতুন</span>`;
+    : `<span class="pd-sold-badge is-new">NEW</span>`;
 
   document.getElementById("pdBody").innerHTML = `
     <div class="pd-main-img">
@@ -1705,8 +1706,8 @@ function productCard(p){
 
   const soldCount = p.sold || 0;
   const soldBadgeHTML = soldCount > 0
-    ? `<span class="sold-badge is-sold">🔥 ${soldCount} বার অর্ডার</span>`
-    : `<span class="sold-badge is-new">🆕 নতুন</span>`;
+    ? `<span class="sold-badge is-sold">🔥 ${soldCount}</span>`
+    : `<span class="sold-badge is-new">NEW</span>`;
 
   const card = document.createElement("div");
   card.className = "card";

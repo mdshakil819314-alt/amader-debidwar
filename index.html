@@ -755,7 +755,7 @@
     <input type="text" id="ord_union" class="m-input" placeholder="যেমন: দেবিদ্বার সদর">
 
     <label class="m-label">ওয়ার্ড নম্বর *</label>
-    <input type="text" id="ord_ward" class="m-input" placeholder="যেমন: ৫">
+    <input type="number" id="ord_ward" class="m-input" placeholder="১ থেকে ৯ এর মধ্যে" min="1" max="9">
 
     <label class="m-label">ফোন নম্বর (১১ ডিজিট) *</label>
     <input type="tel" id="ord_phone" class="m-input" placeholder="01XXXXXXXXX" maxlength="11">
@@ -828,6 +828,11 @@ function buildOrderMessage(){
 
   if(!union || !ward || !phone || !village){
     errBox.textContent = "দয়া করে * চিহ্নিত সবগুলো বক্স পূরণ করুন।";
+    return null;
+  }
+  const wardNum = parseInt(ward, 10);
+  if(isNaN(wardNum) || wardNum < 1 || wardNum > 9){
+    errBox.textContent = "ওয়ার্ড নম্বর ১ থেকে ৯ এর মধ্যে হতে হবে।";
     return null;
   }
   if(!/^01[0-9]{9}$/.test(phone)){

@@ -7,14 +7,22 @@
     "price": 850,
     "originalPrice": 1100,
     "stock": 15,
-    "deliveryFee": 60,
+    "deliveryFee": 30,
+    "description": "শুধু একটি পাঞ্জাবি",
     "images": [
       "https:\/\/raw.githubusercontent.com\/mdshakil819314-alt\/amader-debidwar\/main\/images\/panjabi1.jpg",
       "https:\/\/raw.githubusercontent.com\/mdshakil819314-alt\/amader-debidwar\/main\/images\/panjabi1.jpg",
       "https:\/\/raw.githubusercontent.com\/mdshakil819314-alt\/amader-debidwar\/main\/images\/panjabi1.jpg"
     ],
     "emoji": "👘",
-    "sold": 2
+    "sold": 2,
+    "code": "P2",
+    "sizes": [
+      "M"
+    ],
+    "colors": [
+      "কালোো"
+    ]
   },
   {
     "id": 18,

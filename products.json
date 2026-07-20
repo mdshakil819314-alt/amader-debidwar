@@ -958,5 +958,29 @@
     "image": "",
     "emoji": "🌸",
     "sold": 0
+  },
+  {
+    "id": 73,
+    "name": "মেয়েদের ঘড়ি",
+    "category": "LadiesClock",
+    "shop": "ফ্যামিলি শপ",
+    "price": 400,
+    "originalPrice": 350,
+    "stock": 3,
+    "deliveryFee": 30,
+    "images": [
+      "https:\/\/raw.githubusercontent.com\/mdshakil819314-alt\/amader-debidwar\/main\/images\/img_1784569552278_9f3a81.jpg",
+      "https:\/\/raw.githubusercontent.com\/mdshakil819314-alt\/amader-debidwar\/main\/images\/img_1784569558723_2177f2.jpg",
+      "https:\/\/raw.githubusercontent.com\/mdshakil819314-alt\/amader-debidwar\/main\/images\/img_1784569564909_50f73b.jpg"
+    ],
+    "emoji": "🛍️",
+    "sold": 0,
+    "sizes": [
+      "M"
+    ],
+    "colors": [
+      "সাদা",
+      "কালো"
+    ]
   }
 ]

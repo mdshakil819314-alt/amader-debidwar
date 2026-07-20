@@ -42,6 +42,42 @@
   .brand-font{font-family:'Tiro Bangla',serif;}
 
   /* ---------- header ---------- */
+  /* ---------- loading bar ---------- */
+  .loading-bar{
+    position:fixed;top:0;left:0;right:0;
+    height:3px;
+    background:var(--bg-soft);
+    z-index:200;
+    display:none;
+    overflow:hidden;
+  }
+  .loading-bar.active{display:block;}
+  .loading-bar::after{
+    content:"";
+    position:absolute;top:0;left:0;
+    height:100%;width:40%;
+    background:linear-gradient(90deg, var(--primary), var(--gold));
+    animation:loading-slide 1.1s ease-in-out infinite;
+  }
+  @keyframes loading-slide{
+    0%{left:-40%;}
+    100%{left:100%;}
+  }
+
+  /* ---------- load more ---------- */
+  .load-more-wrap{padding:10px 16px 30px;text-align:center;}
+  .load-more-btn{
+    background:#fff;
+    border:1.5px solid var(--primary);
+    color:var(--primary-dark);
+    font-weight:700;
+    font-size:.88rem;
+    padding:12px 28px;
+    border-radius:999px;
+    box-shadow:var(--shadow);
+  }
+  .load-more-btn:active{background:var(--bg-soft);}
+
   header.site{
     position:sticky;top:0;z-index:60;
     background:#fff;
@@ -717,6 +753,7 @@
 </head>
 <body>
 
+<div class="loading-bar" id="loadingBar"></div>
 <header class="site">
   <div class="logo"><span class="flag">🇧🇩</span> আমাদের দেবিদ্বার</div>
   <div class="header-actions">
@@ -1192,6 +1229,8 @@ let SHOPS = [
 let activeFilter = "all";
 let activeShop = null;
 let searchTerm = "";
+const PAGE_SIZE = 24;
+let visibleLimit = PAGE_SIZE;
 
 function waLink(product){
   const msg = `আসসালামু আলাইকুম, আমি "${product.name}" (${product.shop}) প্রোডাক্টটি অর্ডার করতে চাই। মূল্য: ৳${product.price}`;
@@ -1209,6 +1248,7 @@ function buildCatGrid(){
     btn.innerHTML = `<div class="circle">${thumbInner}</div><span class="label">${cat.label}</span>`;
     btn.onclick = () => {
       activeFilter = (activeFilter === cat.key) ? "all" : cat.key;
+      visibleLimit = PAGE_SIZE;
       render();
       document.getElementById("productSections").scrollIntoView({behavior:"smooth", block:"start"});
     };
@@ -1221,7 +1261,7 @@ function buildShopScroll(){
   const resetBtn = document.getElementById("shopResetBtn");
   wrap.innerHTML = "";
   resetBtn.style.display = activeShop ? "inline-block" : "none";
-  resetBtn.onclick = () => { activeShop = null; render(); };
+  resetBtn.onclick = () => { activeShop = null; visibleLimit = PAGE_SIZE; render(); };
 
   SHOPS.forEach(shop => {
     const card = document.createElement("div");
@@ -1234,6 +1274,7 @@ function buildShopScroll(){
     `;
     card.onclick = () => {
       activeShop = (activeShop === shop.name) ? null : shop.name;
+      visibleLimit = PAGE_SIZE;
       render();
       document.getElementById("productSections").scrollIntoView({behavior:"smooth", block:"start"});
     };
@@ -1345,10 +1386,21 @@ function render(){
   }
   let anyProduct = false;
 
+  const catItemsList = [];
   visibleCats.forEach(cat => {
     const items = PRODUCTS.filter(p => p.category === cat.key && matches(p));
-    if(items.length === 0) return;
-    anyProduct = true;
+    if(items.length > 0) catItemsList.push({ cat, items });
+  });
+
+  const totalMatching = catItemsList.reduce((sum, e) => sum + e.items.length, 0);
+  anyProduct = catItemsList.length > 0;
+
+  let renderedCount = 0;
+  for(const { cat, items } of catItemsList){
+    if(renderedCount >= visibleLimit) break;
+    const remainingSlots = visibleLimit - renderedCount;
+    const itemsToShow = items.slice(0, remainingSlots);
+    renderedCount += itemsToShow.length;
 
     const section = document.createElement("section");
     section.className = "section";
@@ -1361,12 +1413,23 @@ function render(){
     section.appendChild(head);
 
     const grid = document.createElement("div");
-    grid.className = "grid" + (items.length === 1 ? " grid-single" : "");
-    items.forEach(p => grid.appendChild(productCard(p)));
+    grid.className = "grid" + (itemsToShow.length === 1 ? " grid-single" : "");
+    itemsToShow.forEach(p => grid.appendChild(productCard(p)));
     section.appendChild(grid);
 
     wrap.appendChild(section);
-  });
+  }
+
+  if(totalMatching > renderedCount){
+    const loadMoreWrap = document.createElement("div");
+    loadMoreWrap.className = "load-more-wrap";
+    loadMoreWrap.innerHTML = `<button class="load-more-btn" id="loadMoreBtn">আরও দেখুন (বাকি ${totalMatching - renderedCount}টা)</button>`;
+    wrap.appendChild(loadMoreWrap);
+    document.getElementById("loadMoreBtn").addEventListener("click", () => {
+      visibleLimit += PAGE_SIZE;
+      render();
+    });
+  }
 
   if(!anyProduct){
     wrap.innerHTML = `<div class="empty-note">কোনো প্রোডাক্ট পাওয়া যায়নি — অন্য কিছু খুঁজে দেখুন।</div>`;
@@ -1460,6 +1523,7 @@ setTimeout(() => {
 
 document.getElementById("searchInput").addEventListener("input", e => {
   searchTerm = e.target.value;
+  visibleLimit = PAGE_SIZE;
   render();
 });
 
@@ -1481,6 +1545,9 @@ document.getElementById("searchToggleBtn").addEventListener("click", () => {
   সাইট ভাঙবে না।
 */
 async function loadData(){
+  const loadingBar = document.getElementById("loadingBar");
+  loadingBar.classList.add("active");
+
   const tryFetch = async (file) => {
     try {
       const res = await fetch(file, { cache: "no-store" });
@@ -1498,6 +1565,8 @@ async function loadData(){
   if(products){ PRODUCTS = products; render(); }
   if(slider){ SLIDER_ITEMS = slider; renderSlider(); }
   if(shops){ SHOPS = shops; render(); }
+
+  loadingBar.classList.remove("active");
 }
 
 render();

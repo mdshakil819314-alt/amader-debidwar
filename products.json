@@ -76,7 +76,11 @@
     "originalPrice": null,
     "stock": 10,
     "deliveryFee": 60,
-    "image": "https:\/\/raw.githubusercontent.com\/mdshakil819314-alt\/amader-debidwar\/main\/images\/thiripis1.jpg",
+    "images": [
+      "https:\/\/raw.githubusercontent.com\/mdshakil819314-alt\/amader-debidwar\/main\/images\/img_1784570561147_e414df.jpg",
+      "https:\/\/raw.githubusercontent.com\/mdshakil819314-alt\/amader-debidwar\/main\/images\/img_1784570566018_5f5ee4.jpg",
+      "https:\/\/raw.githubusercontent.com\/mdshakil819314-alt\/amader-debidwar\/main\/images\/img_1784570570895_152286.jpg"
+    ],
     "emoji": "👚",
     "sold": 0
   },

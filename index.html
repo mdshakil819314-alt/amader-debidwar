@@ -81,13 +81,13 @@
   header.site{
     position:sticky;top:0;z-index:60;
     background:#fff;
-    padding:12px 16px;
+    padding:12px 12px;
     display:flex;align-items:center;justify-content:space-between;
     box-shadow:var(--shadow);
   }
   header.site .logo{
     font-family:'Tiro Bangla',serif;
-    font-size:1.05rem;
+    font-size:1.22rem;
     font-weight:700;
     color:var(--primary-dark);
     display:flex;align-items:center;gap:6px;
@@ -97,10 +97,10 @@
     min-width:0;
     flex:1 1 auto;
   }
-  header.site .logo .flag{font-size:.95rem;flex:0 0 auto;}
-  header.site .header-actions{display:flex;gap:6px;flex:0 0 auto;}
+  header.site .logo .brand-icon{width:24px;height:24px;border-radius:6px;flex:0 0 auto;object-fit:cover;}
+  header.site .header-actions{display:flex;gap:4px;flex:0 0 auto;}
   header.site .icon-btn{
-    width:32px;height:32px;
+    width:29px;height:29px;
     border-radius:50%;
     display:flex;align-items:center;justify-content:center;
     box-shadow:var(--shadow);
@@ -108,7 +108,7 @@
     appearance:none;
     flex:0 0 auto;
   }
-  header.site .icon-btn svg{width:15px;height:15px;}
+  header.site .icon-btn svg{width:14px;height:14px;}
   header.site .icon-btn.call{background:#fff;border:2px solid var(--secondary);color:var(--secondary);}
   header.site .icon-btn.wa{background:#fff;border:2px solid var(--primary);color:var(--primary);}
   header.site .icon-btn.search-toggle{background:#fff;border:2px solid var(--gold);color:#B8860B;}
@@ -552,7 +552,9 @@
     font-weight:700;
     font-size:1.25rem;
     text-align:center;
+    display:flex;align-items:center;justify-content:center;gap:8px;
   }
+  footer .f-brand img{width:26px;height:26px;border-radius:6px;object-fit:cover;}
   footer .f-links{
     display:flex;flex-wrap:wrap;justify-content:center;gap:14px;
     margin:16px 0;
@@ -832,7 +834,7 @@
 
 <div class="loading-bar" id="loadingBar"></div>
 <header class="site">
-  <div class="logo"><span class="flag">🇧🇩</span> আমাদের দেবিদ্বার</div>
+  <div class="logo"><img class="brand-icon" src="icon-192.png" alt="আমাদের দেবিদ্বার"> আমাদের দেবিদ্বার</div>
   <div class="header-actions">
     <button class="icon-btn search-toggle" id="searchToggleBtn" aria-label="খুঁজুন">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
@@ -902,7 +904,7 @@
     https://m.me/আপনার-ফেসবুক-পেজের-ইউজারনেম
     (আপনার নিউজ পেজের ইউজারনেম বসালেই কাজ করবে)
   -->
-  <div class="f-brand">🇧🇩 আমাদের দেবিদ্বার</div>
+  <div class="f-brand"><img src="icon-192.png" alt="আমাদের দেবিদ্বার"> আমাদের দেবিদ্বার</div>
   <div class="f-links">
     <a href="about.html">About</a>
     <a href="privacy.html">Privacy Policy</a>

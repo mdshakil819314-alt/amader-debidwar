@@ -98,9 +98,9 @@
     flex:1 1 auto;
   }
   header.site .logo .brand-icon{width:24px;height:24px;border-radius:6px;flex:0 0 auto;object-fit:cover;}
-  header.site .header-actions{display:flex;gap:5px;flex:0 0 auto;}
+  header.site .header-actions{display:flex;gap:4px;flex:0 0 auto;}
   header.site .icon-btn{
-    width:30px;height:30px;
+    width:29px;height:29px;
     border-radius:50%;
     display:flex;align-items:center;justify-content:center;
     box-shadow:var(--shadow);
@@ -580,6 +580,21 @@
   footer .copyright{
     text-align:center;font-size:.72rem;opacity:.6;margin-top:20px;
   }
+  .share-site-btn{
+    display:flex;align-items:center;justify-content:center;gap:8px;
+    width:100%;
+    background:var(--gold);color:#3A2A00;
+    border:none;border-radius:12px;
+    padding:12px;
+    font-weight:700;font-size:.86rem;
+    margin-top:16px;
+    font-family:'Hind Siliguri',sans-serif;
+  }
+  .share-site-btn svg{width:17px;height:17px;flex:0 0 auto;}
+  .share-status{
+    text-align:center;font-size:.78rem;color:#fff;opacity:.85;
+    margin-top:8px;min-height:16px;
+  }
 
   /* ---------- install banner ---------- */
   .install-banner{
@@ -640,7 +655,14 @@
     border:none;flex:0 0 auto;
   }
   .pd-back svg{width:18px;height:18px;}
-  .pd-header-title{font-family:'Tiro Bangla',serif;font-weight:700;font-size:1.05rem;color:var(--primary-dark);}
+  .pd-header-title{font-family:'Tiro Bangla',serif;font-weight:700;font-size:1.05rem;color:var(--primary-dark);flex:1;}
+  .pd-share{
+    width:36px;height:36px;border-radius:50%;
+    background:var(--bg-soft);color:var(--primary-dark);
+    display:flex;align-items:center;justify-content:center;
+    border:none;flex:0 0 auto;
+  }
+  .pd-share svg{width:17px;height:17px;}
   .pd-body{max-width:640px;margin:0 auto;padding:16px 16px 40px;}
   .pd-main-img{
     width:100%;
@@ -929,6 +951,11 @@
       মেসেঞ্জার
     </a>
   </div>
+  <button class="share-site-btn" id="shareSiteBtn">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
+    বন্ধুদের সাথে ওয়েবসাইটটি শেয়ার করুন
+  </button>
+  <div class="share-status" id="shareStatus"></div>
   <div class="copyright">© ২০২৬ আমাদের দেবিদ্বার — সর্বস্বত্ব সংরক্ষিত</div>
 </footer>
 
@@ -949,6 +976,9 @@
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
     </button>
     <div class="pd-header-title">প্রোডাক্ট ডিটেইলস</div>
+    <button class="pd-share" id="pdShareBtn">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
+    </button>
   </div>
   <div class="pd-body" id="pdBody"></div>
 </div>
@@ -1215,6 +1245,21 @@ function openProductDetail(p){
   });
   document.getElementById("pdOrderBtn").addEventListener("click", () => {
     addToCart(p);
+  });
+  document.getElementById("pdShareBtn").addEventListener("click", async () => {
+    const shareData = {
+      title: p.name,
+      text: `${p.name} — ৳${p.price}, "আমাদের দেবিদ্বার"-এ দেখুন:`,
+      url: window.location.href
+    };
+    if(navigator.share){
+      try { await navigator.share(shareData); } catch(e){}
+    } else {
+      try {
+        await navigator.clipboard.writeText(shareData.url);
+        showCartToast("লিংক কপি হয়েছে");
+      } catch(e){}
+    }
   });
 
   document.getElementById("productDetail").classList.add("open");
@@ -1874,6 +1919,35 @@ async function loadData(){
 
   loadingBar.classList.remove("active");
 }
+
+/*
+  সাইট শেয়ার ফিচার:
+  ফোনের নিজস্ব "শেয়ার" মেনু ব্যবহার করে — WhatsApp, Facebook, Messenger,
+  SMS, ইমেইল, যা যা অ্যাপ ফোনে ইনস্টল করা আছে সব অপশন দেখাবে। এটা কোনো
+  নির্দিষ্ট একটা প্ল্যাটফর্মে বাঁধা না, ইউজার নিজে বেছে নেবে কোথায় শেয়ার করবে।
+*/
+document.getElementById("shareSiteBtn").addEventListener("click", async () => {
+  const statusEl = document.getElementById("shareStatus");
+  const shareData = {
+    title: "আমাদের দেবিদ্বার",
+    text: "কাপড়, মুদি, সবজি, কসমেটিক — সবকিছু এখন এক জায়গায়! দেখুন আমাদের অনলাইন শপ:",
+    url: window.location.href
+  };
+
+  if(navigator.share){
+    try {
+      await navigator.share(shareData);
+    } catch(e){ /* ইউজার শেয়ার বাতিল করলে কিছু হবে না */ }
+  } else {
+    try {
+      await navigator.clipboard.writeText(shareData.url);
+      statusEl.textContent = "✅ লিংক কপি হয়েছে, এখন যেকোনো জায়গায় পেস্ট করে শেয়ার করুন";
+      setTimeout(() => { statusEl.textContent = ""; }, 3500);
+    } catch(e){
+      statusEl.textContent = "লিংক: " + shareData.url;
+    }
+  }
+});
 
 render();
 renderSlider();

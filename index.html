@@ -456,7 +456,7 @@
     display:flex;
     gap:8px;
   }
-  .card .order-actions a{
+  .card .order-actions a, .card .order-actions button{
     flex:1;
     display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;
     border-radius:14px;
@@ -464,19 +464,24 @@
     font-weight:700;
     font-size:.76rem;
     white-space:nowrap;
+    font-family:inherit;
     animation:gentle-bounce 2.2s ease-in-out infinite;
   }
   .card .order-actions .call-btn{animation-delay:0s;}
-  .card .order-actions .wa-btn{animation-delay:.3s;}
+  .card .order-actions .order-btn{animation:medium-bounce 1.8s ease-in-out infinite; animation-delay:.2s;}
   @keyframes gentle-bounce{
     0%, 100%{transform:translateY(0);}
     50%{transform:translateY(-3px);}
   }
-  .card .order-actions a svg{width:19px;height:19px;flex:0 0 auto;}
+  @keyframes medium-bounce{
+    0%, 100%{transform:translateY(0);}
+    50%{transform:translateY(-4px);}
+  }
+  .card .order-actions a svg, .card .order-actions button svg{width:19px;height:19px;flex:0 0 auto;}
   .card .order-actions .call-btn{background:#fff;border:1.5px solid var(--secondary);color:var(--secondary);}
-  .card .order-actions .wa-btn{background:#fff;border:1.5px solid var(--primary);color:var(--primary);}
+  .card .order-actions .order-btn{background:var(--red);border:1.5px solid var(--red);color:#fff;}
   .card .order-actions .call-btn:active{background:var(--bg-soft);}
-  .card .order-actions .wa-btn:active{background:var(--bg-soft);}
+  .card .order-actions .order-btn:active{background:#B33526;}
 
   .empty-note{text-align:center;padding:40px 20px;color:var(--muted);font-weight:600;}
 
@@ -556,11 +561,78 @@
     padding:4px 6px;line-height:1;
   }
 
+  /* ---------- order form modal ---------- */
+  .modal-overlay{
+    display:none;
+    position:fixed;inset:0;
+    background:rgba(15,25,20,.55);
+    z-index:100;
+    align-items:flex-end;
+    justify-content:center;
+  }
+  .modal-overlay.open{display:flex;}
+  .modal-card{
+    background:#fff;
+    width:100%;
+    max-width:480px;
+    max-height:88vh;
+    overflow-y:auto;
+    border-radius:22px 22px 0 0;
+    padding:18px 20px 26px;
+  }
+  .modal-head{
+    display:flex;align-items:center;justify-content:space-between;
+    margin-bottom:10px;
+  }
+  .modal-title{font-family:'Tiro Bangla',serif;font-weight:700;font-size:1.15rem;color:var(--primary-dark);}
+  .modal-close{
+    background:var(--bg-soft);border:none;
+    width:32px;height:32px;border-radius:50%;
+    font-size:1rem;color:var(--muted);
+  }
+  .modal-product{
+    background:var(--bg-soft);
+    border-radius:12px;
+    padding:12px 14px;
+    margin-bottom:14px;
+  }
+  .modal-product .mp-name{font-weight:700;font-size:.92rem;}
+  .modal-product .mp-price{font-size:.8rem;color:var(--muted);margin-top:4px;line-height:1.6;}
+  .modal-product .mp-price strong{color:var(--red);}
+  .m-label{display:block;font-size:.82rem;font-weight:700;margin:12px 0 6px;color:var(--ink);}
+  .m-label .m-opt{font-weight:500;color:var(--muted);font-size:.74rem;}
+  .m-input{
+    width:100%;
+    border:1.5px solid #E1E8E4;
+    border-radius:10px;
+    padding:10px 12px;
+    font-family:'Hind Siliguri',sans-serif;
+    font-size:.9rem;
+    background:var(--bg-soft);
+    color:var(--ink);
+  }
+  textarea.m-input{min-height:60px;resize:vertical;}
+  .m-input:focus{outline:2px solid var(--primary);border-color:var(--primary);}
+  .m-error{color:var(--red);font-size:.8rem;font-weight:600;margin-top:10px;min-height:18px;}
+  .m-send-label{font-size:.8rem;font-weight:700;color:var(--ink);margin:14px 0 8px;text-align:center;}
+  .m-send-row{display:flex;gap:8px;}
+  .m-submit{
+    flex:1;
+    display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;
+    border:none;border-radius:12px;
+    padding:12px 4px;font-weight:700;font-size:.74rem;
+    background:var(--primary);color:#fff;
+  }
+  .m-submit svg{width:20px;height:20px;}
+  .m-submit-call{background:#fff;border:1.5px solid var(--secondary);color:var(--secondary);}
+  .m-submit-sms{background:#fff;border:1.5px solid var(--gold);color:#B8860B;}
+  .m-submit-wa{background:#fff;border:1.5px solid #25D366;color:#1DA851;}
+
   @media (prefers-reduced-motion: reduce){
     html{scroll-behavior:auto;}
     .card,.cat-item .circle{transition:none;}
     .install-banner{transition:none;}
-    .card .order-actions a{animation:none;}
+    .card .order-actions a, .card .order-actions button{animation:none;}
     .card .discount-badge{animation:none;}
   }
 </style>
@@ -671,8 +743,136 @@
   </div>
 </div>
 
+<div class="modal-overlay" id="orderModal">
+  <div class="modal-card">
+    <div class="modal-head">
+      <div class="modal-title">🧾 অর্ডার ফর্ম</div>
+      <button class="modal-close" id="orderModalClose">✕</button>
+    </div>
+    <div class="modal-product" id="modalProductInfo"></div>
+
+    <label class="m-label">ইউনিয়ন *</label>
+    <input type="text" id="ord_union" class="m-input" placeholder="যেমন: দেবিদ্বার সদর">
+
+    <label class="m-label">ওয়ার্ড নম্বর *</label>
+    <input type="text" id="ord_ward" class="m-input" placeholder="যেমন: ৫">
+
+    <label class="m-label">ফোন নম্বর (১১ ডিজিট) *</label>
+    <input type="tel" id="ord_phone" class="m-input" placeholder="01XXXXXXXXX" maxlength="11">
+
+    <label class="m-label">গ্রাম *</label>
+    <input type="text" id="ord_village" class="m-input" placeholder="গ্রামের নাম">
+
+    <label class="m-label">সুনির্দিষ্ট ঠিকানা <span class="m-opt">(ঐচ্ছিক)</span></label>
+    <textarea id="ord_address" class="m-input" placeholder="বাড়ি/রোড নম্বর ইত্যাদি"></textarea>
+
+    <div class="m-error" id="ord_error"></div>
+
+    <div class="m-send-label">যেভাবে অর্ডার পাঠাতে চান বেছে নিন</div>
+    <div class="m-send-row">
+      <button class="m-submit m-submit-call" id="ord_submit_call">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.91.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+        কল
+      </button>
+      <button class="m-submit m-submit-sms" id="ord_submit_sms">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16v12H7l-3 3z"/></svg>
+        SMS
+      </button>
+      <button class="m-submit m-submit-wa" id="ord_submit_wa">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
+        হোয়াটসঅ্যাপ
+      </button>
+    </div>
+  </div>
+</div>
+
 <script>
 /*
+  অর্ডার ফর্ম:
+  ইউনিয়ন/ওয়ার্ড/ফোন/গ্রাম/ঠিকানা নেওয়ার পর প্রোডাক্টের নাম, দাম, ডেলিভারি ফি,
+  ও সর্বমোট যোগ করে একটা পূর্ণাঙ্গ SMS/WhatsApp মেসেজ বানায়। এটা কোনো
+  পাবলিক জায়গায় (যেমন GitHub) জমা হয় না — সরাসরি আপনার ফোনে SMS/WhatsApp
+  আকারে যায়, তাই কাস্টমারের তথ্য গোপন থাকে।
+*/
+const ORDER_SMS_NUMBER = "+8801872280095";
+let currentOrderProduct = null;
+
+function openOrderModal(p){
+  currentOrderProduct = p;
+  const hasDeliveryFee = !!(p.deliveryFee && p.deliveryFee > 0);
+  const total = hasDeliveryFee ? p.price + p.deliveryFee : p.price;
+  document.getElementById("modalProductInfo").innerHTML = `
+    <div class="mp-name">${p.name}</div>
+    <div class="mp-price">প্রোডাক্টের দাম: ৳${p.price}${hasDeliveryFee ? ` + ডেলিভারি ৳${p.deliveryFee} = <strong>সর্বমোট ৳${total}</strong>` : ""}</div>
+  `;
+  document.getElementById("ord_error").textContent = "";
+  document.getElementById("orderModal").classList.add("open");
+}
+
+function closeOrderModal(){
+  document.getElementById("orderModal").classList.remove("open");
+}
+document.getElementById("orderModalClose").addEventListener("click", closeOrderModal);
+document.getElementById("orderModal").addEventListener("click", (e) => {
+  if(e.target.id === "orderModal") closeOrderModal();
+});
+
+function buildOrderMessage(){
+  const p = currentOrderProduct;
+  const union = document.getElementById("ord_union").value.trim();
+  const ward = document.getElementById("ord_ward").value.trim();
+  const phone = document.getElementById("ord_phone").value.trim();
+  const village = document.getElementById("ord_village").value.trim();
+  const address = document.getElementById("ord_address").value.trim();
+  const errBox = document.getElementById("ord_error");
+
+  if(!union || !ward || !phone || !village){
+    errBox.textContent = "দয়া করে * চিহ্নিত সবগুলো বক্স পূরণ করুন।";
+    return null;
+  }
+  if(!/^01[0-9]{9}$/.test(phone)){
+    errBox.textContent = "ফোন নম্বর ১১ ডিজিটের সঠিক বাংলাদেশি নম্বর হতে হবে (যেমন 01712345678)।";
+    return null;
+  }
+  errBox.textContent = "";
+
+  const hasDeliveryFee = !!(p.deliveryFee && p.deliveryFee > 0);
+  const total = hasDeliveryFee ? p.price + p.deliveryFee : p.price;
+
+  let msg = `নতুন অর্ডার - আমাদের শপ\n`;
+  msg += `প্রোডাক্ট: ${p.name}\n`;
+  msg += `দাম: ৳${p.price}\n`;
+  if(hasDeliveryFee) msg += `ডেলিভারি ফি: ৳${p.deliveryFee}\n`;
+  msg += `সর্বমোট: ৳${total}\n`;
+  msg += `---\n`;
+  msg += `ইউনিয়ন: ${union}\n`;
+  msg += `ওয়ার্ড: ${ward}\n`;
+  msg += `ফোন: ${phone}\n`;
+  msg += `গ্রাম: ${village}\n`;
+  if(address) msg += `ঠিকানা: ${address}\n`;
+  return msg;
+}
+
+document.getElementById("ord_submit_call").addEventListener("click", () => {
+  window.location.href = "tel:+971542758007";
+});
+
+document.getElementById("ord_submit_sms").addEventListener("click", () => {
+  const msg = buildOrderMessage();
+  if(!msg) return;
+  window.location.href = `sms:${ORDER_SMS_NUMBER}?body=${encodeURIComponent(msg)}`;
+});
+
+document.getElementById("ord_submit_wa").addEventListener("click", () => {
+  const msg = buildOrderMessage();
+  if(!msg) return;
+  window.open(`https://wa.me/971542758007?text=${encodeURIComponent(msg)}`, "_blank");
+});
+</script>
+
+<script>
+/*
+
   ডাটা সোর্স:
   PRODUCTS/SLIDER_ITEMS/SHOPS এখানে শুধু ফলব্যাক (ডিফল্ট) ডাটা হিসেবে রাখা —
   যদি products.json/slider.json/shops.json ফাইল একই ফোল্ডারে না পাওয়া যায়,
@@ -922,12 +1122,13 @@ function productCard(p){
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.91.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
         কল
       </a>
-      <a class="wa-btn" href="${waLink(p)}" target="_blank" rel="noopener">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
-        চ্যাট
-      </a>
+      <button class="order-btn" type="button">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+        অর্ডার নাও
+      </button>
     </div>
   `;
+  card.querySelector(".order-btn").addEventListener("click", () => openOrderModal(p));
   if(hasDetails){
     const toggle = card.querySelector(".detail-toggle");
     const panel = card.querySelector(".detail-panel");

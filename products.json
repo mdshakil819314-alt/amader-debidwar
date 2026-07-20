@@ -9,9 +9,9 @@
     "stock": 15,
     "deliveryFee": 60,
     "images": [
-      "https://raw.githubusercontent.com/mdshakil819314-alt/amader-debidwar/main/images/panjabi1.jpg",
-      "https://raw.githubusercontent.com/mdshakil819314-alt/amader-debidwar/main/images/panjabi1.jpg",
-      "https://raw.githubusercontent.com/mdshakil819314-alt/amader-debidwar/main/images/panjabi1.jpg"
+      "https:\/\/raw.githubusercontent.com\/mdshakil819314-alt\/amader-debidwar\/main\/images\/panjabi1.jpg",
+      "https:\/\/raw.githubusercontent.com\/mdshakil819314-alt\/amader-debidwar\/main\/images\/panjabi1.jpg",
+      "https:\/\/raw.githubusercontent.com\/mdshakil819314-alt\/amader-debidwar\/main\/images\/panjabi1.jpg"
     ],
     "emoji": "👘"
   },
@@ -60,7 +60,7 @@
     "originalPrice": null,
     "stock": 10,
     "deliveryFee": 60,
-    "image": "https://raw.githubusercontent.com/mdshakil819314-alt/amader-debidwar/main/images/thiripis1.jpg",
+    "image": "https:\/\/raw.githubusercontent.com\/mdshakil819314-alt\/amader-debidwar\/main\/images\/thiripis1.jpg",
     "emoji": "👚"
   },
   {
@@ -493,13 +493,13 @@
     "category": "churi",
     "shop": "ফ্যামিলি শপ",
     "price": 150,
-    "originalPrice": null,
-    "stock": 35,
-    "deliveryFee": 40,
+    "originalPrice": 200,
+    "stock": 3,
+    "deliveryFee": 30,
     "images": [
-      "https://raw.githubusercontent.com/mdshakil819314-alt/amader-debidwar/main/images/chori1.jpg",
-      "https://raw.githubusercontent.com/mdshakil819314-alt/amader-debidwar/main/images/chori2.jpg",
-      "https://raw.githubusercontent.com/mdshakil819314-alt/amader-debidwar/main/images/chori3.jpg"
+      "https:\/\/raw.githubusercontent.com\/mdshakil819314-alt\/amader-debidwar\/main\/images\/chori1.jpg",
+      "https:\/\/raw.githubusercontent.com\/mdshakil819314-alt\/amader-debidwar\/main\/images\/chori2.jpg",
+      "https:\/\/raw.githubusercontent.com\/mdshakil819314-alt\/amader-debidwar\/main\/images\/chori3.jpg"
     ],
     "emoji": "💍"
   },

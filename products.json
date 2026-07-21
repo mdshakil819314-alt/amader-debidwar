@@ -264,19 +264,6 @@
     "sold": 0
   },
   {
-    "id": 11,
-    "name": "কাঁচা মরিচ (২৫০ গ্রাম)",
-    "category": "vegetable",
-    "shop": "ফ্যামিলি শপ",
-    "price": 40,
-    "originalPrice": null,
-    "stock": 35,
-    "deliveryFee": 30,
-    "image": "",
-    "emoji": "🌶️",
-    "sold": 0
-  },
-  {
     "id": 12,
     "name": "লাউ (১ পিস)",
     "category": "vegetable",

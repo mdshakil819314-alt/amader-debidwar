@@ -640,13 +640,23 @@
     "originalPrice": 1000,
     "stock": 10,
     "deliveryFee": 60,
+    "description": "প্রিমিয়াম কোয়ালিটি 👌",
     "images": [
       "https:\/\/raw.githubusercontent.com\/mdshakil819314-alt\/amader-debidwar\/main\/images\/img_1784595507787_c06bfa.jpg",
       "https:\/\/raw.githubusercontent.com\/mdshakil819314-alt\/amader-debidwar\/main\/images\/img_1784595523535_98166f.jpg",
       "https:\/\/raw.githubusercontent.com\/mdshakil819314-alt\/amader-debidwar\/main\/images\/img_1784595535480_6a9a8f.jpg"
     ],
     "emoji": "👜",
-    "sold": 0
+    "sold": 0,
+    "code": "PQ",
+    "sizes": [
+      "S",
+      "M"
+    ],
+    "colors": [
+      "কালো",
+      "খয়েরী"
+    ]
   },
   {
     "id": 50,

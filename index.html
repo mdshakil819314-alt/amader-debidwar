@@ -407,7 +407,7 @@
   .card .discount-badge{
     position:absolute;top:8px;left:8px;
     background:var(--red);color:#fff;
-    font-size:.45rem;font-weight:800;
+    font-size:.62rem;font-weight:800;
     padding:3px 8px;border-radius:6px;
     animation:badge-pulse 1.6s ease-in-out infinite;
   }
@@ -1959,11 +1959,13 @@ let deferredPrompt = null;
 const isIOS = /iphone|ipad|ipod/i.test(navigator.userAgent);
 const isStandalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true;
 
+let sessionDismissed = false; // শুধু এই ভিজিটের জন্য মনে রাখবে, পেজ রিলোড/নতুন ভিজিটে আবার দেখাবে
+
 function isDismissed(){
-  try { return localStorage.getItem('installBannerDismissed') === '1'; } catch(e){ return false; }
+  return sessionDismissed;
 }
 function markDismissed(){
-  try { localStorage.setItem('installBannerDismissed', '1'); } catch(e){}
+  sessionDismissed = true;
 }
 
 function showInstallBanner(iosMode){

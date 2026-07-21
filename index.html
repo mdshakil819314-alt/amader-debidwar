@@ -175,6 +175,7 @@
     display:flex;
     overflow-x:auto;
     scroll-snap-type:x mandatory;
+    scroll-padding:0 16px;
     gap:12px;
     padding:0 16px 10px;
     scrollbar-width:none;
@@ -745,35 +746,27 @@
   .modal-product .mp-price{font-size:.8rem;color:var(--muted);margin-top:8px;line-height:1.6;}
   .modal-product .mp-price strong{color:var(--red);}
   .trust-box{
-    background:linear-gradient(160deg, #E4F5EC 0%, #D3EEDE 100%);
-    border-radius:14px;
-    padding:14px 14px 12px;
-    margin-top:14px;
+    background:none;
+    padding:0;
+    margin:0 0 16px;
   }
   .trust-box-title{
     font-family:'Tiro Bangla',serif;
     font-weight:700;
-    font-size:.94rem;
+    font-size:.98rem;
     line-height:1.5;
     color:var(--primary-dark);
     text-align:center;
-    margin-bottom:10px;
-  }
-  .trust-box-line{
-    display:flex;
-    align-items:flex-start;
-    gap:8px;
-    background:rgba(255,255,255,.65);
-    border:1px solid rgba(15,143,95,.18);
-    border-radius:10px;
-    padding:9px 11px;
-    font-size:.76rem;
-    line-height:1.55;
-    color:var(--ink);
     margin-bottom:8px;
   }
+  .trust-box-line{
+    font-size:.78rem;
+    line-height:1.65;
+    color:var(--ink);
+    text-align:center;
+    margin-bottom:6px;
+  }
   .trust-box-line:last-child{margin-bottom:0;}
-  .trust-box-line .ic{font-size:.95rem;flex:0 0 auto;}
   .m-label{display:block;font-size:.82rem;font-weight:700;margin:12px 0 6px;color:var(--ink);}
   .m-label .m-opt{font-weight:500;color:var(--muted);font-size:.74rem;}
   .m-input{
@@ -821,8 +814,9 @@
     border-radius:999px;
     flex-direction:row;
     gap:8px;
-    padding:14px 4px;
-    font-size:.9rem;
+    padding:15px 4px;
+    font-size:.92rem;
+    box-shadow:0 6px 16px rgba(214,67,46,.35);
   }
 
   /* ---------- cart ---------- */
@@ -1021,13 +1015,13 @@
       <div class="modal-title">🧾 অর্ডার ফর্ম</div>
       <button class="modal-close" id="orderModalClose">✕</button>
     </div>
-    <div class="modal-product" id="modalProductInfo"></div>
-
     <div class="trust-box">
       <div class="trust-box-title">আপনাদের বিশ্বাস আর ভালোবাসা, আগামী পথচলায় আমাদের অনুপ্রেরণা</div>
-      <div class="trust-box-line"><span class="ic">🤲</span><span>আমরা জেনে-শুনে যদি আপনাদের কোনো খারাপ প্রোডাক্ট দিয়ে থাকি, তাহলে আল্লাহর কাঠগড়ায় আমাদের এর জবাবদিহিতা করতে হবে।</span></div>
-      <div class="trust-box-line"><span class="ic">✅</span><span>ডেলিভারি ম্যান আপনার কাছে প্রোডাক্ট নিয়ে গেলে, প্রোডাক্ট পছন্দ না হলে ১০০% আপনার টাকা আপনি ফেরত পাবেন।</span></div>
+      <div class="trust-box-line">আমরা জেনে-শুনে যদি আপনাদের কোনো খারাপ প্রোডাক্ট দিয়ে থাকি, তাহলে আল্লাহর কাঠগড়ায় আমাদের এর জবাবদিহিতা করতে হবে।</div>
+      <div class="trust-box-line">ডেলিভারি ম্যান আপনার কাছে প্রোডাক্ট নিয়ে গেলে, প্রোডাক্ট পছন্দ না হলে ১০০% আপনার টাকা আপনি ফেরত পাবেন।</div>
     </div>
+
+    <div class="modal-product" id="modalProductInfo"></div>
 
     <label class="m-label">আপনার নাম *</label>
     <input type="text" id="ord_name" class="m-input" placeholder="যেমন: করিম উদ্দিন">

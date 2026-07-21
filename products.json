@@ -399,19 +399,6 @@
     "sold": 0
   },
   {
-    "id": 55,
-    "name": "বেবি ক্যারিয়ার",
-    "category": "kids-products",
-    "shop": "ফ্যামিলি শপ",
-    "price": 950,
-    "originalPrice": 1100,
-    "stock": 8,
-    "deliveryFee": 50,
-    "image": "",
-    "emoji": "🧸",
-    "sold": 0
-  },
-  {
     "id": 4,
     "name": "বাচ্চাদের জামা",
     "category": "baby-dress",

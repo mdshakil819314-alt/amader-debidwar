@@ -693,9 +693,16 @@
     "originalPrice": null,
     "stock": 12,
     "deliveryFee": 60,
-    "image": "",
+    "image": "https:\/\/raw.githubusercontent.com\/mdshakil819314-alt\/amader-debidwar\/main\/images\/img_1784596043068_410eee.jpg",
     "emoji": "👜",
-    "sold": 0
+    "sold": 0,
+    "code": "P2",
+    "sizes": [
+      "M"
+    ],
+    "colors": [
+      "কালো"
+    ]
   },
   {
     "id": 53,

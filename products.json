@@ -52,19 +52,6 @@
     ]
   },
   {
-    "id": 20,
-    "name": "পাঞ্জাবি (লিনেন, অফ-হোয়াইট)",
-    "category": "panjabi",
-    "shop": "ফ্যামিলি শপ",
-    "price": 780,
-    "originalPrice": null,
-    "stock": 14,
-    "deliveryFee": 60,
-    "image": "",
-    "emoji": "👘",
-    "sold": 0
-  },
-  {
     "id": 2,
     "name": "মেয়েদের থ্রি-পিস",
     "category": "threepiece",

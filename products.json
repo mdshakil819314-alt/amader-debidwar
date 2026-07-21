@@ -264,19 +264,6 @@
     "sold": 0
   },
   {
-    "id": 6,
-    "name": "সয়াবিন তেল (৫ লিটার)",
-    "category": "grocery",
-    "shop": "ফ্যামিলি শপ",
-    "price": 780,
-    "originalPrice": 850,
-    "stock": 18,
-    "deliveryFee": 40,
-    "image": "",
-    "emoji": "🛢️",
-    "sold": 0
-  },
-  {
     "id": 7,
     "name": "চিনি (১ কেজি)",
     "category": "grocery",

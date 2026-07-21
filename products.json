@@ -264,19 +264,6 @@
     "sold": 0
   },
   {
-    "id": 12,
-    "name": "লাউ (১ পিস)",
-    "category": "vegetable",
-    "shop": "ফ্যামিলি শপ",
-    "price": 50,
-    "originalPrice": null,
-    "stock": 22,
-    "deliveryFee": 30,
-    "image": "",
-    "emoji": "🥒",
-    "sold": 0
-  },
-  {
     "id": 13,
     "name": "ফেসওয়াশ (হারবাল)",
     "category": "cosmetic",

@@ -333,19 +333,6 @@
     "sold": 0
   },
   {
-    "id": 47,
-    "name": "পুঁতির চুড়ি সেট",
-    "category": "churi",
-    "shop": "ফ্যামিলি শপ",
-    "price": 180,
-    "originalPrice": null,
-    "stock": 25,
-    "deliveryFee": 40,
-    "image": "",
-    "emoji": "💍",
-    "sold": 0
-  },
-  {
     "id": 49,
     "name": "লেডিস হ্যান্ডব্যাগ (লেদার)",
     "category": "handbag",

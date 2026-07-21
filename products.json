@@ -516,19 +516,6 @@
     "sold": 0
   },
   {
-    "id": 68,
-    "name": "ওয়াটার বোতল (স্কুল)",
-    "category": "school-bag",
-    "shop": "ফ্যামিলি শপ",
-    "price": 150,
-    "originalPrice": null,
-    "stock": 26,
-    "deliveryFee": 50,
-    "image": "",
-    "emoji": "🎒",
-    "sold": 0
-  },
-  {
     "id": 69,
     "name": "আতর (উদ)",
     "category": "perfume-attar",

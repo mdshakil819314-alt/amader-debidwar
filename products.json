@@ -104,19 +104,6 @@
     ]
   },
   {
-    "id": 22,
-    "name": "থ্রি-পিস (কটন, এমব্রয়ডারি)",
-    "category": "threepiece",
-    "shop": "ফ্যামিলি শপ",
-    "price": 980,
-    "originalPrice": null,
-    "stock": 11,
-    "deliveryFee": 60,
-    "image": "",
-    "emoji": "👚",
-    "sold": 0
-  },
-  {
     "id": 3,
     "name": "শাড়ি (হাফ সিল্ক)",
     "category": "saree",

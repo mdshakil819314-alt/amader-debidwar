@@ -212,19 +212,6 @@
     "sold": 0
   },
   {
-    "id": 15,
-    "name": "বডি লোশন",
-    "category": "cosmetic",
-    "shop": "ফ্যামিলি শপ",
-    "price": 260,
-    "originalPrice": null,
-    "stock": 12,
-    "deliveryFee": 50,
-    "image": "",
-    "emoji": "🧴",
-    "sold": 0
-  },
-  {
     "id": 33,
     "name": "কুর্তি (প্রিন্টেড)",
     "category": "women-fashion",

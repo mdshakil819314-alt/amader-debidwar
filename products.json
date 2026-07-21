@@ -52,19 +52,6 @@
     ]
   },
   {
-    "id": 19,
-    "name": "পাঞ্জাবি (সিল্ক, কালো)",
-    "category": "panjabi",
-    "shop": "ফ্যামিলি শপ",
-    "price": 1200,
-    "originalPrice": null,
-    "stock": 9,
-    "deliveryFee": 60,
-    "image": "",
-    "emoji": "👘",
-    "sold": 0
-  },
-  {
     "id": 20,
     "name": "পাঞ্জাবি (লিনেন, অফ-হোয়াইট)",
     "category": "panjabi",

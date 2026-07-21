@@ -1,28 +1,5 @@
 [
   {
-    "id": 18,
-    "name": "পাঞ্জাবি (এমব্রয়ডার)",
-    "category": "panjabi",
-    "shop": "ফ্যামিলি শপ",
-    "price": 950,
-    "originalPrice": 1150,
-    "stock": 3,
-    "deliveryFee": 60,
-    "images": [
-      "https:\/\/raw.githubusercontent.com\/mdshakil819314-alt\/amader-debidwar\/main\/images\/img_1784571291632_07f602.jpg",
-      "https:\/\/raw.githubusercontent.com\/mdshakil819314-alt\/amader-debidwar\/main\/images\/img_1784571424606_6adf39.jpg"
-    ],
-    "emoji": "👘",
-    "sold": 1,
-    "code": "P1",
-    "sizes": [
-      "S"
-    ],
-    "colors": [
-      "সাদা"
-    ]
-  },
-  {
     "id": 2,
     "name": "মেয়েদের থ্রি-পিস",
     "category": "threepiece",

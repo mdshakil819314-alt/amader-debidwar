@@ -60,9 +60,21 @@
     "originalPrice": 1950,
     "stock": 8,
     "deliveryFee": 60,
-    "image": "",
+    "description": "একটি শাড়ি ব্লাউজ পেটিকোট",
+    "images": [
+      "https:\/\/raw.githubusercontent.com\/mdshakil819314-alt\/amader-debidwar\/main\/images\/img_1784600646175_a0b056.jpg",
+      "https:\/\/raw.githubusercontent.com\/mdshakil819314-alt\/amader-debidwar\/main\/images\/img_1784600654165_b8b8a6.jpg"
+    ],
     "emoji": "🥻",
-    "sold": 0
+    "sold": 0,
+    "code": "P11",
+    "sizes": [
+      "M"
+    ],
+    "colors": [
+      "খয়েরী",
+      "কালো"
+    ]
   },
   {
     "id": 24,

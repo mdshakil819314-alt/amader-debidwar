@@ -251,19 +251,6 @@
     "sold": 0
   },
   {
-    "id": 36,
-    "name": "ক্যাজুয়াল টপ",
-    "category": "women-fashion",
-    "shop": "ফ্যামিলি শপ",
-    "price": 450,
-    "originalPrice": null,
-    "stock": 20,
-    "deliveryFee": 60,
-    "image": "",
-    "emoji": "👗",
-    "sold": 0
-  },
-  {
     "id": 37,
     "name": "হিজাব (জর্জেট, প্লেইন)",
     "category": "hijab",

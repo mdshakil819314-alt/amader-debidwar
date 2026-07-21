@@ -130,19 +130,6 @@
     "sold": 0
   },
   {
-    "id": 26,
-    "name": "শাড়ি (সুতি, প্রিন্ট)",
-    "category": "saree",
-    "shop": "ফ্যামিলি শপ",
-    "price": 850,
-    "originalPrice": null,
-    "stock": 15,
-    "deliveryFee": 60,
-    "image": "",
-    "emoji": "🥻",
-    "sold": 0
-  },
-  {
     "id": 17,
     "name": "সাপ্তাহিক বাজার কম্বো প্যাক",
     "category": "combo",

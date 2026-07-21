@@ -264,19 +264,6 @@
     "sold": 0
   },
   {
-    "id": 8,
-    "name": "মসুর ডাল (১ কেজি)",
-    "category": "grocery",
-    "shop": "ফ্যামিলি শপ",
-    "price": 150,
-    "originalPrice": null,
-    "stock": 25,
-    "deliveryFee": 40,
-    "image": "",
-    "emoji": "🫘",
-    "sold": 0
-  },
-  {
     "id": 9,
     "name": "দেশি টমেটো (১ কেজি)",
     "category": "vegetable",

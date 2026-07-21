@@ -451,19 +451,6 @@
     "sold": 0
   },
   {
-    "id": 59,
-    "name": "সিলিকন নিপল সেট",
-    "category": "feeder",
-    "shop": "ফ্যামিলি শপ",
-    "price": 90,
-    "originalPrice": null,
-    "stock": 30,
-    "deliveryFee": 40,
-    "image": "",
-    "emoji": "🍼",
-    "sold": 0
-  },
-  {
     "id": 61,
     "name": "রিমোট কন্ট্রোল গাড়ি",
     "category": "toys",

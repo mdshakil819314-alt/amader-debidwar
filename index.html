@@ -81,7 +81,7 @@
   header.site{
     position:sticky;top:0;z-index:60;
     background:#fff;
-    padding:10px 10px;
+    padding:12px 12px;
     display:flex;align-items:center;justify-content:space-between;
     box-shadow:var(--shadow);
   }
@@ -89,39 +89,37 @@
     display:flex;flex-direction:column;
     min-width:0;
     flex:1 1 auto;
-    overflow:hidden;
   }
   header.site .logo{
     font-family:'Tiro Bangla',serif;
-    font-size:1.30rem;
-    font-weight:730;
+    font-size:1.15rem;
+    font-weight:700;
     color:var(--primary-dark);
-    display:flex;align-items:center;gap:5px;
+    display:flex;align-items:center;gap:6px;
     white-space:nowrap;
     overflow:hidden;
     text-overflow:ellipsis;
     min-width:0;
   }
   header.site .logo-tagline{
-    font-size:.62rem;
+    font-size:.68rem;
     font-weight:600;
     color:var(--muted);
-    margin-left:27px;
+    margin-left:38px;
     margin-top:1px;
-    letter-spacing:.02em;
-    display:flex;align-items:center;gap:4px;
-    white-space:nowrap;
+    letter-spacing:.03em;
+    display:flex;align-items:center;gap:5px;
   }
   header.site .logo-tagline .dot{
-    width:5px;height:5px;
+    width:6px;height:6px;
     border-radius:50%;
     background:var(--primary);
     flex:0 0 auto;
   }
-  header.site .logo .brand-icon{width:26px;height:26px;border-radius:5px;flex:0 0 auto;object-fit:cover;}
-  header.site .header-actions{display:flex;gap:6px;flex:0 0 auto;}
+  header.site .logo .brand-icon{width:24px;height:24px;border-radius:6px;flex:0 0 auto;object-fit:cover;}
+  header.site .header-actions{display:flex;gap:9px;flex:0 0 auto;}
   header.site .icon-btn{
-    width:34px;height:34px;
+    width:38px;height:38px;
     border-radius:50%;
     display:flex;align-items:center;justify-content:center;
     box-shadow:var(--shadow);
@@ -129,7 +127,7 @@
     appearance:none;
     flex:0 0 auto;
   }
-  header.site .icon-btn svg{width:16px;height:16px;}
+  header.site .icon-btn svg{width:18px;height:18px;}
   header.site .icon-btn.call{background:#fff;border:2px solid var(--secondary);color:var(--secondary);}
   header.site .icon-btn.fb{background:#fff;border:2px solid #1877F2;color:#1877F2;}
   header.site .icon-btn.search-toggle{background:#fff;border:2px solid var(--gold);color:#B8860B;}
@@ -428,8 +426,8 @@
   .card .discount-badge{
     position:absolute;top:8px;left:8px;
     background:var(--red);color:#fff;
-    font-size:.50rem;font-weight:800;
-    padding:2px 7px;border-radius:6px;
+    font-size:.62rem;font-weight:800;
+    padding:3px 8px;border-radius:6px;
     animation:badge-pulse 1.6s ease-in-out infinite;
   }
   @keyframes badge-pulse{
@@ -493,7 +491,8 @@
   .card .price.no-discount{color:var(--primary-dark);}
   .card .old-price{font-size:.85rem;color:#9a9284;text-decoration:line-through;font-weight:500;}
   .card .order-actions{
-    margin-top:12px;
+    margin-top:auto;
+    padding-top:12px;
     display:flex;
     gap:8px;
   }

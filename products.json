@@ -529,5 +529,32 @@
     "colors": [
       "সাদা"
     ]
+  },
+  {
+    "id": 75,
+    "name": "টি শার্ট",
+    "category": "T-shirt",
+    "shop": "ফ্যামিলি শপ",
+    "price": 600,
+    "originalPrice": 700,
+    "stock": 6,
+    "deliveryFee": 30,
+    "images": [
+      "https:\/\/raw.githubusercontent.com\/mdshakil819314-alt\/amader-debidwar\/main\/images\/img_1784601801413_b83543.jpg",
+      "https:\/\/raw.githubusercontent.com\/mdshakil819314-alt\/amader-debidwar\/main\/images\/img_1784601807499_d03305.jpg"
+    ],
+    "emoji": "🛍️",
+    "sold": 0,
+    "code": "P3",
+    "sizes": [
+      "M",
+      "S",
+      "XXL"
+    ],
+    "colors": [
+      "কালো",
+      "নিল",
+      "সাদা"
+    ]
   }
 ]

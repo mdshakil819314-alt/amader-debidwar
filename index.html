@@ -170,13 +170,13 @@
   }
 
   /* ---------- featured slider ---------- */
-  .slider-wrap{padding:0 0 4px;position:relative;}
+  .slider-wrap{padding:2px 0 4px;position:relative;}
   .slider{
     display:flex;
     overflow-x:auto;
     scroll-snap-type:x mandatory;
-    gap:0;
-    padding:0 0 10px;
+    gap:12px;
+    padding:0 16px 10px;
     scrollbar-width:none;
   }
   .slider::-webkit-scrollbar{display:none;}
@@ -202,7 +202,7 @@
     overflow:hidden;
   }
   .slide .slide-emoji img{
-    width:100%;height:100%;object-fit:contain;display:block;
+    width:100%;height:100%;object-fit:cover;display:block;
   }
   .slide .slide-tag{
     position:absolute;
@@ -245,8 +245,8 @@
     z-index:3;
   }
   .slider-nav svg{width:18px;height:18px;}
-  .slider-nav.prev{left:8px;}
-  .slider-nav.next{right:8px;}
+  .slider-nav.prev{left:22px;}
+  .slider-nav.next{right:22px;}
   .dots{display:flex;justify-content:center;gap:6px;margin-top:10px;}
   .dots span{
     width:7px;height:7px;border-radius:50%;
@@ -1643,7 +1643,7 @@ function renderSlider(){
 function goToSlide(i){
   const track = document.getElementById("slider");
   sliderIndex = (i + SLIDER_ITEMS.length) % SLIDER_ITEMS.length;
-  const slideWidth = track.children[0].getBoundingClientRect().width;
+  const slideWidth = track.children[0].getBoundingClientRect().width + 12;
   track.scrollTo({ left: sliderIndex * slideWidth, behavior: "smooth" });
   document.querySelectorAll("#sliderDots span").forEach((d, idx) => {
     d.classList.toggle("active", idx === sliderIndex);

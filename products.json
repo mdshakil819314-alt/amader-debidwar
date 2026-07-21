@@ -556,5 +556,31 @@
       "নিল",
       "সাদা"
     ]
+  },
+  {
+    "id": 76,
+    "name": "ছেলেদের ঘড়ি",
+    "category": "Clock",
+    "shop": "ফ্যামিলি শপ",
+    "price": 900,
+    "originalPrice": 1000,
+    "stock": 5,
+    "deliveryFee": 40,
+    "images": [
+      "https:\/\/raw.githubusercontent.com\/mdshakil819314-alt\/amader-debidwar\/main\/images\/img_1784602088546_3fb503.jpg",
+      "https:\/\/raw.githubusercontent.com\/mdshakil819314-alt\/amader-debidwar\/main\/images\/img_1784602071876_fcf65d.jpg",
+      "https:\/\/raw.githubusercontent.com\/mdshakil819314-alt\/amader-debidwar\/main\/images\/img_1784602098058_9e8b58.jpg"
+    ],
+    "emoji": "🛍️",
+    "sold": 0,
+    "code": "U2",
+    "sizes": [
+      "M",
+      "S"
+    ],
+    "colors": [
+      "সাদা",
+      "কালো"
+    ]
   }
 ]

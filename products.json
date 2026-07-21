@@ -438,19 +438,6 @@
     "sold": 0
   },
   {
-    "id": 32,
-    "name": "বেবি ড্রেস (পার্টি ওয়্যার)",
-    "category": "baby-dress",
-    "shop": "ফ্যামিলি শপ",
-    "price": 650,
-    "originalPrice": 750,
-    "stock": 10,
-    "deliveryFee": 50,
-    "image": "",
-    "emoji": "👶",
-    "sold": 0
-  },
-  {
     "id": 57,
     "name": "ফিডার বোতল (১২০ মিলি)",
     "category": "feeder",

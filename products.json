@@ -464,19 +464,6 @@
     "sold": 0
   },
   {
-    "id": 60,
-    "name": "ফিডার ক্লিনিং ব্রাশ",
-    "category": "feeder",
-    "shop": "ফ্যামিলি শপ",
-    "price": 60,
-    "originalPrice": null,
-    "stock": 35,
-    "deliveryFee": 40,
-    "image": "",
-    "emoji": "🍼",
-    "sold": 0
-  },
-  {
     "id": 61,
     "name": "রিমোট কন্ট্রোল গাড়ি",
     "category": "toys",

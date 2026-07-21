@@ -233,6 +233,10 @@
   }
   .slide .slide-sub{font-size:.78rem;color:#fff;opacity:.9;font-weight:600;margin-top:4px;}
   .slide .slide-price{margin-top:6px;font-weight:700;color:#fff;font-size:1rem;}
+  .slide-emoji.no-image .slide-body{background:none;}
+  .slide-emoji.no-image .slide-title{color:var(--ink);}
+  .slide-emoji.no-image .slide-sub{color:var(--secondary);opacity:1;}
+  .slide-emoji.no-image .slide-price{color:var(--red);}
   .slider-nav{
     position:absolute;
     top:calc(50% - 25px);
@@ -1612,9 +1616,10 @@ function renderSlider(){
     slide.href = sliderWaLink(s);
     slide.target = "_blank";
     slide.rel = "noopener";
-    const thumbInner = s.image ? `<img src="${s.image}" alt="${s.title}" loading="lazy">` : s.emoji;
+    const hasImage = !!s.image;
+    const thumbInner = hasImage ? `<img src="${s.image}" alt="${s.title}" loading="lazy">` : s.emoji;
     slide.innerHTML = `
-      <div class="slide-emoji">
+      <div class="slide-emoji${hasImage ? "" : " no-image"}">
         ${thumbInner}
         ${s.tag ? `<span class="slide-tag">${s.tag}</span>` : ""}
         <div class="slide-body">

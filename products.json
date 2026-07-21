@@ -277,19 +277,6 @@
     "sold": 0
   },
   {
-    "id": 39,
-    "name": "হিজাব (প্রিন্টেড)",
-    "category": "hijab",
-    "shop": "ফ্যামিলি শপ",
-    "price": 200,
-    "originalPrice": null,
-    "stock": 25,
-    "deliveryFee": 40,
-    "image": "",
-    "emoji": "🧕",
-    "sold": 0
-  },
-  {
     "id": 40,
     "name": "আল-আমিরা হিজাব ক্যাপ",
     "category": "hijab",

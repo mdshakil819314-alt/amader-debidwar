@@ -264,19 +264,6 @@
     "sold": 0
   },
   {
-    "id": 9,
-    "name": "দেশি টমেটো (১ কেজি)",
-    "category": "vegetable",
-    "shop": "ফ্যামিলি শপ",
-    "price": 60,
-    "originalPrice": null,
-    "stock": 50,
-    "deliveryFee": 30,
-    "image": "",
-    "emoji": "🍅",
-    "sold": 0
-  },
-  {
     "id": 10,
     "name": "আলু (১ কেজি)",
     "category": "vegetable",

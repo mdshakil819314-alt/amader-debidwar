@@ -251,19 +251,6 @@
     "sold": 0
   },
   {
-    "id": 35,
-    "name": "লং গাউন",
-    "category": "women-fashion",
-    "shop": "ফ্যামিলি শপ",
-    "price": 1500,
-    "originalPrice": 1800,
-    "stock": 6,
-    "deliveryFee": 60,
-    "image": "",
-    "emoji": "👗",
-    "sold": 0
-  },
-  {
     "id": 36,
     "name": "ক্যাজুয়াল টপ",
     "category": "women-fashion",

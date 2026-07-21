@@ -490,19 +490,6 @@
     "sold": 0
   },
   {
-    "id": 66,
-    "name": "স্কুল ব্যাগ (কার্টুন প্রিন্ট)",
-    "category": "school-bag",
-    "shop": "ফ্যামিলি শপ",
-    "price": 380,
-    "originalPrice": null,
-    "stock": 18,
-    "deliveryFee": 50,
-    "image": "",
-    "emoji": "🎒",
-    "sold": 0
-  },
-  {
     "id": 67,
     "name": "টিফিন বক্স সেট",
     "category": "school-bag",

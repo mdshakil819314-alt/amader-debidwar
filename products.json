@@ -264,19 +264,6 @@
     "sold": 0
   },
   {
-    "id": 5,
-    "name": "চাল (মিনিকেট, ৫ কেজি)",
-    "category": "grocery",
-    "shop": "ফ্যামিলি শপ",
-    "price": 340,
-    "originalPrice": null,
-    "stock": 30,
-    "deliveryFee": 40,
-    "image": "",
-    "emoji": "🌾",
-    "sold": 0
-  },
-  {
     "id": 6,
     "name": "সয়াবিন তেল (৫ লিটার)",
     "category": "grocery",

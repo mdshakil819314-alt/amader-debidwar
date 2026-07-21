@@ -1,34 +1,5 @@
 [
   {
-    "id": 1,
-    "name": "পাঞ্জাবি (সুতি, সাদা)",
-    "category": "panjabi",
-    "shop": "ফ্যামিলি শপ",
-    "price": 850,
-    "originalPrice": 1100,
-    "stock": 15,
-    "deliveryFee": 30,
-    "description": "শুধু একটি পাঞ্জাবি",
-    "images": [
-      "https:\/\/raw.githubusercontent.com\/mdshakil819314-alt\/amader-debidwar\/main\/images\/img_1784570908519_de9882.jpg",
-      "https:\/\/raw.githubusercontent.com\/mdshakil819314-alt\/amader-debidwar\/main\/images\/img_1784570915214_4a8ebf.jpg",
-      "https:\/\/raw.githubusercontent.com\/mdshakil819314-alt\/amader-debidwar\/main\/images\/img_1784570921317_66a313.jpg"
-    ],
-    "emoji": "👘",
-    "sold": 2,
-    "code": "P2",
-    "sizes": [
-      "M",
-      "S",
-      "XX"
-    ],
-    "colors": [
-      "কালো",
-      "সাদা",
-      "নিল"
-    ]
-  },
-  {
     "id": 18,
     "name": "পাঞ্জাবি (এমব্রয়ডার)",
     "category": "panjabi",

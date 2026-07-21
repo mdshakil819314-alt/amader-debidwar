@@ -477,19 +477,6 @@
     "sold": 0
   },
   {
-    "id": 63,
-    "name": "পাজল সেট",
-    "category": "toys",
-    "shop": "ফ্যামিলি শপ",
-    "price": 220,
-    "originalPrice": null,
-    "stock": 25,
-    "deliveryFee": 50,
-    "image": "",
-    "emoji": "🎠",
-    "sold": 0
-  },
-  {
     "id": 65,
     "name": "স্কুল ব্যাগ (প্রাইমারি)",
     "category": "school-bag",

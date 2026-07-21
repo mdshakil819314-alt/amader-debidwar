@@ -303,19 +303,6 @@
     "sold": 0
   },
   {
-    "id": 43,
-    "name": "ওড়না (নেট প্রিন্ট)",
-    "category": "orna",
-    "shop": "ফ্যামিলি শপ",
-    "price": 320,
-    "originalPrice": null,
-    "stock": 18,
-    "deliveryFee": 40,
-    "image": "",
-    "emoji": "🧣",
-    "sold": 0
-  },
-  {
     "id": 45,
     "name": "কাচের চুড়ি (৬ পিস সেট)",
     "category": "churi",

@@ -425,19 +425,6 @@
     "sold": 0
   },
   {
-    "id": 31,
-    "name": "বেবি রোম্পার সেট",
-    "category": "baby-dress",
-    "shop": "ফ্যামিলি শপ",
-    "price": 420,
-    "originalPrice": 500,
-    "stock": 16,
-    "deliveryFee": 50,
-    "image": "",
-    "emoji": "👶",
-    "sold": 0
-  },
-  {
     "id": 57,
     "name": "ফিডার বোতল (১২০ মিলি)",
     "category": "feeder",

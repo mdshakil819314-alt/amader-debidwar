@@ -412,19 +412,6 @@
     "sold": 0
   },
   {
-    "id": 56,
-    "name": "কিডস কম্ব-ব্রাশ সেট",
-    "category": "kids-products",
-    "shop": "ফ্যামিলি শপ",
-    "price": 120,
-    "originalPrice": null,
-    "stock": 30,
-    "deliveryFee": 50,
-    "image": "",
-    "emoji": "🧸",
-    "sold": 0
-  },
-  {
     "id": 4,
     "name": "বাচ্চাদের জামা",
     "category": "baby-dress",

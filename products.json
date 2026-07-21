@@ -602,5 +602,21 @@
     "colors": [
       "কালো"
     ]
+  },
+  {
+    "id": 78,
+    "name": "টি শার্ট",
+    "category": "T-shirt",
+    "shop": "ফ্যামিলি শপ",
+    "price": 555,
+    "originalPrice": null,
+    "stock": 5,
+    "deliveryFee": 32,
+    "images": [
+      "https:\/\/res.cloudinary.com\/hkstgbdt\/image\/upload\/v1784635198\/familyshop-products\/zu2qp0iuwx54wiyrvw9n.jpg",
+      "https:\/\/res.cloudinary.com\/hkstgbdt\/image\/upload\/v1784635211\/familyshop-products\/ix8cu53rmqcteluhfsbp.jpg"
+    ],
+    "emoji": "🛍️",
+    "sold": 0
   }
 ]

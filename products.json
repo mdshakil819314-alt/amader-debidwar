@@ -316,19 +316,6 @@
     "sold": 0
   },
   {
-    "id": 44,
-    "name": "ওড়না (ভয়েল)",
-    "category": "orna",
-    "shop": "ফ্যামিলি শপ",
-    "price": 220,
-    "originalPrice": null,
-    "stock": 24,
-    "deliveryFee": 40,
-    "image": "",
-    "emoji": "🧣",
-    "sold": 0
-  },
-  {
     "id": 45,
     "name": "কাচের চুড়ি (৬ পিস সেট)",
     "category": "churi",

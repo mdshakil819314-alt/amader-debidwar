@@ -264,19 +264,6 @@
     "sold": 0
   },
   {
-    "id": 7,
-    "name": "চিনি (১ কেজি)",
-    "category": "grocery",
-    "shop": "ফ্যামিলি শপ",
-    "price": 130,
-    "originalPrice": null,
-    "stock": 40,
-    "deliveryFee": 40,
-    "image": "",
-    "emoji": "🍬",
-    "sold": 0
-  },
-  {
     "id": 8,
     "name": "মসুর ডাল (১ কেজি)",
     "category": "grocery",

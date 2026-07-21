@@ -277,19 +277,6 @@
     "sold": 0
   },
   {
-    "id": 40,
-    "name": "আল-আমিরা হিজাব ক্যাপ",
-    "category": "hijab",
-    "shop": "ফ্যামিলি শপ",
-    "price": 150,
-    "originalPrice": null,
-    "stock": 28,
-    "deliveryFee": 40,
-    "image": "",
-    "emoji": "🧕",
-    "sold": 0
-  },
-  {
     "id": 41,
     "name": "ওড়না (কটন, এমব্রয়ডারি)",
     "category": "orna",

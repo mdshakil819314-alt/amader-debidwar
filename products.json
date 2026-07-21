@@ -85,9 +85,16 @@
     "originalPrice": 2500,
     "stock": 5,
     "deliveryFee": 60,
-    "image": "",
+    "image": "https:\/\/raw.githubusercontent.com\/mdshakil819314-alt\/amader-debidwar\/main\/images\/img_1784600758575_45daf0.jpg",
     "emoji": "🥻",
-    "sold": 0
+    "sold": 0,
+    "code": "O2",
+    "sizes": [
+      "M"
+    ],
+    "colors": [
+      "কালো"
+    ]
   },
   {
     "id": 17,

@@ -490,19 +490,6 @@
     "sold": 0
   },
   {
-    "id": 64,
-    "name": "বেবি র‍্যাটল সেট",
-    "category": "toys",
-    "shop": "ফ্যামিলি শপ",
-    "price": 150,
-    "originalPrice": null,
-    "stock": 28,
-    "deliveryFee": 50,
-    "image": "",
-    "emoji": "🎠",
-    "sold": 0
-  },
-  {
     "id": 65,
     "name": "স্কুল ব্যাগ (প্রাইমারি)",
     "category": "school-bag",

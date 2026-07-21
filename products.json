@@ -373,19 +373,6 @@
     "sold": 0
   },
   {
-    "id": 51,
-    "name": "পার্টি ক্লাচ",
-    "category": "handbag",
-    "shop": "ফ্যামিলি শপ",
-    "price": 450,
-    "originalPrice": 500,
-    "stock": 16,
-    "deliveryFee": 60,
-    "image": "",
-    "emoji": "👜",
-    "sold": 0
-  },
-  {
     "id": 53,
     "name": "বেবি ফিডিং সেট",
     "category": "kids-products",

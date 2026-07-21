@@ -582,5 +582,25 @@
       "সাদা",
       "কালো"
     ]
+  },
+  {
+    "id": 77,
+    "name": "টি শার্ট",
+    "category": "T-shirt",
+    "shop": "ফ্যামিলি শপ",
+    "price": 500,
+    "originalPrice": 600,
+    "stock": 2,
+    "deliveryFee": 30,
+    "image": "https:\/\/raw.githubusercontent.com\/mdshakil819314-alt\/amader-debidwar\/main\/images\/img_1784602407405_3ece2c.jpg",
+    "emoji": "🛍️",
+    "sold": 0,
+    "code": "O4",
+    "sizes": [
+      "L"
+    ],
+    "colors": [
+      "কালো"
+    ]
   }
 ]

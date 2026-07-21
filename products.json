@@ -486,5 +486,29 @@
       "সাদা",
       "কালো"
     ]
+  },
+  {
+    "id": 74,
+    "name": "পাঞ্জাবি ( সাদা সুতি)",
+    "category": "Punjabi",
+    "shop": "ফ্যামিলি শপ",
+    "price": 1000,
+    "originalPrice": 1200,
+    "stock": 5,
+    "deliveryFee": 60,
+    "images": [
+      "https:\/\/raw.githubusercontent.com\/mdshakil819314-alt\/amader-debidwar\/main\/images\/img_1784600220446_9acdad.jpg",
+      "https:\/\/raw.githubusercontent.com\/mdshakil819314-alt\/amader-debidwar\/main\/images\/img_1784600249180_2c648e.jpg",
+      "https:\/\/raw.githubusercontent.com\/mdshakil819314-alt\/amader-debidwar\/main\/images\/img_1784600228806_e799d3.jpg"
+    ],
+    "emoji": "🛍️",
+    "sold": 0,
+    "code": "P1",
+    "sizes": [
+      "M"
+    ],
+    "colors": [
+      "সাদা"
+    ]
   }
 ]

@@ -130,19 +130,6 @@
     "sold": 0
   },
   {
-    "id": 25,
-    "name": "শাড়ি (জামদানি)",
-    "category": "saree",
-    "shop": "ফ্যামিলি শপ",
-    "price": 3200,
-    "originalPrice": null,
-    "stock": 4,
-    "deliveryFee": 60,
-    "image": "",
-    "emoji": "🥻",
-    "sold": 0
-  },
-  {
     "id": 26,
     "name": "শাড়ি (সুতি, প্রিন্ট)",
     "category": "saree",

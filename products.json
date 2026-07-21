@@ -542,19 +542,6 @@
     "sold": 0
   },
   {
-    "id": 72,
-    "name": "বডি স্প্রে (আনসেন্টেড)",
-    "category": "perfume-attar",
-    "shop": "ফ্যামিলি শপ",
-    "price": 180,
-    "originalPrice": null,
-    "stock": 26,
-    "deliveryFee": 40,
-    "image": "",
-    "emoji": "🌸",
-    "sold": 0
-  },
-  {
     "id": 73,
     "name": "মেয়েদের ঘড়ি",
     "category": "LadiesClock",

@@ -225,19 +225,6 @@
     "sold": 0
   },
   {
-    "id": 16,
-    "name": "আতর (ছোট শিশি)",
-    "category": "cosmetic",
-    "shop": "ফ্যামিলি শপ",
-    "price": 150,
-    "originalPrice": null,
-    "stock": 19,
-    "deliveryFee": 50,
-    "image": "",
-    "emoji": "🌸",
-    "sold": 0
-  },
-  {
     "id": 33,
     "name": "কুর্তি (প্রিন্টেড)",
     "category": "women-fashion",

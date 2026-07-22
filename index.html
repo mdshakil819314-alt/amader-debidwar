@@ -92,7 +92,7 @@
   }
   header.site .logo{
     font-family:'Tiro Bangla',serif;
-    font-size:1.10rem;
+    font-size:1.15rem;
     font-weight:700;
     color:var(--primary-dark);
     display:flex;align-items:center;gap:6px;
@@ -500,7 +500,25 @@
   }
   .card .detail-panel.open{display:block;}
   .card .detail-panel .total-line{font-weight:700;color:var(--primary-dark);}
+  .delivery-hint{
+    margin-top:6px;
+    padding-top:6px;
+    border-top:1px dashed #D7E3DE;
+    font-size:.72rem;
+    color:var(--secondary);
+    line-height:1.5;
+  }
   .card .price-row{margin-top:8px;display:flex;align-items:baseline;gap:8px;flex-wrap:wrap;}
+  .card .free-delivery-tag{
+    display:inline-block;
+    margin-top:4px;
+    font-size:.68rem;
+    font-weight:700;
+    color:var(--primary-dark);
+    background:var(--bg-soft);
+    padding:2px 8px;
+    border-radius:999px;
+  }
   .card .price{font-family:'Hind Siliguri',sans-serif;font-weight:700;color:var(--red);font-size:1.22rem;}
   .card .price.no-discount{color:var(--primary-dark);}
   .card .old-price{font-size:.85rem;color:#9a9284;text-decoration:line-through;font-weight:500;}
@@ -783,6 +801,16 @@
   .modal-product .mp-line{font-weight:600;font-size:.85rem;padding:3px 0;border-bottom:1px dashed #E1E8E4;}
   .modal-product .mp-price{font-size:.8rem;color:var(--muted);margin-top:8px;line-height:1.6;}
   .modal-product .mp-price strong{color:var(--red);}
+  .price-updated-flash{
+    display:inline-block;
+    animation:price-flash 1.8s ease;
+    border-radius:6px;
+  }
+  @keyframes price-flash{
+    0%{background:var(--gold);color:#3A2A00;padding:2px 6px;}
+    70%{background:var(--gold);color:#3A2A00;padding:2px 6px;}
+    100%{background:transparent;color:var(--red);padding:2px 6px;}
+  }
   .trust-box{
     background:none;
     padding:0;
@@ -1094,15 +1122,15 @@
     <div class="m-send-row">
       <button class="m-submit m-submit-call" id="ord_submit_call">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.91.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
-        কল
+        <span id="ord_submit_call_label">কল</span>
       </button>
       <button class="m-submit m-submit-sms" id="ord_submit_sms">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16v12H7l-3 3z"/></svg>
-        SMS
+        <span id="ord_submit_sms_label">SMS</span>
       </button>
       <button class="m-submit m-submit-wa" id="ord_submit_wa">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
-        হোয়াটসঅ্যাপ
+        <span id="ord_submit_wa_label">হোয়াটসঅ্যাপ</span>
       </button>
     </div>
   </div>
@@ -1223,11 +1251,12 @@ function renderCartModal(){
     wrap.appendChild(row);
   });
 
-  const maxDeliveryFee = Math.max(0, ...cart.map(item => item.product.deliveryFee || 0));
+  const allFreeDelivery = cart.length > 0 && cart.every(item => item.product.freeDelivery === true);
+  const maxDeliveryFee = allFreeDelivery ? 0 : Math.max(0, ...cart.map(item => item.product.freeDelivery ? 0 : (item.product.deliveryFee || 0)));
   const grandTotal = subtotal + maxDeliveryFee;
   totalRow.style.display = "flex";
   totalRow.innerHTML = `
-    <span>মোট (${maxDeliveryFee > 0 ? "ডেলিভারিসহ ৳" + maxDeliveryFee : "ডেলিভারি ছাড়া"})</span>
+    <span>মোট (${allFreeDelivery ? "🆓 ফ্রি ডেলিভারি" : (maxDeliveryFee > 0 ? "ডেলিভারিসহ ৳" + maxDeliveryFee : "ডেলিভারি ছাড়া")})</span>
     <span class="ct-amount">৳${grandTotal}</span>
   `;
   checkoutBtn.style.display = "block";
@@ -1259,9 +1288,9 @@ function openProductDetail(p){
   const images = (p.images && p.images.length) ? p.images : (p.image ? [p.image] : []);
   const mainInner = images.length ? `<img src="${images[0]}" alt="${p.name}">` : p.emoji;
 
-  const hasDeliveryFee = !!(p.deliveryFee && p.deliveryFee > 0);
+  const hasDeliveryFee = !!(p.deliveryFee && p.deliveryFee > 0 && !p.freeDelivery);
   const total = hasDeliveryFee ? p.price + p.deliveryFee : p.price;
-  const hasExtra = !!(p.stock || hasDeliveryFee);
+  const hasExtra = !!(p.stock || hasDeliveryFee || !p.freeDelivery);
 
   const thumbsHTML = images.length > 1
     ? `<div class="pd-thumbs">${images.map((img, i) =>
@@ -1306,12 +1335,14 @@ function openProductDetail(p){
       <span class="pd-price${hasDiscount ? "" : " no-discount"}">৳${p.price}</span>
       ${hasDiscount ? `<span class="pd-old-price">৳${p.originalPrice}</span>` : ""}
     </div>
+    ${p.freeDelivery ? `<div class="free-delivery-tag">🆓 ফ্রি ডেলিভারি</div>` : ""}
     ${sizesHTML}
     ${colorsHTML}
     ${hasExtra ? `
       <div class="pd-extra">
         ${p.stock ? `<div>স্টক: ${p.stock} পিস</div>` : ""}
         ${hasDeliveryFee ? `<div>ডেলিভারি ফি: ৳${p.deliveryFee}</div><div class="pd-total">সর্বমোট: ৳${total}</div>` : ""}
+        ${!p.freeDelivery ? `<div class="delivery-hint">📍 অর্ডারের সময় লোকেশন দিলে, আপনার দূরত্ব অনুযায়ী সঠিক ডেলিভারি ফি দেখানো হবে</div>` : ""}
       </div>
     ` : ""}
     <div class="pd-actions">
@@ -1390,14 +1421,31 @@ function closeProductDetail(){
 }
 document.getElementById("pdCloseBtn").addEventListener("click", closeProductDetail);
 
-function openOrderModal(items){
-  // items: array of {product, qty}
-  currentOrderItems = items;
-  resetLocationState();
-  const hasAnyDeliveryFee = items.some(item => item.product.deliveryFee && item.product.deliveryFee > 0);
-  const maxDeliveryFee = Math.max(0, ...items.map(item => item.product.deliveryFee || 0));
+function renderOrderSummary(isUpdate){
+  const items = currentOrderItems;
   const subtotal = items.reduce((sum, item) => sum + item.product.price * item.qty, 0);
-  const total = hasAnyDeliveryFee ? subtotal + maxDeliveryFee : subtotal;
+
+  const hasProductDeliveryFee = items.some(item => item.product.deliveryFee && item.product.deliveryFee > 0);
+  const productMaxFee = Math.max(0, ...items.map(item => item.product.freeDelivery ? 0 : (item.product.deliveryFee || 0)));
+
+  // "ফ্রি ডেলিভারি" সবচেয়ে বড় অগ্রাধিকার পায় — কার্টের সবগুলো প্রোডাক্টে
+  // freeDelivery চালু থাকলে, দূরত্ব যত কিমিই হোক না কেন, ডেলিভারি ফ্রি থাকবে
+  const allFreeDelivery = items.length > 0 && items.every(item => item.product.freeDelivery === true);
+
+  let deliveryFee = null;
+  let deliveryLabel = "";
+  if(allFreeDelivery){
+    deliveryFee = 0;
+    deliveryLabel = `🆓 ফ্রি ডেলিভারি — `;
+  } else if(currentLocationDeliveryFee !== null && currentLocationDeliveryFee !== undefined){
+    deliveryFee = currentLocationDeliveryFee;
+    deliveryLabel = `দূরত্ব অনুযায়ী ডেলিভারি ৳${deliveryFee} সহ `;
+  } else if(hasProductDeliveryFee){
+    deliveryFee = productMaxFee;
+    deliveryLabel = `ডেলিভারি ৳${deliveryFee} সহ `;
+  }
+
+  const total = deliveryFee !== null ? subtotal + deliveryFee : subtotal;
 
   const itemsListHTML = items.map(item => {
     const variantText = [item.size, item.color].filter(Boolean).join(" · ");
@@ -1406,8 +1454,38 @@ function openOrderModal(items){
 
   document.getElementById("modalProductInfo").innerHTML = `
     ${itemsListHTML}
-    <div class="mp-price">${hasAnyDeliveryFee ? `ডেলিভারি ৳${maxDeliveryFee} সহ ` : ""}<strong>সর্বমোট ৳${total}</strong></div>
+    <div class="mp-price">${deliveryFee !== null ? deliveryLabel : ""}<strong id="mpTotalAmount">সর্বমোট ৳${total}</strong></div>
   `;
+
+  // লোকেশন দেওয়ার কারণে দাম বদলে গেলে, স্পষ্টভাবে চোখে পড়ে এমন হাইলাইট দেখানো —
+  // যাতে কাস্টমার কখনো না বুঝেই ভুল দামে অর্ডার কনফার্ম না করে ফেলে
+  if(isUpdate){
+    const totalEl = document.getElementById("mpTotalAmount");
+    totalEl.classList.add("price-updated-flash");
+    setTimeout(() => totalEl.classList.remove("price-updated-flash"), 1800);
+  }
+
+  updateSubmitButtonLabels(total);
+}
+
+function updateSubmitButtonLabels(total){
+  const callLabel = document.getElementById("ord_submit_call_label");
+  const smsLabel = document.getElementById("ord_submit_sms_label");
+  const waLabel = document.getElementById("ord_submit_wa_label");
+  if(callLabel) callLabel.textContent = "কল";
+  if(smsLabel) smsLabel.textContent = `SMS (৳${total})`;
+  if(waLabel) waLabel.textContent = `হোয়াটসঅ্যাপ (৳${total})`;
+}
+
+function refreshOrderModalSummary(){
+  if(currentOrderItems && currentOrderItems.length) renderOrderSummary(true);
+}
+
+function openOrderModal(items){
+  // items: array of {product, qty}
+  currentOrderItems = items;
+  resetLocationState();
+  renderOrderSummary();
   document.getElementById("ord_error").textContent = "";
   document.getElementById("orderModal").classList.add("open");
 }
@@ -1429,9 +1507,13 @@ document.getElementById("orderModal").addEventListener("click", (e) => {
   ইউনিয়ন/ওয়ার্ড/গ্রাম/ঠিকানা দিয়ে অর্ডার করা যাবে।
 */
 let currentLocationLink = null;
+let currentLocationDeliveryFee = null; // দূরত্ব হিসাব করে বের করা আসল ডেলিভারি ফি
+let currentLocationDistanceKm = null;
 
 function resetLocationState(){
   currentLocationLink = null;
+  currentLocationDeliveryFee = null;
+  currentLocationDistanceKm = null;
   const btn = document.getElementById("locationBtn");
   btn.classList.remove("located");
   document.getElementById("locationBtnText").textContent = "বর্তমান লোকেশন যোগ করুন";
@@ -1455,16 +1537,44 @@ document.getElementById("locationBtn").addEventListener("click", () => {
 
   navigator.geolocation.getCurrentPosition(
     (pos) => {
-      const lat = pos.coords.latitude.toFixed(6);
-      const lng = pos.coords.longitude.toFixed(6);
-      currentLocationLink = `https://www.google.com/maps?q=${lat},${lng}`;
+      const lat = pos.coords.latitude;
+      const lng = pos.coords.longitude;
+      currentLocationLink = `https://www.google.com/maps?q=${lat.toFixed(6)},${lng.toFixed(6)}`;
       btn.classList.add("located");
       document.getElementById("locationBtnText").textContent = "✅ লোকেশন যোগ হয়েছে";
-      status.textContent = "লোকেশন ঠিকভাবে পাওয়া গেছে — অর্ডারের সাথে চলে যাবে।";
-      status.className = "location-status success";
+
+      const distanceKm = calcDistanceKm(DELIVERY_CONFIG.shopLat, DELIVERY_CONFIG.shopLng, lat, lng);
+      currentLocationDistanceKm = distanceKm;
+      const result = getDeliveryFeeForDistance(distanceKm);
+      const allFreeDelivery = currentOrderItems.length > 0 && currentOrderItems.every(item => item.product.freeDelivery === true);
+
+      if(allFreeDelivery){
+        // ফ্রি ডেলিভারি প্রোডাক্টে দূরত্ব যাই হোক, ফি ফ্রিই থাকবে
+        currentLocationDeliveryFee = 0;
+        status.textContent = `দূরত্ব: প্রায় ${distanceKm.toFixed(1)} কিমি — 🆓 এই প্রোডাক্টে ডেলিভারি সম্পূর্ণ ফ্রি`;
+        status.className = "location-status success";
+      } else if(result.beyond && (result.fee === null || result.fee === undefined)){
+        currentLocationDeliveryFee = null;
+        status.textContent = `দূরত্ব: প্রায় ${distanceKm.toFixed(1)} কিমি — ${DELIVERY_CONFIG.beyondMessage}`;
+        status.className = "location-status success";
+      } else {
+        currentLocationDeliveryFee = result.fee;
+        // এতক্ষণ পর্যন্ত স্ক্রিনে যে ফি দেখানো ছিল (প্রোডাক্টের নিজস্ব ফি), সেটার সাথে
+        // তুলনা করে স্পষ্ট করে বলা হচ্ছে দাম বাড়লো নাকি কমলো — কাস্টমার যেন কখনো
+        // না বুঝে ভুল দামে অর্ডার কনফার্ম না করে ফেলে
+        const previousFee = Math.max(0, ...currentOrderItems.map(item => item.product.deliveryFee || 0));
+        let changeNote = "";
+        if(result.fee > previousFee) changeNote = ` (আগের চেয়ে ৳${result.fee - previousFee} বেশি)`;
+        else if(result.fee < previousFee) changeNote = ` (আগের চেয়ে ৳${previousFee - result.fee} কম)`;
+        status.textContent = `দূরত্ব: প্রায় ${distanceKm.toFixed(1)} কিমি — আসল ডেলিভারি ফি: ৳${result.fee}${changeNote}`;
+        status.className = "location-status success";
+      }
+      refreshOrderModalSummary();
     },
     (err) => {
       currentLocationLink = null;
+      currentLocationDeliveryFee = null;
+      currentLocationDistanceKm = null;
       status.className = "location-status error";
       if(err.code === err.PERMISSION_DENIED){
         status.textContent = "লোকেশনের অনুমতি দেওয়া হয়নি — ব্রাউজারের সেটিংস থেকে অনুমতি দিন, অথবা ম্যানুয়ালি ঠিকানা লিখুন।";
@@ -1501,10 +1611,20 @@ function buildOrderMessage(){
   }
   errBox.textContent = "";
 
-  const hasAnyDeliveryFee = items.some(item => item.product.deliveryFee && item.product.deliveryFee > 0);
-  const maxDeliveryFee = Math.max(0, ...items.map(item => item.product.deliveryFee || 0));
+  const hasProductDeliveryFee = items.some(item => item.product.deliveryFee && item.product.deliveryFee > 0);
+  const productMaxFee = Math.max(0, ...items.map(item => item.product.freeDelivery ? 0 : (item.product.deliveryFee || 0)));
   const subtotal = items.reduce((sum, item) => sum + item.product.price * item.qty, 0);
-  const total = hasAnyDeliveryFee ? subtotal + maxDeliveryFee : subtotal;
+  const allFreeDelivery = items.length > 0 && items.every(item => item.product.freeDelivery === true);
+
+  let deliveryFee = null;
+  if(allFreeDelivery){
+    deliveryFee = 0;
+  } else if(currentLocationDeliveryFee !== null && currentLocationDeliveryFee !== undefined){
+    deliveryFee = currentLocationDeliveryFee;
+  } else if(hasProductDeliveryFee){
+    deliveryFee = productMaxFee;
+  }
+  const total = deliveryFee !== null ? subtotal + deliveryFee : subtotal;
 
   let msg = `নতুন অর্ডার - ফ্যামিলি শপ দেবিদ্বার\n`;
   items.forEach(item => {
@@ -1512,7 +1632,9 @@ function buildOrderMessage(){
     const variantText = [item.size, item.color].filter(Boolean).join(" · ");
     msg += `প্রোডাক্ট: ${item.product.name}${codeText}${variantText ? ` (${variantText})` : ""}${item.qty > 1 ? ` (${item.qty} পিস)` : ""} - ৳${item.product.price * item.qty}\n`;
   });
-  if(hasAnyDeliveryFee) msg += `ডেলিভারি ফি: ৳${maxDeliveryFee}\n`;
+  if(currentLocationDistanceKm !== null) msg += `দূরত্ব (আনুমানিক): ${currentLocationDistanceKm.toFixed(1)} কিমি\n`;
+  if(allFreeDelivery) msg += `ডেলিভারি ফি: 🆓 ফ্রি\n`;
+  else if(deliveryFee !== null) msg += `ডেলিভারি ফি: ৳${deliveryFee}\n`;
   msg += `সর্বমোট: ৳${total}\n`;
   msg += `---\n`;
   msg += `নাম: ${name}\n`;
@@ -1701,6 +1823,46 @@ document.getElementById("sliderNext").addEventListener("click", () => {
 });
 
 /*
+  দূরত্ব-ভিত্তিক ডেলিভারি ফি — ফলব্যাক। আসল কন্ট্রোল delivery.json থেকে
+  (নিচের loadData() দেখুন)। shopLat/shopLng অবশ্যই দোকানের আসল অবস্থানে
+  বদলে নিতে হবে — এই ফলব্যাক শুধু একটা ডেমো মান, সঠিক জায়গা না।
+*/
+let DELIVERY_CONFIG = {
+  shopLat: 23.5204,
+  shopLng: 90.9700,
+  tiers: [
+    { maxKm: 3, fee: 30 },
+    { maxKm: 8, fee: 50 },
+    { maxKm: 15, fee: 80 }
+  ],
+  beyondFee: null,
+  beyondMessage: "এই দূরত্বে ডেলিভারির জন্য সরাসরি যোগাযোগ করুন"
+};
+
+/* দুই লোকেশনের মধ্যে দূরত্ব (কিলোমিটারে) হিসাব করে — Haversine ফর্মুলা */
+function calcDistanceKm(lat1, lng1, lat2, lng2){
+  const R = 6371; // পৃথিবীর ব্যাসার্ধ (কিমি)
+  const dLat = (lat2 - lat1) * Math.PI / 180;
+  const dLng = (lng2 - lng1) * Math.PI / 180;
+  const a = Math.sin(dLat/2) * Math.sin(dLat/2) +
+            Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
+            Math.sin(dLng/2) * Math.sin(dLng/2);
+  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+  return R * c;
+}
+
+/* দূরত্ব অনুযায়ী ঠিক কত টাকা ডেলিভারি ফি হবে, DELIVERY_CONFIG-এর তালিকা থেকে বের করে */
+function getDeliveryFeeForDistance(km){
+  // তালিকা ছোট থেকে বড় দূরত্বে সাজিয়ে নেওয়া হচ্ছে (নিরাপত্তার জন্য) — যদি
+  // কখনো delivery.json হাতে এলোমেলো ক্রমে বসানো হয়, তাহলেও হিসাব ভুল হবে না
+  const sortedTiers = [...DELIVERY_CONFIG.tiers].sort((a, b) => a.maxKm - b.maxKm);
+  for(const tier of sortedTiers){
+    if(km <= tier.maxKm) return { fee: tier.fee, beyond: false };
+  }
+  return { fee: DELIVERY_CONFIG.beyondFee, beyond: true };
+}
+
+/*
   দোকান ডাটা — ফলব্যাক। আসল কন্ট্রোল shops.json থেকে (নিচের loadData() দেখুন)।
   name অবশ্যই PRODUCTS-এর shop ফিল্ডের সাথে হুবহু মিলতে হবে।
 */
@@ -1805,8 +1967,8 @@ function productCard(p){
       ).join("")}</div>`
     : "";
 
-  const hasDetails = !!(p.stock || p.deliveryFee || p.code || p.description || images.length > 1);
-  const hasDeliveryFee = !!(p.deliveryFee && p.deliveryFee > 0);
+  const hasDetails = !!(p.stock || p.deliveryFee || p.code || p.description || images.length > 1 || !p.freeDelivery);
+  const hasDeliveryFee = !!(p.deliveryFee && p.deliveryFee > 0 && !p.freeDelivery);
   const detailToggleHTML = hasDetails
     ? `<button class="detail-toggle"><span class="chev">▾</span> বিস্তারিত দেখুন</button>
        <div class="detail-panel">
@@ -1815,6 +1977,7 @@ function productCard(p){
          ${p.code ? `<div>কোড: ${p.code}</div>` : ""}
          ${p.stock ? `<div>স্টক: ${p.stock} পিস</div>` : ""}
          ${hasDeliveryFee ? `<div>ডেলিভারি ফি: ৳${p.deliveryFee}</div><div class="total-line">সর্বমোট: ৳${p.price + p.deliveryFee}</div>` : ""}
+         ${!p.freeDelivery ? `<div class="delivery-hint">📍 অর্ডারের সময় লোকেশন দিলে, আপনার দূরত্ব অনুযায়ী সঠিক ডেলিভারি ফি দেখানো হবে</div>` : ""}
        </div>`
     : "";
 
@@ -1839,6 +2002,7 @@ function productCard(p){
           <span class="price${hasDiscount ? "" : " no-discount"}">৳${p.price}</span>
           ${hasDiscount ? `<span class="old-price">৳${p.originalPrice}</span>` : ""}
         </div>
+        ${p.freeDelivery ? `<div class="free-delivery-tag">🆓 ফ্রি ডেলিভারি</div>` : ""}
         ${detailToggleHTML}
       </div>
     </div>
@@ -2080,12 +2244,13 @@ async function loadData(){
     } catch(e){ return null; }
   };
 
-  const [products, slider, shops, categories, offers] = await Promise.all([
+  const [products, slider, shops, categories, offers, delivery] = await Promise.all([
     tryFetch("products.json"),
     tryFetch("slider.json"),
     tryFetch("shops.json"),
     tryFetch("categories.json"),
     tryFetch("offers.json"),
+    tryFetch("delivery.json"),
   ]);
 
   if(products){ PRODUCTS = products; render(); }
@@ -2093,6 +2258,7 @@ async function loadData(){
   if(shops){ SHOPS = shops; render(); }
   if(categories){ CATEGORIES = categories; render(); }
   if(offers){ OFFERS = offers; buildOfferStrip(); }
+  if(delivery){ DELIVERY_CONFIG = delivery; }
 
   loadingBar.classList.remove("active");
 }

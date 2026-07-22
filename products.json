@@ -651,5 +651,31 @@
       "কালো"
     ],
     "freeDelivery": true
+  },
+  {
+    "id": 78,
+    "name": "ছাতা",
+    "category": "Umbrella",
+    "shop": "ফ্যামিলি শপ",
+    "price": 320,
+    "originalPrice": 400,
+    "stock": 5,
+    "deliveryFee": 60,
+    "images": [
+      "https:\/\/res.cloudinary.com\/hkstgbdt\/image\/upload\/v1784746118\/familyshop-products\/mywtrak1ucqenhf2lelg.jpg",
+      "https:\/\/res.cloudinary.com\/hkstgbdt\/image\/upload\/v1784746126\/familyshop-products\/gfjyumloeyimj8xvorle.jpg",
+      "https:\/\/res.cloudinary.com\/hkstgbdt\/image\/upload\/v1784746141\/familyshop-products\/sxa0piq3pnqtq5hdk9br.jpg"
+    ],
+    "emoji": "🛍️",
+    "sold": 0,
+    "code": "PO4",
+    "sizes": [
+      "M",
+      "S"
+    ],
+    "colors": [
+      "কালো"
+    ],
+    "freeDelivery": false
   }
 ]

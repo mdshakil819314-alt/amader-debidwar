@@ -2052,7 +2052,7 @@ function sendOrder(channel, msg){
   এটা সাইটের অন্য সব মডালের (অর্ডার ফর্ম, কার্ট) মতোই একই প্রমাণিত পদ্ধতিতে
   বানানো, যাতে আলাদা কোনো নতুন সমস্যা তৈরি না হয়।
 */
-const REVIEW_REMINDER_DELAY_MS = 72 * 60 * 60 * 1000; // ঠিক ৭২ ঘণ্টা
+const REVIEW_REMINDER_DELAY_MS = 5 * 60 * 1000; // টেস্টের জন্য ৫ মিনিট
 const REVIEW_REMINDER_MAX_SHOWS = 2; // সর্বোচ্চ দুইবার দেখানো হবে, তারপর আর না
 
 function saveReviewReminders(items){

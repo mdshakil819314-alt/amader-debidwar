@@ -407,6 +407,7 @@
     box-shadow:var(--shadow);
     display:flex;flex-direction:column;
     transition:transform .15s ease, box-shadow .15s ease;
+    cursor:pointer;
   }
   .card:hover{transform:translateY(-3px);box-shadow:var(--shadow-lg);}
   .card .card-top{display:flex;flex-direction:column;}
@@ -518,6 +519,36 @@
     background:var(--bg-soft);
     padding:2px 8px;
     border-radius:999px;
+  }
+  .promo-card-tag{
+    display:flex;
+    align-items:center;
+    gap:6px;
+    margin-top:6px;
+    background:linear-gradient(135deg, #FFF7E6, #FFEFC9);
+    border:1px dashed var(--gold);
+    border-radius:8px;
+    padding:6px 8px;
+  }
+  .promo-card-tag span{
+    flex:1;
+    font-size:.68rem;
+    font-weight:600;
+    color:#7A5A00;
+    line-height:1.4;
+  }
+  .promo-card-tag span strong{color:#B8860B;}
+  .promo-copy-btn{
+    flex:0 0 auto;
+    background:var(--gold);
+    color:#3A2A00;
+    border:none;
+    border-radius:6px;
+    padding:4px 9px;
+    font-size:.66rem;
+    font-weight:700;
+    font-family:inherit;
+    white-space:nowrap;
   }
   .card .price{font-family:'Hind Siliguri',sans-serif;font-weight:700;color:var(--red);font-size:1.22rem;}
   .card .price.no-discount{color:var(--primary-dark);}
@@ -833,6 +864,63 @@
     margin-bottom:6px;
   }
   .trust-box-line:last-child{margin-bottom:0;}
+  .promo-box{
+    background:linear-gradient(160deg, #FFF7E6 0%, #FFEFC9 100%);
+    border:1.5px dashed var(--gold);
+    border-radius:12px;
+    padding:12px 12px 10px;
+    margin-top:14px;
+  }
+  .promo-box .m-label{margin-top:0;}
+  .promo-input-row{display:flex;gap:8px;}
+  .promo-input-row input{
+    flex:1;
+    border:1.5px solid #E7D9AE;
+    border-radius:10px;
+    padding:10px 12px;
+    font-size:.85rem;
+    font-family:inherit;
+    background:#fff;
+  }
+  .promo-input-row button{
+    flex:0 0 auto;
+    background:var(--gold);
+    color:#3A2A00;
+    border:none;
+    border-radius:10px;
+    padding:0 16px;
+    font-weight:700;
+    font-size:.82rem;
+    font-family:inherit;
+  }
+  .promo-status{font-size:.76rem;font-weight:600;margin-top:6px;min-height:1em;}
+  .promo-status.success{color:var(--primary-dark);}
+  .promo-status.error{color:var(--red);}
+  .promo-confirm-card{max-width:380px;}
+  .promo-confirm-actions{display:flex;gap:10px;margin-top:18px;}
+  .promo-confirm-actions .m-submit{
+    flex:1;
+    flex-direction:row;
+    padding:13px 4px;
+    font-size:.85rem;
+    border-radius:10px;
+  }
+  .promo-breakdown-line{
+    display:flex;justify-content:space-between;
+    padding:7px 0;
+    font-size:.86rem;
+    border-bottom:1px dashed #E1E8E4;
+  }
+  .promo-breakdown-line.discount{color:var(--primary-dark);font-weight:700;}
+  .promo-breakdown-line.total{
+    border-bottom:none;
+    border-top:2px solid var(--ink);
+    margin-top:4px;
+    padding-top:10px;
+    font-weight:800;
+    font-size:1rem;
+    color:var(--red);
+  }
   .m-label{display:block;font-size:.82rem;font-weight:700;margin:12px 0 6px;color:var(--ink);}
   .m-label .m-opt{font-weight:500;color:var(--muted);font-size:.74rem;}
   .m-input{
@@ -1092,6 +1180,15 @@
 
     <div class="modal-product" id="modalProductInfo"></div>
 
+    <div class="promo-box">
+      <label class="m-label">🎟️ প্রোমো কোড আছে? (ঐচ্ছিক)</label>
+      <div class="promo-input-row">
+        <input type="text" id="ord_promo" class="m-input" placeholder="কোড লিখুন">
+        <button type="button" id="promoApplyBtn">প্রয়োগ করুন</button>
+      </div>
+      <div id="promoStatus" class="promo-status"></div>
+    </div>
+
     <label class="m-label">আপনার নাম *</label>
     <input type="text" id="ord_name" class="m-input" placeholder="যেমন: করিম উদ্দিন">
 
@@ -1132,6 +1229,20 @@
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
         <span id="ord_submit_wa_label">হোয়াটসঅ্যাপ</span>
       </button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="promoConfirmModal">
+  <div class="modal-card promo-confirm-card">
+    <div class="modal-head">
+      <div class="modal-title">🎉 প্রোমো ছাড়ের হিসাব</div>
+      <button class="modal-close" id="promoConfirmClose">✕</button>
+    </div>
+    <div id="promoConfirmBody"></div>
+    <div class="promo-confirm-actions">
+      <button class="m-submit" id="promoConfirmCancel" style="background:#fff;border:1.5px solid var(--muted);color:var(--muted);">✏️ বাতিল</button>
+      <button class="m-submit" id="promoConfirmProceed" style="background:var(--primary);">✅ নিশ্চিত করে পাঠান</button>
     </div>
   </div>
 </div>
@@ -1285,6 +1396,8 @@ updateCartBadge();
 function openProductDetail(p){
   const hasDiscount = p.originalPrice && p.originalPrice > p.price;
   const discountPct = hasDiscount ? Math.round(100 - (p.price / p.originalPrice) * 100) : 0;
+  const hasPromo = !!(p.promoCode && p.promoDiscount && p.promoDiscount > 0);
+  const promoPct = hasPromo ? Math.round((p.promoDiscount / p.price) * 100) : 0;
   const images = (p.images && p.images.length) ? p.images : (p.image ? [p.image] : []);
   const mainInner = images.length ? `<img src="${images[0]}" alt="${p.name}">` : p.emoji;
 
@@ -1336,6 +1449,12 @@ function openProductDetail(p){
       ${hasDiscount ? `<span class="pd-old-price">৳${p.originalPrice}</span>` : ""}
     </div>
     ${p.freeDelivery ? `<div class="free-delivery-tag">🆓 ফ্রি ডেলিভারি</div>` : ""}
+    ${hasPromo ? `
+      <div class="promo-card-tag">
+        <span>🎉 কোড <strong>${p.promoCode}</strong> দিয়ে ${promoPct}% ছাড়!</span>
+        <button type="button" class="promo-copy-btn" id="pdPromoCopyBtn" data-code="${p.promoCode}">কপি</button>
+      </div>
+    ` : ""}
     ${sizesHTML}
     ${colorsHTML}
     ${hasExtra ? `
@@ -1396,6 +1515,11 @@ function openProductDetail(p){
   document.getElementById("pdOrderBtn").addEventListener("click", () => {
     addToCart(p, selectedSize, selectedColor);
   });
+  if(hasPromo){
+    document.getElementById("pdPromoCopyBtn").addEventListener("click", () => {
+      copyPromoCodeToClipboard(p.promoCode, document.getElementById("pdPromoCopyBtn"));
+    });
+  }
   document.getElementById("pdShareBtn").addEventListener("click", async () => {
     const shareData = {
       title: p.name,
@@ -1446,15 +1570,21 @@ function renderOrderSummary(isUpdate){
   }
 
   const total = deliveryFee !== null ? subtotal + deliveryFee : subtotal;
+  const finalTotal = Math.max(0, total - appliedPromoDiscount);
 
   const itemsListHTML = items.map(item => {
     const variantText = [item.size, item.color].filter(Boolean).join(" · ");
     return `<div class="mp-line">${item.product.name}${variantText ? ` (${variantText})` : ""}${item.qty > 1 ? ` × ${item.qty}` : ""} — ৳${item.product.price * item.qty}</div>`;
   }).join("");
 
+  const promoLineHTML = appliedPromoDiscount > 0
+    ? `<div class="mp-line" style="color:var(--primary-dark);font-weight:700;">🎟️ প্রোমো ছাড় (${appliedPromoCode}) — −৳${appliedPromoDiscount}</div>`
+    : "";
+
   document.getElementById("modalProductInfo").innerHTML = `
     ${itemsListHTML}
-    <div class="mp-price">${deliveryFee !== null ? deliveryLabel : ""}<strong id="mpTotalAmount">সর্বমোট ৳${total}</strong></div>
+    ${promoLineHTML}
+    <div class="mp-price">${deliveryFee !== null ? deliveryLabel : ""}<strong id="mpTotalAmount">সর্বমোট ৳${finalTotal}</strong></div>
   `;
 
   // লোকেশন দেওয়ার কারণে দাম বদলে গেলে, স্পষ্টভাবে চোখে পড়ে এমন হাইলাইট দেখানো —
@@ -1465,7 +1595,7 @@ function renderOrderSummary(isUpdate){
     setTimeout(() => totalEl.classList.remove("price-updated-flash"), 1800);
   }
 
-  updateSubmitButtonLabels(total);
+  updateSubmitButtonLabels(finalTotal);
 }
 
 function updateSubmitButtonLabels(total){
@@ -1485,6 +1615,7 @@ function openOrderModal(items){
   // items: array of {product, qty}
   currentOrderItems = items;
   resetLocationState();
+  resetPromoState();
   renderOrderSummary();
   document.getElementById("ord_error").textContent = "";
   document.getElementById("orderModal").classList.add("open");
@@ -1509,6 +1640,8 @@ document.getElementById("orderModal").addEventListener("click", (e) => {
 let currentLocationLink = null;
 let currentLocationDeliveryFee = null; // দূরত্ব হিসাব করে বের করা আসল ডেলিভারি ফি
 let currentLocationDistanceKm = null;
+let appliedPromoCode = null;
+let appliedPromoDiscount = 0; // মোট কত টাকা ছাড় (কোয়ান্টিটি ধরেই হিসাব করা)
 
 function resetLocationState(){
   currentLocationLink = null;
@@ -1521,6 +1654,53 @@ function resetLocationState(){
   status.textContent = "";
   status.className = "location-status";
 }
+
+function resetPromoState(){
+  appliedPromoCode = null;
+  appliedPromoDiscount = 0;
+  document.getElementById("ord_promo").value = "";
+  const status = document.getElementById("promoStatus");
+  status.textContent = "";
+  status.className = "promo-status";
+}
+
+/* কার্টের প্রোডাক্টগুলোর মধ্যে যেগুলোর নিজস্ব promoCode ইউজারের লেখা কোডের সাথে
+   মিলে যায়, সেগুলোর ছাড় (promoDiscount × qty) যোগ করে মোট ছাড় বের করে। */
+function calcPromoDiscount(code){
+  if(!code) return 0;
+  const normalized = code.trim().toUpperCase();
+  let discount = 0;
+  currentOrderItems.forEach(item => {
+    const itemCode = (item.product.promoCode || "").trim().toUpperCase();
+    if(itemCode && itemCode === normalized && item.product.promoDiscount){
+      discount += item.product.promoDiscount * item.qty;
+    }
+  });
+  return discount;
+}
+
+document.getElementById("promoApplyBtn").addEventListener("click", () => {
+  const raw = document.getElementById("ord_promo").value.trim();
+  const status = document.getElementById("promoStatus");
+  if(!raw){
+    status.textContent = "একটা কোড লিখুন।";
+    status.className = "promo-status error";
+    return;
+  }
+  const discount = calcPromoDiscount(raw);
+  if(discount > 0){
+    appliedPromoCode = raw.toUpperCase();
+    appliedPromoDiscount = discount;
+    status.textContent = `✅ প্রোমো কোড প্রয়োগ হয়েছে! ৳${discount} ছাড় পেয়েছেন।`;
+    status.className = "promo-status success";
+  } else {
+    appliedPromoCode = null;
+    appliedPromoDiscount = 0;
+    status.textContent = "❌ এই কোডটি এই প্রোডাক্টের জন্য প্রযোজ্য না, আবার চেষ্টা করুন।";
+    status.className = "promo-status error";
+  }
+  renderOrderSummary(true);
+});
 
 document.getElementById("locationBtn").addEventListener("click", () => {
   const status = document.getElementById("locationStatus");
@@ -1625,6 +1805,7 @@ function buildOrderMessage(){
     deliveryFee = productMaxFee;
   }
   const total = deliveryFee !== null ? subtotal + deliveryFee : subtotal;
+  const finalTotal = Math.max(0, total - appliedPromoDiscount);
 
   let msg = `নতুন অর্ডার - ফ্যামিলি শপ দেবিদ্বার\n`;
   items.forEach(item => {
@@ -1635,7 +1816,8 @@ function buildOrderMessage(){
   if(currentLocationDistanceKm !== null) msg += `দূরত্ব (আনুমানিক): ${currentLocationDistanceKm.toFixed(1)} কিমি\n`;
   if(allFreeDelivery) msg += `ডেলিভারি ফি: 🆓 ফ্রি\n`;
   else if(deliveryFee !== null) msg += `ডেলিভারি ফি: ৳${deliveryFee}\n`;
-  msg += `সর্বমোট: ৳${total}\n`;
+  if(appliedPromoDiscount > 0) msg += `প্রোমো ছাড় (${appliedPromoCode}): −৳${appliedPromoDiscount}\n`;
+  msg += `সর্বমোট: ৳${finalTotal}\n`;
   msg += `---\n`;
   msg += `নাম: ${name}\n`;
   msg += `ইউনিয়ন: ${union}\n`;
@@ -1657,19 +1839,73 @@ document.getElementById("ord_submit_call").addEventListener("click", () => {
   window.location.href = "tel:+8801872280095";
 });
 
-document.getElementById("ord_submit_sms").addEventListener("click", () => {
-  const msg = buildOrderMessage();
-  if(!msg) return;
+let pendingSendChannel = null;
+let pendingOrderMessage = null;
+
+function sendOrder(channel, msg){
   clearCartAfterOrder();
-  window.location.href = `sms:${ORDER_SMS_NUMBER}?body=${encodeURIComponent(msg)}`;
+  if(channel === "sms"){
+    window.location.href = `sms:${ORDER_SMS_NUMBER}?body=${encodeURIComponent(msg)}`;
+  } else if(channel === "wa"){
+    window.open(`https://wa.me/8801872280095?text=${encodeURIComponent(msg)}`, "_blank");
+  }
+}
+
+function trySubmit(channel){
+  const msg = buildOrderMessage(); // এখানেই ফর্ম যাচাই হয়ে যায়
+  if(!msg) return;
+  if(appliedPromoDiscount > 0){
+    // প্রোমো ছাড় প্রয়োগ থাকলে, পাঠানোর আগে একবার সুন্দর করে হিসাবটা দেখিয়ে
+    // নিশ্চিত হয়ে নেওয়া হয় — কাস্টমার যেন ঠিক জানে কত ছাড় পাচ্ছে
+    pendingOrderMessage = msg;
+    showPromoConfirm(channel);
+    return;
+  }
+  sendOrder(channel, msg);
+}
+
+function showPromoConfirm(channel){
+  pendingSendChannel = channel;
+  const items = currentOrderItems;
+  const subtotal = items.reduce((sum, item) => sum + item.product.price * item.qty, 0);
+
+  const hasProductDeliveryFee = items.some(item => item.product.deliveryFee && item.product.deliveryFee > 0);
+  const productMaxFee = Math.max(0, ...items.map(item => item.product.freeDelivery ? 0 : (item.product.deliveryFee || 0)));
+  const allFreeDelivery = items.length > 0 && items.every(item => item.product.freeDelivery === true);
+
+  let deliveryFee = null;
+  if(allFreeDelivery) deliveryFee = 0;
+  else if(currentLocationDeliveryFee !== null && currentLocationDeliveryFee !== undefined) deliveryFee = currentLocationDeliveryFee;
+  else if(hasProductDeliveryFee) deliveryFee = productMaxFee;
+
+  const total = deliveryFee !== null ? subtotal + deliveryFee : subtotal;
+  const finalTotal = Math.max(0, total - appliedPromoDiscount);
+
+  document.getElementById("promoConfirmBody").innerHTML = `
+    <div class="promo-breakdown-line"><span>প্রোডাক্টের দাম</span><span>৳${subtotal}</span></div>
+    ${deliveryFee !== null ? `<div class="promo-breakdown-line"><span>ডেলিভারি ফি</span><span>${allFreeDelivery ? "🆓 ফ্রি" : "৳" + deliveryFee}</span></div>` : ""}
+    <div class="promo-breakdown-line discount"><span>🎟️ প্রোমো ছাড় (${appliedPromoCode})</span><span>−৳${appliedPromoDiscount}</span></div>
+    <div class="promo-breakdown-line total"><span>সর্বমোট</span><span>৳${finalTotal}</span></div>
+  `;
+  document.getElementById("promoConfirmModal").classList.add("open");
+}
+
+function closePromoConfirm(){
+  document.getElementById("promoConfirmModal").classList.remove("open");
+  pendingSendChannel = null;
+}
+
+document.getElementById("promoConfirmClose").addEventListener("click", closePromoConfirm);
+document.getElementById("promoConfirmCancel").addEventListener("click", closePromoConfirm);
+document.getElementById("promoConfirmProceed").addEventListener("click", () => {
+  const channel = pendingSendChannel;
+  const msg = pendingOrderMessage;
+  closePromoConfirm();
+  if(channel && msg) sendOrder(channel, msg);
 });
 
-document.getElementById("ord_submit_wa").addEventListener("click", () => {
-  const msg = buildOrderMessage();
-  if(!msg) return;
-  clearCartAfterOrder();
-  window.open(`https://wa.me/8801872280095?text=${encodeURIComponent(msg)}`, "_blank");
-});
+document.getElementById("ord_submit_sms").addEventListener("click", () => trySubmit("sms"));
+document.getElementById("ord_submit_wa").addEventListener("click", () => trySubmit("wa"));
 </script>
 
 <script>
@@ -1950,9 +2186,32 @@ function buildShopScroll(){
   });
 }
 
+function copyPromoCodeToClipboard(code, btnEl){
+  const done = () => {
+    if(!btnEl) return;
+    const original = btnEl.textContent;
+    btnEl.textContent = "✅ কপি হয়েছে";
+    setTimeout(() => { btnEl.textContent = original; }, 1500);
+  };
+  if(navigator.clipboard && navigator.clipboard.writeText){
+    navigator.clipboard.writeText(code).then(done).catch(done);
+  } else {
+    // পুরনো ব্রাউজারের জন্য ব্যাকআপ পদ্ধতি
+    const temp = document.createElement("textarea");
+    temp.value = code;
+    document.body.appendChild(temp);
+    temp.select();
+    try { document.execCommand("copy"); } catch(e){}
+    document.body.removeChild(temp);
+    done();
+  }
+}
+
 function productCard(p){
   const hasDiscount = p.originalPrice && p.originalPrice > p.price;
   const discountPct = hasDiscount ? Math.round(100 - (p.price / p.originalPrice) * 100) : 0;
+  const hasPromo = !!(p.promoCode && p.promoDiscount && p.promoDiscount > 0);
+  const promoPct = hasPromo ? Math.round((p.promoDiscount / p.price) * 100) : 0;
   const images = (p.images && p.images.length) ? p.images : (p.image ? [p.image] : []);
   const hasRealImage = images.length > 0;
   const thumbInner = hasRealImage
@@ -2003,6 +2262,12 @@ function productCard(p){
           ${hasDiscount ? `<span class="old-price">৳${p.originalPrice}</span>` : ""}
         </div>
         ${p.freeDelivery ? `<div class="free-delivery-tag">🆓 ফ্রি ডেলিভারি</div>` : ""}
+        ${hasPromo ? `
+          <div class="promo-card-tag">
+            <span>🎉 কোড <strong>${p.promoCode}</strong> দিয়ে ${promoPct}% ছাড়!</span>
+            <button type="button" class="promo-copy-btn" data-code="${p.promoCode}">কপি</button>
+          </div>
+        ` : ""}
         ${detailToggleHTML}
       </div>
     </div>
@@ -2018,19 +2283,25 @@ function productCard(p){
     </div>
   `;
   const hasVariants = !!((p.sizes && p.sizes.length) || (p.colors && p.colors.length));
-  card.querySelector(".order-btn").addEventListener("click", () => {
+  card.querySelector(".order-btn").addEventListener("click", (e) => {
+    e.stopPropagation();
     if(hasVariants) openProductDetail(p);
     else addToCart(p);
   });
-  card.querySelector(".thumb").addEventListener("click", () => openProductDetail(p));
-  if(hasDetails){
-    const toggle = card.querySelector(".detail-toggle");
-    const panel = card.querySelector(".detail-panel");
-    toggle.addEventListener("click", () => {
-      toggle.classList.toggle("open");
-      panel.classList.toggle("open");
+  card.querySelector(".call-btn").addEventListener("click", (e) => e.stopPropagation());
+  const promoCopyBtn = card.querySelector(".promo-copy-btn");
+  if(promoCopyBtn){
+    promoCopyBtn.addEventListener("click", (e) => {
+      e.stopPropagation();
+      copyPromoCodeToClipboard(promoCopyBtn.dataset.code, promoCopyBtn);
     });
   }
+
+  // পুরো কার্ডের যেকোনো জায়গায় (ছবি, নাম, "বিস্তারিত দেখুন" — যেকোনো কিছুতে)
+  // ক্লিক করলেই সরাসরি ফুল-স্ক্রিন ডিটেইল পেজে চলে যাবে। এতে কার্ডের ভেতরে
+  // আর কিছু খুলে/সরে গিয়ে পাশের প্রোডাক্টের লেআউট এলোমেলো হওয়ার সুযোগ নেই —
+  // কার্ডের উচ্চতা কখনো বদলায় না।
+  card.addEventListener("click", () => openProductDetail(p));
   if(images.length > 1){
     const mainImg = card.querySelector(".thumb img");
     card.querySelectorAll(".mini-thumb").forEach(btn => {

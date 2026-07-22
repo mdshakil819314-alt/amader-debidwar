@@ -537,6 +537,12 @@
     line-height:1.4;
   }
   .promo-card-tag span strong{color:#B8860B;}
+  .promo-card-line{
+    margin-top:5px;
+    font-size:.7rem;
+    font-weight:700;
+    color:#B8860B;
+  }
   .promo-copy-btn{
     flex:0 0 auto;
     background:var(--gold);
@@ -2285,12 +2291,7 @@ function productCard(p){
           ${hasDiscount ? `<span class="old-price">৳${p.originalPrice}</span>` : ""}
         </div>
         ${p.freeDelivery ? `<div class="free-delivery-tag">🆓 ফ্রি ডেলিভারি</div>` : ""}
-        ${hasPromo ? `
-          <div class="promo-card-tag">
-            <span>🎉 কোড <strong>${p.promoCode}</strong> দিয়ে ${promoPct}% ছাড়!</span>
-            <button type="button" class="promo-copy-btn" data-code="${p.promoCode}">কপি</button>
-          </div>
-        ` : ""}
+        ${hasPromo ? `<div class="promo-card-line">🎉 প্রোমো কোড ব্যবহারে ${promoPct}% ছাড়!</div>` : ""}
         ${detailToggleHTML}
       </div>
     </div>
@@ -2312,13 +2313,6 @@ function productCard(p){
     else addToCart(p);
   });
   card.querySelector(".call-btn").addEventListener("click", (e) => e.stopPropagation());
-  const promoCopyBtn = card.querySelector(".promo-copy-btn");
-  if(promoCopyBtn){
-    promoCopyBtn.addEventListener("click", (e) => {
-      e.stopPropagation();
-      copyPromoCodeToClipboard(promoCopyBtn.dataset.code, promoCopyBtn);
-    });
-  }
 
   // পুরো কার্ডের যেকোনো জায়গায় (ছবি, নাম, "বিস্তারিত দেখুন" — যেকোনো কিছুতে)
   // ক্লিক করলেই সরাসরি ফুল-স্ক্রিন ডিটেইল পেজে চলে যাবে। এতে কার্ডের ভেতরে

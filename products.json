@@ -637,7 +637,7 @@
     "price": 500,
     "originalPrice": 600,
     "stock": 2,
-    "deliveryFee": 30,
+    "deliveryFee": null,
     "image": "https:\/\/raw.githubusercontent.com\/mdshakil819314-alt\/amader-debidwar\/main\/images\/img_1784602407405_3ece2c.jpg",
     "emoji": "🛍️",
     "sold": 0,

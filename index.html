@@ -1538,11 +1538,35 @@ function openProductDetail(p){
 
   document.getElementById("productDetail").classList.add("open");
   document.getElementById("pdBody").scrollTop = 0;
+
+  // ফোনের ব্যাক বাটন চাপলে যেন সরাসরি সাইট থেকে বের না হয়ে শুধু এই
+  // ডিটেইল ভিউটাই বন্ধ হয়ে হোমস্ক্রিনে ফিরে আসে — তাই ব্রাউজার হিস্ট্রিতে
+  // একটা "ধাপ" যোগ করে রাখা হচ্ছে
+  if(!productDetailHistoryPushed){
+    history.pushState({ pdOpen: true }, "");
+    productDetailHistoryPushed = true;
+  }
 }
 
+let productDetailHistoryPushed = false;
+
 function closeProductDetail(){
-  document.getElementById("productDetail").classList.remove("open");
+  if(productDetailHistoryPushed){
+    // history.back() ডাকলে popstate ইভেন্ট ফায়ার হবে, যেটাই আসল UI বন্ধ করবে —
+    // এতে ফোনের ব্যাক বাটন আর এই "✕" বাটন ঠিক একই নিয়মে কাজ করে, হিস্ট্রি এলোমেলো হয় না
+    history.back();
+  } else {
+    document.getElementById("productDetail").classList.remove("open");
+  }
 }
+
+window.addEventListener("popstate", () => {
+  if(productDetailHistoryPushed){
+    productDetailHistoryPushed = false;
+    document.getElementById("productDetail").classList.remove("open");
+  }
+});
+
 document.getElementById("pdCloseBtn").addEventListener("click", closeProductDetail);
 
 function renderOrderSummary(isUpdate){

@@ -539,7 +539,7 @@
   .promo-card-tag span strong{color:#B8860B;}
   .promo-card-line{
     margin-top:5px;
-    font-size:.6rem;
+    font-size:.7rem;
     font-weight:700;
     color:#B8860B;
   }
@@ -798,6 +798,67 @@
   .pd-actions .pd-order{background:var(--red);color:#fff;}
   .pd-actions svg{width:19px;height:19px;}
 
+  .pd-reviews{margin-top:28px;padding-top:18px;border-top:1px solid #E1E8E4;}
+  .pd-reviews-head{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:6px;}
+  .pd-reviews-head h3{font-family:'Tiro Bangla',serif;font-size:1.05rem;color:var(--primary-dark);}
+  .pd-reviews-head span{font-size:.78rem;color:var(--muted);font-weight:600;}
+  .pd-reviews-list{margin-top:12px;display:flex;flex-direction:column;gap:14px;}
+  .pd-reviews-loading, .pd-reviews-empty{
+    text-align:center;color:var(--muted);font-size:.82rem;padding:20px 0;
+  }
+  .pd-review-item{display:flex;gap:10px;}
+  .pd-review-avatar{
+    width:38px;height:38px;border-radius:50%;
+    display:flex;align-items:center;justify-content:center;
+    color:#fff;font-weight:700;font-size:.95rem;
+    flex:0 0 auto;
+  }
+  .pd-review-content{flex:1;min-width:0;}
+  .pd-review-top{display:flex;align-items:baseline;gap:8px;flex-wrap:wrap;}
+  .pd-review-name{font-weight:700;font-size:.86rem;color:var(--ink);}
+  .pd-review-time{font-size:.7rem;color:var(--muted);}
+  .pd-review-stars{margin-top:2px;}
+  .pd-star-display{color:#E1E8E4;font-size:.85rem;}
+  .pd-star-display.filled{color:var(--gold);}
+  .pd-review-comment{font-size:.83rem;color:var(--ink);line-height:1.6;margin-top:4px;}
+  .pd-review-like{
+    margin-top:6px;
+    background:var(--bg-soft);
+    border:none;border-radius:999px;
+    padding:4px 12px;
+    font-size:.74rem;font-weight:700;
+    color:var(--muted);
+    font-family:inherit;
+  }
+  .pd-review-like.liked{background:#E4F5EC;color:var(--primary-dark);}
+
+  .pd-review-toggle{
+    display:block;width:100%;margin-top:16px;
+    background:#fff;border:1.5px solid var(--primary);color:var(--primary-dark);
+    border-radius:12px;padding:11px;font-weight:700;font-size:.85rem;font-family:inherit;
+  }
+  .pd-review-form{
+    display:none;
+    margin-top:12px;
+    background:var(--bg-soft);
+    border-radius:14px;
+    padding:14px;
+  }
+  .pd-review-form.open{display:block;}
+  .pd-star-picker{display:flex;gap:6px;margin-top:2px;}
+  .pd-star-picker .pd-star{
+    background:none;border:none;font-size:1.6rem;color:#D7E3DE;
+    padding:0;line-height:1;
+  }
+  .pd-star-picker .pd-star.active{color:var(--gold);}
+  .pd-review-error{color:var(--red);font-size:.78rem;font-weight:600;min-height:1em;margin-top:6px;}
+  .pd-review-submit{
+    display:block;width:100%;margin-top:10px;
+    background:var(--primary);color:#fff;border:none;
+    border-radius:10px;padding:12px;font-weight:700;font-size:.85rem;font-family:inherit;
+  }
+  .pd-review-submit:disabled{opacity:.6;}
+
   /* ---------- order form modal ---------- */
   .modal-overlay{
     display:none;
@@ -1031,6 +1092,9 @@
     .card .thumb.img-loading{animation:none;}
   }
 </style>
+<!-- কাস্টমার রিভিউ সিস্টেমের জন্য Firebase (শুধু Firestore Database ব্যবহার হবে) -->
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
 </head>
 <body>
 
@@ -1479,7 +1543,37 @@ function openProductDetail(p){
         কার্টে যোগ করুন
       </button>
     </div>
+
+    <div class="pd-reviews">
+      <div class="pd-reviews-head">
+        <h3>⭐ কাস্টমার রিভিউ</h3>
+        <span id="pdReviewsAvg"></span>
+      </div>
+      <div id="pdReviewsList" class="pd-reviews-list">
+        <div class="pd-reviews-loading">রিভিউ লোড হচ্ছে...</div>
+      </div>
+
+      <button class="pd-review-toggle" id="pdReviewFormToggle">✍️ একটা রিভিউ লিখুন</button>
+      <div class="pd-review-form" id="pdReviewForm">
+        <label class="m-label">আপনার নাম *</label>
+        <input type="text" id="pdReviewName" class="m-input" placeholder="যেমন: করিম উদ্দিন">
+        <label class="m-label">রেটিং দিন *</label>
+        <div class="pd-star-picker" id="pdStarPicker">
+          <button type="button" class="pd-star" data-star="1">★</button>
+          <button type="button" class="pd-star" data-star="2">★</button>
+          <button type="button" class="pd-star" data-star="3">★</button>
+          <button type="button" class="pd-star" data-star="4">★</button>
+          <button type="button" class="pd-star" data-star="5">★</button>
+        </div>
+        <label class="m-label">মন্তব্য *</label>
+        <textarea id="pdReviewComment" class="m-input" rows="3" placeholder="প্রোডাক্টটা কেমন লেগেছে লিখুন..."></textarea>
+        <div id="pdReviewError" class="pd-review-error"></div>
+        <button type="button" class="pd-review-submit" id="pdReviewSubmit">রিভিউ জমা দিন</button>
+      </div>
+    </div>
   `;
+
+  loadReviews(p.id);
 
   if(images.length > 1){
     const mainImgEl = document.querySelector("#pdBody .pd-main-img img");
@@ -1525,6 +1619,24 @@ function openProductDetail(p){
       copyPromoCodeToClipboard(p.promoCode, document.getElementById("pdPromoCopyBtn"));
     });
   }
+
+  // রিভিউ ফর্ম দেখানো/লুকানো
+  let selectedReviewStar = 0;
+  document.getElementById("pdReviewFormToggle").addEventListener("click", () => {
+    document.getElementById("pdReviewForm").classList.toggle("open");
+  });
+  document.querySelectorAll("#pdStarPicker .pd-star").forEach(starBtn => {
+    starBtn.addEventListener("click", () => {
+      selectedReviewStar = parseInt(starBtn.dataset.star, 10);
+      document.querySelectorAll("#pdStarPicker .pd-star").forEach(b => {
+        b.classList.toggle("active", parseInt(b.dataset.star, 10) <= selectedReviewStar);
+      });
+    });
+  });
+  document.getElementById("pdReviewSubmit").addEventListener("click", () => {
+    submitReview(p.id, selectedReviewStar);
+  });
+
   document.getElementById("pdShareBtn").addEventListener("click", async () => {
     const shareData = {
       title: p.name,
@@ -2105,6 +2217,205 @@ let DELIVERY_CONFIG = {
 };
 
 /* দুই লোকেশনের মধ্যে দূরত্ব (কিলোমিটারে) হিসাব করে — Haversine ফর্মুলা */
+/*
+  ============================================================
+  কাস্টমার রিভিউ সিস্টেম (Firebase Firestore)
+  ============================================================
+  ⚠️ নিচের FIREBASE_CONFIG-এ আপনার আসল Firebase কনফিগ বসাতে হবে।
+  Firebase Console → Project Settings → Your apps → Web app থেকে পাবেন।
+  এখন যা আছে সেটা শুধু প্লেসহোল্ডার, আসল মান না বসালে রিভিউ সিস্টেম কাজ করবে না
+  (তবে বাকি সাইট স্বাভাবিকভাবেই চলবে, কোনো ক্ষতি হবে না)।
+*/
+const FIREBASE_CONFIG = {
+  apiKey: "AIzaSyBEpanBa7MiGY_aVQo_S73b5zG-z1n-Dr8",
+  authDomain: "familyshop-reviews.firebaseapp.com",
+  projectId: "familyshop-reviews",
+  storageBucket: "familyshop-reviews.firebasestorage.app",
+  messagingSenderId: "407630802251",
+  appId: "1:407630802251:web:1f17553cb74f1741feccce"
+};
+
+let firestoreDB = null;
+try {
+  if(typeof firebase !== "undefined" && FIREBASE_CONFIG.apiKey && !FIREBASE_CONFIG.apiKey.includes("আপনার")){
+    firebase.initializeApp(FIREBASE_CONFIG);
+    firestoreDB = firebase.firestore();
+  }
+} catch(e){
+  console.warn("Firebase চালু করা যায়নি:", e);
+}
+
+const AVATAR_COLORS = ["#0F8F5F","#1565C0","#B8860B","#D6432E","#7B4EA3","#C2185B","#00796B","#5D4037"];
+
+function getAvatarColor(name){
+  let hash = 0;
+  for(let i = 0; i < name.length; i++) hash = name.charCodeAt(i) + ((hash << 5) - hash);
+  return AVATAR_COLORS[Math.abs(hash) % AVATAR_COLORS.length];
+}
+
+function getInitial(name){
+  const trimmed = (name || "?").trim();
+  return trimmed.charAt(0).toUpperCase() || "?";
+}
+
+function renderStars(rating){
+  let html = "";
+  for(let i = 1; i <= 5; i++) html += `<span class="pd-star-display${i <= rating ? " filled" : ""}">★</span>`;
+  return html;
+}
+
+function timeAgo(date){
+  const seconds = Math.floor((Date.now() - date.getTime()) / 1000);
+  if(seconds < 60) return "এইমাত্র";
+  const minutes = Math.floor(seconds / 60);
+  if(minutes < 60) return `${minutes} মিনিট আগে`;
+  const hours = Math.floor(minutes / 60);
+  if(hours < 24) return `${hours} ঘণ্টা আগে`;
+  const days = Math.floor(hours / 24);
+  if(days < 30) return `${days} দিন আগে`;
+  const months = Math.floor(days / 30);
+  if(months < 12) return `${months} মাস আগে`;
+  return `${Math.floor(months / 12)} বছর আগে`;
+}
+
+function getLikedReviewIds(){
+  try { return JSON.parse(localStorage.getItem("likedReviews") || "[]"); }
+  catch(e){ return []; }
+}
+function markReviewLiked(reviewId){
+  const liked = getLikedReviewIds();
+  liked.push(reviewId);
+  try { localStorage.setItem("likedReviews", JSON.stringify(liked)); } catch(e){}
+}
+
+function loadReviews(productId){
+  const listEl = document.getElementById("pdReviewsList");
+  const avgEl = document.getElementById("pdReviewsAvg");
+  if(!firestoreDB){
+    listEl.innerHTML = `<div class="pd-reviews-empty">রিভিউ সিস্টেম এখনো চালু হয়নি।</div>`;
+    return;
+  }
+  firestoreDB.collection("reviews")
+    .where("productId", "==", productId)
+    .orderBy("createdAt", "desc")
+    .get()
+    .then(snapshot => {
+      if(snapshot.empty){
+        listEl.innerHTML = `<div class="pd-reviews-empty">এখনো কোনো রিভিউ নেই — প্রথম রিভিউটা আপনিই দিন!</div>`;
+        avgEl.textContent = "";
+        return;
+      }
+      const likedIds = getLikedReviewIds();
+      let totalRating = 0;
+      let html = "";
+      snapshot.forEach(doc => {
+        const r = doc.data();
+        totalRating += r.rating || 0;
+        const createdDate = r.createdAt && r.createdAt.toDate ? r.createdAt.toDate() : new Date();
+        const alreadyLiked = likedIds.includes(doc.id);
+        html += `
+          <div class="pd-review-item">
+            <div class="pd-review-avatar" style="background:${getAvatarColor(r.name || "?")}">${getInitial(r.name)}</div>
+            <div class="pd-review-content">
+              <div class="pd-review-top">
+                <span class="pd-review-name">${(r.name || "অজানা").replace(/</g, "&lt;")}</span>
+                <span class="pd-review-time">${timeAgo(createdDate)}</span>
+              </div>
+              <div class="pd-review-stars">${renderStars(r.rating || 0)}</div>
+              <div class="pd-review-comment">${(r.comment || "").replace(/</g, "&lt;")}</div>
+              <button type="button" class="pd-review-like${alreadyLiked ? " liked" : ""}" data-review-id="${doc.id}" ${alreadyLiked ? "disabled" : ""}>
+                👍 <span class="pd-like-count">${r.likes || 0}</span>
+              </button>
+            </div>
+          </div>
+        `;
+      });
+      listEl.innerHTML = html;
+      const avg = (totalRating / snapshot.size).toFixed(1);
+      avgEl.textContent = `গড় ${avg} ⭐ (${snapshot.size}টা রিভিউ)`;
+
+      listEl.querySelectorAll(".pd-review-like").forEach(btn => {
+        btn.addEventListener("click", () => likeReview(btn.dataset.reviewId, btn));
+      });
+    })
+    .catch(err => {
+      listEl.innerHTML = `<div class="pd-reviews-empty">রিভিউ লোড করতে সমস্যা হয়েছে।</div>`;
+      console.warn("রিভিউ লোড এরর:", err);
+    });
+}
+
+function likeReview(reviewId, btnEl){
+  if(!firestoreDB) return;
+  const ref = firestoreDB.collection("reviews").doc(reviewId);
+  ref.update({ likes: firebase.firestore.FieldValue.increment(1) })
+    .then(() => {
+      markReviewLiked(reviewId);
+      btnEl.classList.add("liked");
+      btnEl.disabled = true;
+      const countEl = btnEl.querySelector(".pd-like-count");
+      countEl.textContent = (parseInt(countEl.textContent, 10) || 0) + 1;
+    })
+    .catch(err => console.warn("লাইক করতে সমস্যা:", err));
+}
+
+function submitReview(productId){
+  const nameInput = document.getElementById("pdReviewName");
+  const commentInput = document.getElementById("pdReviewComment");
+  const errorEl = document.getElementById("pdReviewError");
+  const submitBtn = document.getElementById("pdReviewSubmit");
+  const activeStars = document.querySelectorAll("#pdStarPicker .pd-star.active").length;
+
+  const name = nameInput.value.trim();
+  const comment = commentInput.value.trim();
+
+  if(!firestoreDB){
+    errorEl.textContent = "রিভিউ সিস্টেম এখনো চালু হয়নি, একটু পরে চেষ্টা করুন।";
+    return;
+  }
+  if(!name){
+    errorEl.textContent = "আপনার নাম লিখুন।";
+    return;
+  }
+  if(activeStars < 1){
+    errorEl.textContent = "কমপক্ষে ১টা তারকা দিয়ে রেটিং দিন।";
+    return;
+  }
+  if(!comment){
+    errorEl.textContent = "মন্তব্য লিখুন।";
+    return;
+  }
+  if(name.length > 50 || comment.length > 500){
+    errorEl.textContent = "নাম বা মন্তব্য অনেক বড় হয়ে গেছে।";
+    return;
+  }
+
+  errorEl.textContent = "";
+  submitBtn.disabled = true;
+  submitBtn.textContent = "পাঠানো হচ্ছে...";
+
+  firestoreDB.collection("reviews").add({
+    productId: productId,
+    name: name,
+    rating: activeStars,
+    comment: comment,
+    likes: 0,
+    createdAt: firebase.firestore.FieldValue.serverTimestamp()
+  }).then(() => {
+    nameInput.value = "";
+    commentInput.value = "";
+    document.querySelectorAll("#pdStarPicker .pd-star").forEach(b => b.classList.remove("active"));
+    document.getElementById("pdReviewForm").classList.remove("open");
+    submitBtn.disabled = false;
+    submitBtn.textContent = "রিভিউ জমা দিন";
+    loadReviews(productId);
+  }).catch(err => {
+    errorEl.textContent = "রিভিউ জমা দিতে সমস্যা হয়েছে, আবার চেষ্টা করুন।";
+    submitBtn.disabled = false;
+    submitBtn.textContent = "রিভিউ জমা দিন";
+    console.warn("রিভিউ সাবমিট এরর:", err);
+  });
+}
+
 function calcDistanceKm(lat1, lng1, lat2, lng2){
   const R = 6371; // পৃথিবীর ব্যাসার্ধ (কিমি)
   const dLat = (lat2 - lat1) * Math.PI / 180;

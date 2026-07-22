@@ -26,7 +26,9 @@
       "খয়েরি",
       "লাল"
     ],
-    "freeDelivery": false
+    "freeDelivery": false,
+    "promoCode": "SEVE30",
+    "promoDiscount": 3000000000
   },
   {
     "id": 21,

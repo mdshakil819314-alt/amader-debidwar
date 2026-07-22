@@ -2073,6 +2073,10 @@ function dismissReviewReminder(productId){
 }
 
 function checkReviewReminders(){
+  // একই ব্রাউজিং সেশনে একবার দেখানোর পর আর দেখাবে না — একাধিক প্রোডাক্ট অর্ডার
+  // করা থাকলে বারবার নতুন নতুন ব্যানার আসতে থাকলে সেটা "বন্ধই হচ্ছে না" এমন মনে হতে পারে
+  if(sessionStorage.getItem("reviewReminderShownThisSession")) return;
+
   let reminders;
   try {
     reminders = JSON.parse(localStorage.getItem("reviewReminders") || "[]");
@@ -2082,6 +2086,8 @@ function checkReviewReminders(){
   const now = Date.now();
   const eligible = reminders.find(r => (now - r.orderedAt) >= REVIEW_REMINDER_DELAY_MS);
   if(!eligible) return;
+
+  sessionStorage.setItem("reviewReminderShownThisSession", "1");
 
   const banner = document.getElementById("reviewReminderBanner");
   document.getElementById("reviewReminderText").textContent =
@@ -2113,6 +2119,9 @@ function checkReviewReminders(){
   banner.addEventListener("click", closeHandler);
 
   setTimeout(() => banner.classList.add("show"), 800);
+  // একদম শেষ ভরসা হিসেবে — কোনো কারণে ক্লিক কাজ না করলেও, ১৫ সেকেন্ড পর
+  // ব্যানারটা নিজে থেকেই সরে যাবে, স্থায়ীভাবে আটকে থাকবে না
+  setTimeout(() => banner.classList.remove("show"), 15800);
 }
 
 function trySubmit(channel){
@@ -2420,7 +2429,6 @@ function loadReviews(productId){
   }
   firestoreDB.collection("reviews")
     .where("productId", "==", productId)
-    .orderBy("createdAt", "desc")
     .get()
     .then(snapshot => {
       if(snapshot.empty){
@@ -2431,7 +2439,19 @@ function loadReviews(productId){
       const likedIds = getLikedReviewIds();
       let totalRating = 0;
       let html = "";
-      snapshot.forEach(doc => {
+
+      // Firestore থেকে সরাসরি সাজানো (orderBy) না করে, নিজেরাই তারিখ অনুযায়ী
+      // সাজিয়ে নেওয়া হচ্ছে — এতে বাড়তি "কম্পোজিট ইনডেক্স" লাগে না, যেটার অভাবে
+      // আগে রিভিউ লোডই হচ্ছিল না
+      const docs = [];
+      snapshot.forEach(doc => docs.push(doc));
+      docs.sort((a, b) => {
+        const dateA = a.data().createdAt && a.data().createdAt.toDate ? a.data().createdAt.toDate() : new Date(0);
+        const dateB = b.data().createdAt && b.data().createdAt.toDate ? b.data().createdAt.toDate() : new Date(0);
+        return dateB - dateA;
+      });
+
+      docs.forEach(doc => {
         const r = doc.data();
         totalRating += r.rating || 0;
         const createdDate = r.createdAt && r.createdAt.toDate ? r.createdAt.toDate() : new Date();
@@ -2454,8 +2474,8 @@ function loadReviews(productId){
         `;
       });
       listEl.innerHTML = html;
-      const avg = (totalRating / snapshot.size).toFixed(1);
-      avgEl.textContent = `গড় ${avg} ⭐ (${snapshot.size}টা রিভিউ)`;
+      const avg = (totalRating / docs.length).toFixed(1);
+      avgEl.textContent = `গড় ${avg} ⭐ (${docs.length}টা রিভিউ)`;
 
       listEl.querySelectorAll(".pd-review-like").forEach(btn => {
         btn.addEventListener("click", () => likeReview(btn.dataset.reviewId, btn));

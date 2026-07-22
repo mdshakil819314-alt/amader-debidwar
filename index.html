@@ -1598,7 +1598,7 @@ function openProductDetail(p){
       <div class="pd-review-form" id="pdReviewForm">
         <label class="m-label">আপনার নাম *</label>
         <input type="text" id="pdReviewName" class="m-input" placeholder="যেমন: করিম উদ্দিন">
-        <label class="m-label">ফোন নম্বর * <span class="m-opt">(গোপন থাকবে, কারো কাছে দেখাবে না)</span></label>
+        <label class="m-label">ফোন নম্বর * <span class="m-opt">(🔒 সম্পূর্ণ গোপন, ওয়েবসাইটে কখনো দেখানো হয় না — শুধু দোকান মালিকের কাছে থাকবে)</span></label>
         <input type="tel" id="pdReviewPhone" class="m-input" placeholder="যেমন: 01712345678">
         <label class="m-label">রেটিং দিন *</label>
         <div class="pd-star-picker" id="pdStarPicker">
@@ -2052,7 +2052,7 @@ function sendOrder(channel, msg){
   এটা সাইটের অন্য সব মডালের (অর্ডার ফর্ম, কার্ট) মতোই একই প্রমাণিত পদ্ধতিতে
   বানানো, যাতে আলাদা কোনো নতুন সমস্যা তৈরি না হয়।
 */
-const REVIEW_REMINDER_DELAY_MS = 5 * 60 * 1000; // টেস্টের জন্য ৫ মিনিট
+const REVIEW_REMINDER_DELAY_MS = 72 * 60 * 60 * 1000; // ঠিক ৭২ ঘণ্টা
 const REVIEW_REMINDER_MAX_SHOWS = 2; // সর্বোচ্চ দুইবার দেখানো হবে, তারপর আর না
 
 function saveReviewReminders(items){

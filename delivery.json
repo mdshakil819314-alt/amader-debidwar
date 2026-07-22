@@ -1,0 +1,11 @@
+{
+  "shopLat": 23.5204,
+  "shopLng": 90.9700,
+  "tiers": [
+    { "maxKm": 3, "fee": 30 },
+    { "maxKm": 8, "fee": 50 },
+    { "maxKm": 15, "fee": 80 }
+  ],
+  "beyondFee": null,
+  "beyondMessage": "এই দূরত্বে ডেলিভারির জন্য সরাসরি যোগাযোগ করুন"
+}

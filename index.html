@@ -666,6 +666,8 @@
     transition:transform .35s ease;
   }
   .install-banner.show{transform:translateY(0);}
+  .review-reminder-banner{bottom:96px;}
+  .review-reminder-banner .ib-icon{background:var(--gold);}
   .install-banner .ib-icon{
     width:42px;height:42px;flex:0 0 auto;
     border-radius:12px;
@@ -836,6 +838,13 @@
     display:block;width:100%;margin-top:16px;
     background:#fff;border:1.5px solid var(--primary);color:var(--primary-dark);
     border-radius:12px;padding:11px;font-weight:700;font-size:.85rem;font-family:inherit;
+    white-space:normal;line-height:1.5;
+  }
+  .pd-review-toggle:disabled{
+    background:var(--bg-soft);border-color:#D7E3DE;color:var(--muted);
+  }
+  .pd-review-toggle.pd-review-locked{
+    background:#FFF7E6;border-color:var(--gold);color:#8A6300;font-size:.78rem;
   }
   .pd-review-form{
     display:none;
@@ -1210,6 +1219,15 @@
   </div>
 </div>
 
+<div class="install-banner review-reminder-banner" id="reviewReminderBanner">
+  <div class="ib-icon">🎁</div>
+  <div class="ib-text" id="reviewReminderText"></div>
+  <div class="ib-actions">
+    <button class="ib-add" id="reviewReminderGo">রিভিউ দিন</button>
+    <button class="ib-close" id="reviewReminderClose">✕</button>
+  </div>
+</div>
+
 <div class="pd-overlay" id="productDetail">
   <div class="pd-header">
     <button class="pd-back" id="pdCloseBtn">
@@ -1557,6 +1575,8 @@ function openProductDetail(p){
       <div class="pd-review-form" id="pdReviewForm">
         <label class="m-label">আপনার নাম *</label>
         <input type="text" id="pdReviewName" class="m-input" placeholder="যেমন: করিম উদ্দিন">
+        <label class="m-label">ফোন নম্বর * <span class="m-opt">(গোপন থাকবে, কারো কাছে দেখাবে না)</span></label>
+        <input type="tel" id="pdReviewPhone" class="m-input" placeholder="যেমন: 01712345678">
         <label class="m-label">রেটিং দিন *</label>
         <div class="pd-star-picker" id="pdStarPicker">
           <button type="button" class="pd-star" data-star="1">★</button>
@@ -1620,11 +1640,21 @@ function openProductDetail(p){
     });
   }
 
-  // রিভিউ ফর্ম দেখানো/লুকানো
+  // রিভিউ ফর্ম দেখানো/লুকানো — শুধু যারা এই প্রোডাক্ট আগে অর্ডার করেছে তারাই লিখতে পারবে
   let selectedReviewStar = 0;
-  document.getElementById("pdReviewFormToggle").addEventListener("click", () => {
-    document.getElementById("pdReviewForm").classList.toggle("open");
-  });
+  const reviewToggleBtn = document.getElementById("pdReviewFormToggle");
+  if(getReviewedProductIds().includes(p.id)){
+    reviewToggleBtn.textContent = "✅ আপনি রিভিউ দিয়েছেন";
+    reviewToggleBtn.disabled = true;
+  } else if(!hasOrderedProduct(p.id)){
+    reviewToggleBtn.textContent = "🛍️ প্রোডাক্টটি কিনুন, ব্যবহার করুন — তারপর এখানেই রিভিউ লেখার সুযোগ পাবেন";
+    reviewToggleBtn.disabled = true;
+    reviewToggleBtn.classList.add("pd-review-locked");
+  } else {
+    reviewToggleBtn.addEventListener("click", () => {
+      document.getElementById("pdReviewForm").classList.toggle("open");
+    });
+  }
   document.querySelectorAll("#pdStarPicker .pd-star").forEach(starBtn => {
     starBtn.addEventListener("click", () => {
       selectedReviewStar = parseInt(starBtn.dataset.star, 10);
@@ -1984,12 +2014,93 @@ let pendingSendChannel = null;
 let pendingOrderMessage = null;
 
 function sendOrder(channel, msg){
+  saveReviewReminders(currentOrderItems);
   clearCartAfterOrder();
   if(channel === "sms"){
     window.location.href = `sms:${ORDER_SMS_NUMBER}?body=${encodeURIComponent(msg)}`;
   } else if(channel === "wa"){
     window.open(`https://wa.me/8801872280095?text=${encodeURIComponent(msg)}`, "_blank");
   }
+}
+
+/*
+  অর্ডার করা প্রোডাক্টের জন্য "রিভিউ রিমাইন্ডার" — কয়েকদিন পর কাস্টমার আবার
+  সাইটে এলে বন্ধুত্বপূর্ণভাবে মনে করিয়ে দেওয়া হয় "প্রোডাক্ট পেয়েছেন? রিভিউ দিন"।
+*/
+const REVIEW_REMINDER_DELAY_MS = 2 * 24 * 60 * 60 * 1000; // অর্ডারের ২ দিন পর থেকে দেখানো শুরু হবে
+
+function saveReviewReminders(items){
+  try {
+    const existing = JSON.parse(localStorage.getItem("reviewReminders") || "[]");
+    const now = Date.now();
+    items.forEach(item => {
+      if(!existing.some(r => r.productId === item.product.id)){
+        existing.push({
+          productId: item.product.id,
+          productName: item.product.name,
+          orderedAt: now
+        });
+      }
+    });
+    localStorage.setItem("reviewReminders", JSON.stringify(existing));
+  } catch(e){}
+
+  // এই তালিকাটা স্থায়ী, রিমাইন্ডার বন্ধ/দেখানো হলেও মুছে যায় না — শুধু "এই
+  // প্রোডাক্ট আগে অর্ডার করা হয়েছিল কিনা" যাচাই করতে ব্যবহার হয় (রিভিউ লেখার অনুমতির জন্য)
+  try {
+    const orderedIds = JSON.parse(localStorage.getItem("orderedProductIds") || "[]");
+    items.forEach(item => {
+      if(!orderedIds.includes(item.product.id)) orderedIds.push(item.product.id);
+    });
+    localStorage.setItem("orderedProductIds", JSON.stringify(orderedIds));
+  } catch(e){}
+}
+
+function hasOrderedProduct(productId){
+  try {
+    const orderedIds = JSON.parse(localStorage.getItem("orderedProductIds") || "[]");
+    return orderedIds.includes(productId);
+  } catch(e){ return false; }
+}
+
+function dismissReviewReminder(productId){
+  try {
+    const reminders = JSON.parse(localStorage.getItem("reviewReminders") || "[]");
+    const updated = reminders.filter(r => r.productId !== productId);
+    localStorage.setItem("reviewReminders", JSON.stringify(updated));
+  } catch(e){}
+  document.getElementById("reviewReminderBanner").classList.remove("show");
+}
+
+function checkReviewReminders(){
+  let reminders;
+  try {
+    reminders = JSON.parse(localStorage.getItem("reviewReminders") || "[]");
+  } catch(e){ return; }
+  if(!reminders.length) return;
+
+  const now = Date.now();
+  const eligible = reminders.find(r => (now - r.orderedAt) >= REVIEW_REMINDER_DELAY_MS);
+  if(!eligible) return;
+
+  const banner = document.getElementById("reviewReminderBanner");
+  document.getElementById("reviewReminderText").textContent =
+    `আপনার অর্ডার করা "${eligible.productName}" হাতে পেয়েছেন? একটা রিভিউ দিন! 🎁`;
+
+  document.getElementById("reviewReminderGo").onclick = () => {
+    const p = PRODUCTS.find(pr => pr.id === eligible.productId);
+    dismissReviewReminder(eligible.productId);
+    if(p){
+      openProductDetail(p);
+      setTimeout(() => {
+        const reviewsSection = document.querySelector("#pdBody .pd-reviews");
+        if(reviewsSection) reviewsSection.scrollIntoView({behavior:"smooth"});
+      }, 350);
+    }
+  };
+  document.getElementById("reviewReminderClose").onclick = () => dismissReviewReminder(eligible.productId);
+
+  setTimeout(() => banner.classList.add("show"), 800);
 }
 
 function trySubmit(channel){
@@ -2358,22 +2469,56 @@ function likeReview(reviewId, btnEl){
     .catch(err => console.warn("লাইক করতে সমস্যা:", err));
 }
 
+/* খুব সাধারণ কিছু আপত্তিকর শব্দ থাকলে আটকানো — সম্পূর্ণ ফিল্টার না, একটা প্রাথমিক বাধা মাত্র */
+const REVIEW_BLOCKED_WORDS = ["মাদারচোদ","বাইনচোদ","শালা কুত্তা","খানকি","chutiya","madarchod","bastard","fuck","fucking"];
+
+function containsBlockedWords(text){
+  const lower = text.toLowerCase();
+  return REVIEW_BLOCKED_WORDS.some(word => lower.includes(word.toLowerCase()));
+}
+
+function getReviewedProductIds(){
+  try { return JSON.parse(localStorage.getItem("reviewedProducts") || "[]"); }
+  catch(e){ return []; }
+}
+function markProductReviewed(productId){
+  const list = getReviewedProductIds();
+  if(!list.includes(productId)){
+    list.push(productId);
+    try { localStorage.setItem("reviewedProducts", JSON.stringify(list)); } catch(e){}
+  }
+}
+
 function submitReview(productId){
   const nameInput = document.getElementById("pdReviewName");
+  const phoneInput = document.getElementById("pdReviewPhone");
   const commentInput = document.getElementById("pdReviewComment");
   const errorEl = document.getElementById("pdReviewError");
   const submitBtn = document.getElementById("pdReviewSubmit");
   const activeStars = document.querySelectorAll("#pdStarPicker .pd-star.active").length;
 
   const name = nameInput.value.trim();
+  const phone = phoneInput.value.trim();
   const comment = commentInput.value.trim();
 
   if(!firestoreDB){
     errorEl.textContent = "রিভিউ সিস্টেম এখনো চালু হয়নি, একটু পরে চেষ্টা করুন।";
     return;
   }
+  if(!hasOrderedProduct(productId)){
+    errorEl.textContent = "শুধু যারা প্রোডাক্টটি অর্ডার করেছেন তারাই রিভিউ লিখতে পারবেন।";
+    return;
+  }
+  if(getReviewedProductIds().includes(productId)){
+    errorEl.textContent = "এই প্রোডাক্টে আপনি ইতিমধ্যে একটা রিভিউ দিয়েছেন।";
+    return;
+  }
   if(!name){
     errorEl.textContent = "আপনার নাম লিখুন।";
+    return;
+  }
+  if(!/^01[0-9]{9}$/.test(phone)){
+    errorEl.textContent = "সঠিক ১১ ডিজিটের ফোন নম্বর দিন (যেমন 01712345678)।";
     return;
   }
   if(activeStars < 1){
@@ -2388,6 +2533,10 @@ function submitReview(productId){
     errorEl.textContent = "নাম বা মন্তব্য অনেক বড় হয়ে গেছে।";
     return;
   }
+  if(containsBlockedWords(name) || containsBlockedWords(comment)){
+    errorEl.textContent = "দয়া করে ভদ্র ভাষায় লিখুন।";
+    return;
+  }
 
   errorEl.textContent = "";
   submitBtn.disabled = true;
@@ -2396,12 +2545,15 @@ function submitReview(productId){
   firestoreDB.collection("reviews").add({
     productId: productId,
     name: name,
+    phone: phone, // ওয়েবসাইটে কখনো দেখানো হয় না, শুধু অ্যাপ থেকে দোকান মালিক দেখতে পারবেন
     rating: activeStars,
     comment: comment,
     likes: 0,
     createdAt: firebase.firestore.FieldValue.serverTimestamp()
   }).then(() => {
+    markProductReviewed(productId);
     nameInput.value = "";
+    phoneInput.value = "";
     commentInput.value = "";
     document.querySelectorAll("#pdStarPicker .pd-star").forEach(b => b.classList.remove("active"));
     document.getElementById("pdReviewForm").classList.remove("open");
@@ -2860,6 +3012,7 @@ async function loadData(){
   if(delivery){ DELIVERY_CONFIG = delivery; }
 
   loadingBar.classList.remove("active");
+  checkReviewReminders();
 }
 
 /*

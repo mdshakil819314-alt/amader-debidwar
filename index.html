@@ -1219,12 +1219,12 @@
   </div>
 </div>
 
-<div class="install-banner review-reminder-banner" id="reviewReminderBanner">
+<div class="install-banner review-reminder-banner" id="reviewReminderBanner" onclick="window.handleReviewReminderClose(event)">
   <div class="ib-icon">🎁</div>
   <div class="ib-text" id="reviewReminderText"></div>
   <div class="ib-actions">
-    <button class="ib-add" id="reviewReminderGo">রিভিউ দিন</button>
-    <button class="ib-close" id="reviewReminderClose">✕</button>
+    <button class="ib-add" id="reviewReminderGo" onclick="window.handleReviewReminderGo(event)">রিভিউ দিন</button>
+    <button class="ib-close" id="reviewReminderClose" onclick="window.handleReviewReminderClose(event)">✕</button>
   </div>
 </div>
 
@@ -2072,6 +2072,33 @@ function dismissReviewReminder(productId){
   document.getElementById("reviewReminderBanner").classList.remove("show");
 }
 
+/*
+  এই দুইটা ফাংশন সরাসরি HTML-এর onclick="..." থেকে ডাকা হয় (ক্লোজার/addEventListener
+  ব্যবহার না করে) — সবচেয়ে সহজ, সরাসরি পদ্ধতি, যাতে ক্লিক কাজ না করার কোনো
+  জটিল কারণ (টাইমিং/স্কোপ সমস্যা) থাকার সুযোগই না থাকে।
+*/
+window.handleReviewReminderGo = function(e){
+  if(e) e.stopPropagation();
+  const banner = document.getElementById("reviewReminderBanner");
+  const productId = Number(banner.dataset.productId);
+  const p = PRODUCTS.find(pr => pr.id === productId);
+  dismissReviewReminder(productId);
+  if(p){
+    openProductDetail(p);
+    setTimeout(() => {
+      const reviewsSection = document.querySelector("#pdBody .pd-reviews");
+      if(reviewsSection) reviewsSection.scrollIntoView({behavior:"smooth"});
+    }, 350);
+  }
+};
+
+window.handleReviewReminderClose = function(e){
+  if(e) e.stopPropagation();
+  const banner = document.getElementById("reviewReminderBanner");
+  const productId = Number(banner.dataset.productId);
+  dismissReviewReminder(productId);
+};
+
 function checkReviewReminders(){
   // একই ব্রাউজিং সেশনে একবার দেখানোর পর আর দেখাবে না — একাধিক প্রোডাক্ট অর্ডার
   // করা থাকলে বারবার নতুন নতুন ব্যানার আসতে থাকলে সেটা "বন্ধই হচ্ছে না" এমন মনে হতে পারে
@@ -2093,30 +2120,9 @@ function checkReviewReminders(){
   document.getElementById("reviewReminderText").textContent =
     `আপনার অর্ডার করা "${eligible.productName}" হাতে পেয়েছেন? একটা রিভিউ দিন! 🎁`;
 
-  const goBtn = document.getElementById("reviewReminderGo");
-  const closeBtn = document.getElementById("reviewReminderClose");
-
-  const goHandler = (e) => {
-    if(e) e.stopPropagation();
-    const p = PRODUCTS.find(pr => pr.id === eligible.productId);
-    dismissReviewReminder(eligible.productId);
-    if(p){
-      openProductDetail(p);
-      setTimeout(() => {
-        const reviewsSection = document.querySelector("#pdBody .pd-reviews");
-        if(reviewsSection) reviewsSection.scrollIntoView({behavior:"smooth"});
-      }, 350);
-    }
-  };
-  const closeHandler = (e) => {
-    if(e) e.stopPropagation();
-    dismissReviewReminder(eligible.productId);
-  };
-
-  goBtn.addEventListener("click", goHandler);
-  closeBtn.addEventListener("click", closeHandler);
-  // বাড়তি সুরক্ষা — "✕"-এ নিখুঁতভাবে না লাগলেও, ব্যানারের ফাঁকা জায়গায় চাপলেও বন্ধ হয়ে যাবে
-  banner.addEventListener("click", closeHandler);
+  // productId-টা বোতামে না রেখে, সরাসরি ব্যানারের গায়েই বসিয়ে রাখা হচ্ছে —
+  // ক্লিক হ্যান্ডলার তখন এখান থেকেই পড়ে নেবে, কোনো জটিল ক্লোজার/স্কোপের উপর নির্ভর করবে না
+  banner.dataset.productId = String(eligible.productId);
 
   setTimeout(() => banner.classList.add("show"), 800);
   // একদম শেষ ভরসা হিসেবে — কোনো কারণে ক্লিক কাজ না করলেও, ১৫ সেকেন্ড পর

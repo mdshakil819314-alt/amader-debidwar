@@ -666,8 +666,6 @@
     transition:transform .35s ease;
   }
   .install-banner.show{transform:translateY(0);}
-  .review-reminder-banner{bottom:96px;}
-  .review-reminder-banner .ib-icon{background:var(--gold);}
   .install-banner .ib-icon{
     width:42px;height:42px;flex:0 0 auto;
     border-radius:12px;
@@ -972,6 +970,31 @@
   .promo-status.success{color:var(--primary-dark);}
   .promo-status.error{color:var(--red);}
   .promo-confirm-card{max-width:380px;}
+  .review-reminder-card{
+    text-align:center;
+    padding:32px 24px 28px;
+  }
+  .rr-emoji{font-size:3rem;line-height:1;margin-bottom:14px;}
+  .rr-text{
+    font-family:'Tiro Bangla',serif;
+    font-size:1.05rem;
+    line-height:1.7;
+    color:var(--ink);
+    margin-bottom:24px;
+  }
+  .rr-text strong{color:var(--primary-dark);}
+  .rr-go{
+    display:block;width:100%;
+    background:var(--primary);color:#fff;border:none;
+    border-radius:12px;padding:14px;
+    font-weight:700;font-size:.95rem;font-family:inherit;
+    margin-bottom:10px;
+  }
+  .rr-later{
+    display:block;width:100%;
+    background:none;color:var(--muted);border:none;
+    padding:8px;font-weight:600;font-size:.82rem;font-family:inherit;
+  }
   .promo-confirm-actions{display:flex;gap:10px;margin-top:18px;}
   .promo-confirm-actions .m-submit{
     flex:1;
@@ -1219,12 +1242,12 @@
   </div>
 </div>
 
-<div class="install-banner review-reminder-banner" id="reviewReminderBanner" onclick="window.handleReviewReminderClose(event)">
-  <div class="ib-icon">🎁</div>
-  <div class="ib-text" id="reviewReminderText"></div>
-  <div class="ib-actions">
-    <button class="ib-add" id="reviewReminderGo" onclick="window.handleReviewReminderGo(event)">রিভিউ দিন</button>
-    <button class="ib-close" id="reviewReminderClose" onclick="window.handleReviewReminderClose(event)">✕</button>
+<div class="modal-overlay" id="reviewReminderModal">
+  <div class="modal-card review-reminder-card">
+    <div class="rr-emoji">🎁</div>
+    <div class="rr-text" id="reviewReminderText"></div>
+    <button class="rr-go" id="reviewReminderGoBtn">✍️ রিভিউ দিন</button>
+    <button class="rr-later" id="reviewReminderLaterBtn">এখন না, পরে দেব</button>
   </div>
 </div>
 
@@ -2024,13 +2047,17 @@ function sendOrder(channel, msg){
 }
 
 /*
-  অর্ডার করা প্রোডাক্টের জন্য "রিভিউ রিমাইন্ডার" — কয়েকদিন পর কাস্টমার আবার
-  সাইটে এলে বন্ধুত্বপূর্ণভাবে মনে করিয়ে দেওয়া হয় "প্রোডাক্ট পেয়েছেন? রিভিউ দিন"।
+  অর্ডার করা প্রোডাক্টের জন্য "রিভিউ রিমাইন্ডার" — অর্ডারের ঠিক ৭২ ঘণ্টা পর
+  কাস্টমার আবার সাইটে এলে বড় করে একটা পপ-আপে অনুরোধ করা হয় রিভিউ দিতে।
+  এটা সাইটের অন্য সব মডালের (অর্ডার ফর্ম, কার্ট) মতোই একই প্রমাণিত পদ্ধতিতে
+  বানানো, যাতে আলাদা কোনো নতুন সমস্যা তৈরি না হয়।
 */
-const REVIEW_REMINDER_DELAY_MS = 2 * 24 * 60 * 60 * 1000; // অর্ডারের ২ দিন পর থেকে দেখানো শুরু হবে
+const REVIEW_REMINDER_DELAY_MS = 72 * 60 * 60 * 1000; // ঠিক ৭২ ঘণ্টা
+const REVIEW_REMINDER_MAX_SHOWS = 2; // সর্বোচ্চ দুইবার দেখানো হবে, তারপর আর না
 
 function saveReviewReminders(items){
   try {
+    const customerName = (document.getElementById("ord_name").value || "").trim();
     const existing = JSON.parse(localStorage.getItem("reviewReminders") || "[]");
     const now = Date.now();
     items.forEach(item => {
@@ -2038,7 +2065,9 @@ function saveReviewReminders(items){
         existing.push({
           productId: item.product.id,
           productName: item.product.name,
-          orderedAt: now
+          customerName: customerName,
+          orderedAt: now,
+          timesShown: 0
         });
       }
     });
@@ -2063,45 +2092,32 @@ function hasOrderedProduct(productId){
   } catch(e){ return false; }
 }
 
-function dismissReviewReminder(productId){
+let currentReminderProductId = null;
+
+function removeReviewReminder(productId){
   try {
     const reminders = JSON.parse(localStorage.getItem("reviewReminders") || "[]");
     const updated = reminders.filter(r => r.productId !== productId);
     localStorage.setItem("reviewReminders", JSON.stringify(updated));
   } catch(e){}
-  document.getElementById("reviewReminderBanner").classList.remove("show");
 }
 
-/*
-  এই দুইটা ফাংশন সরাসরি HTML-এর onclick="..." থেকে ডাকা হয় (ক্লোজার/addEventListener
-  ব্যবহার না করে) — সবচেয়ে সহজ, সরাসরি পদ্ধতি, যাতে ক্লিক কাজ না করার কোনো
-  জটিল কারণ (টাইমিং/স্কোপ সমস্যা) থাকার সুযোগই না থাকে।
-*/
-window.handleReviewReminderGo = function(e){
-  if(e) e.stopPropagation();
-  const banner = document.getElementById("reviewReminderBanner");
-  const productId = Number(banner.dataset.productId);
-  const p = PRODUCTS.find(pr => pr.id === productId);
-  dismissReviewReminder(productId);
-  if(p){
-    openProductDetail(p);
-    setTimeout(() => {
-      const reviewsSection = document.querySelector("#pdBody .pd-reviews");
-      if(reviewsSection) reviewsSection.scrollIntoView({behavior:"smooth"});
-    }, 350);
-  }
-};
+function bumpReviewReminderShownCount(productId){
+  try {
+    const reminders = JSON.parse(localStorage.getItem("reviewReminders") || "[]");
+    reminders.forEach(r => {
+      if(r.productId === productId) r.timesShown = (r.timesShown || 0) + 1;
+    });
+    localStorage.setItem("reviewReminders", JSON.stringify(reminders));
+  } catch(e){}
+}
 
-window.handleReviewReminderClose = function(e){
-  if(e) e.stopPropagation();
-  const banner = document.getElementById("reviewReminderBanner");
-  const productId = Number(banner.dataset.productId);
-  dismissReviewReminder(productId);
-};
+function closeReviewReminderModal(){
+  document.getElementById("reviewReminderModal").classList.remove("open");
+}
 
 function checkReviewReminders(){
-  // একই ব্রাউজিং সেশনে একবার দেখানোর পর আর দেখাবে না — একাধিক প্রোডাক্ট অর্ডার
-  // করা থাকলে বারবার নতুন নতুন ব্যানার আসতে থাকলে সেটা "বন্ধই হচ্ছে না" এমন মনে হতে পারে
+  // একই ব্রাউজিং সেশনে একবার দেখানোর পর আর দেখাবে না
   if(sessionStorage.getItem("reviewReminderShownThisSession")) return;
 
   let reminders;
@@ -2111,24 +2127,43 @@ function checkReviewReminders(){
   if(!reminders.length) return;
 
   const now = Date.now();
-  const eligible = reminders.find(r => (now - r.orderedAt) >= REVIEW_REMINDER_DELAY_MS);
+  const eligible = reminders.find(r =>
+    (now - r.orderedAt) >= REVIEW_REMINDER_DELAY_MS && (r.timesShown || 0) < REVIEW_REMINDER_MAX_SHOWS
+  );
   if(!eligible) return;
 
   sessionStorage.setItem("reviewReminderShownThisSession", "1");
+  currentReminderProductId = eligible.productId;
+  bumpReviewReminderShownCount(eligible.productId);
 
-  const banner = document.getElementById("reviewReminderBanner");
-  document.getElementById("reviewReminderText").textContent =
-    `আপনার অর্ডার করা "${eligible.productName}" হাতে পেয়েছেন? একটা রিভিউ দিন! 🎁`;
+  const nameGreeting = eligible.customerName ? `আসসালামু আলাইকুম ${eligible.customerName} ভাই,\n` : "";
+  document.getElementById("reviewReminderText").innerHTML =
+    `${nameGreeting}আপনি যে "<strong>${eligible.productName}</strong>" নিয়েছিলেন, কেমন হয়েছে? দয়া করে একটা রিভিউ দিন।`;
 
-  // productId-টা বোতামে না রেখে, সরাসরি ব্যানারের গায়েই বসিয়ে রাখা হচ্ছে —
-  // ক্লিক হ্যান্ডলার তখন এখান থেকেই পড়ে নেবে, কোনো জটিল ক্লোজার/স্কোপের উপর নির্ভর করবে না
-  banner.dataset.productId = String(eligible.productId);
-
-  setTimeout(() => banner.classList.add("show"), 800);
-  // একদম শেষ ভরসা হিসেবে — কোনো কারণে ক্লিক কাজ না করলেও, ১৫ সেকেন্ড পর
-  // ব্যানারটা নিজে থেকেই সরে যাবে, স্থায়ীভাবে আটকে থাকবে না
-  setTimeout(() => banner.classList.remove("show"), 15800);
+  setTimeout(() => {
+    document.getElementById("reviewReminderModal").classList.add("open");
+  }, 900);
 }
+
+document.getElementById("reviewReminderGoBtn").addEventListener("click", () => {
+  const productId = currentReminderProductId;
+  removeReviewReminder(productId);
+  closeReviewReminderModal();
+  const p = PRODUCTS.find(pr => pr.id === productId);
+  if(p){
+    openProductDetail(p);
+    setTimeout(() => {
+      const reviewsSection = document.querySelector("#pdBody .pd-reviews");
+      if(reviewsSection) reviewsSection.scrollIntoView({behavior:"smooth"});
+    }, 350);
+  }
+});
+
+document.getElementById("reviewReminderLaterBtn").addEventListener("click", () => {
+  // এন্ট্রিটা মুছে ফেলা হচ্ছে না, শুধু বন্ধ করা হচ্ছে — timesShown আগেই বাড়ানো
+  // হয়ে গেছে, তাই সর্বোচ্চ ২ বারের মধ্যেই থাকবে
+  closeReviewReminderModal();
+});
 
 function trySubmit(channel){
   const msg = buildOrderMessage(); // এখানেই ফর্ম যাচাই হয়ে যায়

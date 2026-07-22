@@ -2087,7 +2087,11 @@ function checkReviewReminders(){
   document.getElementById("reviewReminderText").textContent =
     `আপনার অর্ডার করা "${eligible.productName}" হাতে পেয়েছেন? একটা রিভিউ দিন! 🎁`;
 
-  document.getElementById("reviewReminderGo").onclick = () => {
+  const goBtn = document.getElementById("reviewReminderGo");
+  const closeBtn = document.getElementById("reviewReminderClose");
+
+  const goHandler = (e) => {
+    if(e) e.stopPropagation();
     const p = PRODUCTS.find(pr => pr.id === eligible.productId);
     dismissReviewReminder(eligible.productId);
     if(p){
@@ -2098,7 +2102,15 @@ function checkReviewReminders(){
       }, 350);
     }
   };
-  document.getElementById("reviewReminderClose").onclick = () => dismissReviewReminder(eligible.productId);
+  const closeHandler = (e) => {
+    if(e) e.stopPropagation();
+    dismissReviewReminder(eligible.productId);
+  };
+
+  goBtn.addEventListener("click", goHandler);
+  closeBtn.addEventListener("click", closeHandler);
+  // বাড়তি সুরক্ষা — "✕"-এ নিখুঁতভাবে না লাগলেও, ব্যানারের ফাঁকা জায়গায় চাপলেও বন্ধ হয়ে যাবে
+  banner.addEventListener("click", closeHandler);
 
   setTimeout(() => banner.classList.add("show"), 800);
 }

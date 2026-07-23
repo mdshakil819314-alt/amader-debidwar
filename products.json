@@ -650,7 +650,9 @@
     "colors": [
       "কালো"
     ],
-    "freeDelivery": true
+    "freeDelivery": true,
+    "promoCode": "SEVEB30",
+    "promoDiscount": 30
   },
   {
     "id": 78,

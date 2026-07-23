@@ -124,5 +124,11 @@
     "label": "ছাতা",
     "emoji": "🛒",
     "image": ""
+  },
+  {
+    "key": "Wallet",
+    "label": "ছেলেদের ওয়ালেট",
+    "emoji": "⛺",
+    "image": ""
   }
 ]

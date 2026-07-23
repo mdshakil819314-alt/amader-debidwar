@@ -92,7 +92,7 @@
   }
   header.site .logo{
     font-family:'Tiro Bangla',serif;
-    font-size:1.10rem;
+    font-size:1.15rem;
     font-weight:700;
     color:var(--primary-dark);
     display:flex;align-items:center;gap:6px;
@@ -440,7 +440,7 @@
   .card .discount-badge{
     position:absolute;top:8px;left:8px;
     background:var(--red);color:#fff;
-    font-size:.55rem;font-weight:800;
+    font-size:.62rem;font-weight:800;
     padding:3px 8px;border-radius:6px;
     animation:badge-pulse 1.6s ease-in-out infinite;
   }
@@ -1062,6 +1062,13 @@
   .m-submit-call{background:#fff;border:1.5px solid var(--secondary);color:var(--secondary);}
   .m-submit-sms{background:#fff;border:1.5px solid var(--gold);color:#B8860B;}
   .m-submit-wa{background:#fff;border:1.5px solid #25D366;color:#1DA851;}
+  .imo-note{
+    text-align:center;
+    font-size:.72rem;
+    color:var(--muted);
+    margin-top:10px;
+  }
+  .imo-note strong{color:var(--ink);}
   #cartCheckoutBtn{
     border-radius:10px;
     flex-direction:row;
@@ -1340,6 +1347,7 @@
         <span id="ord_submit_wa_label">হোয়াটসঅ্যাপ</span>
       </button>
     </div>
+    <div class="imo-note">📱 ইমোতে অর্ডার করতে চাইলে সরাসরি মেসেজ দিন: <strong>+8801872280095</strong></div>
   </div>
 </div>
 
@@ -1884,14 +1892,13 @@ function resetPromoState(){
 function calcPromoDiscount(code){
   if(!code) return 0;
   const normalized = code.trim().toUpperCase();
-  let discount = 0;
-  currentOrderItems.forEach(item => {
+  // যতগুলো একই প্রোডাক্ট/কোড কার্টে থাকুক না কেন, ছাড়টা পুরো অর্ডারে
+  // একবারই প্রয়োগ হবে — পিস অনুযায়ী গুণ করা হয় না
+  const matched = currentOrderItems.find(item => {
     const itemCode = (item.product.promoCode || "").trim().toUpperCase();
-    if(itemCode && itemCode === normalized && item.product.promoDiscount){
-      discount += item.product.promoDiscount * item.qty;
-    }
+    return itemCode && itemCode === normalized && item.product.promoDiscount;
   });
-  return discount;
+  return matched ? matched.product.promoDiscount : 0;
 }
 
 document.getElementById("promoApplyBtn").addEventListener("click", () => {

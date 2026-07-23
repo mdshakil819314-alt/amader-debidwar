@@ -679,5 +679,31 @@
       "কালো"
     ],
     "freeDelivery": false
+  },
+  {
+    "id": 79,
+    "name": "ছেলেদের ওয়ালেট",
+    "category": "Wallet",
+    "shop": "ফ্যামিলি শপ",
+    "price": 500,
+    "originalPrice": 600,
+    "stock": 5,
+    "deliveryFee": null,
+    "description": "১০০% অরজিনাল চামড়া",
+    "images": [
+      "https:\/\/res.cloudinary.com\/hkstgbdt\/image\/upload\/v1784811113\/familyshop-products\/bcfgo49edtb19ipzqngu.webp",
+      "https:\/\/res.cloudinary.com\/hkstgbdt\/image\/upload\/v1784811123\/familyshop-products\/wtntlhrfawfwn5ycxwoi.webp",
+      "https:\/\/res.cloudinary.com\/hkstgbdt\/image\/upload\/v1784811135\/familyshop-products\/c868an19rsoide6yebrt.webp"
+    ],
+    "emoji": "🛍️",
+    "sold": 0,
+    "code": "PQ1",
+    "sizes": [
+      "M"
+    ],
+    "colors": [
+      "কালো"
+    ],
+    "freeDelivery": false
   }
 ]

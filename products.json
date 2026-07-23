@@ -584,7 +584,7 @@
     "price": 600,
     "originalPrice": 700,
     "stock": 6,
-    "deliveryFee": null,
+    "deliveryFee": 100,
     "images": [
       "https:\/\/res.cloudinary.com\/hkstgbdt\/image\/upload\/v1784788380\/familyshop-products\/p1edxvpgzoplcxakkaml.webp",
       "https:\/\/raw.githubusercontent.com\/mdshakil819314-alt\/amader-debidwar\/main\/images\/img_1784601807499_d03305.jpg"
@@ -602,7 +602,7 @@
       "নিল",
       "সাদা"
     ],
-    "freeDelivery": true
+    "freeDelivery": false
   },
   {
     "id": 76,

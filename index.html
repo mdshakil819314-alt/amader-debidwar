@@ -92,7 +92,7 @@
   }
   header.site .logo{
     font-family:'Tiro Bangla',serif;
-    font-size:1.10rem;
+    font-size:1.15rem;
     font-weight:700;
     color:var(--primary-dark);
     display:flex;align-items:center;gap:6px;
@@ -221,9 +221,9 @@
     display:flex;align-items:center;justify-content:center;
     overflow:hidden;
   }
-.slide .slide-emoji img{
+  .slide .slide-emoji img{
     width:100%;height:100%;object-fit:fill;display:block;
-}
+  }
   .slide .slide-tag{
     position:absolute;
     top:10px;left:10px;
@@ -367,7 +367,7 @@
   .shop-card{
     flex:0 0 auto;
     width:128px;
-    background:#F3F7F5;
+    background:#fff;
     border-radius:var(--card-radius);
     box-shadow:var(--shadow);
     padding:14px 10px;
@@ -379,7 +379,7 @@
     width:44px;height:44px;
     margin:0 auto 8px;
     border-radius:50%;
-    background:#E4EEE8;
+    background:var(--bg-soft);
     display:flex;align-items:center;justify-content:center;
     font-size:1.3rem;
     overflow:hidden;
@@ -440,7 +440,7 @@
   .card .discount-badge{
     position:absolute;top:8px;left:8px;
     background:var(--red);color:#fff;
-    font-size:.50rem;font-weight:800;
+    font-size:.62rem;font-weight:800;
     padding:3px 8px;border-radius:6px;
     animation:badge-pulse 1.6s ease-in-out infinite;
   }
@@ -450,7 +450,7 @@
   }
   .card .sold-badge{
     position:absolute;top:8px;right:8px;
-    font-size:.60rem;font-weight:800;
+    font-size:.62rem;font-weight:800;
     padding:3px 8px;border-radius:6px;
     letter-spacing:.03em;
     box-shadow:0 2px 5px rgba(0,0,0,.15);
@@ -539,7 +539,7 @@
   .promo-card-tag span strong{color:#B8860B;}
   .promo-card-line{
     margin-top:5px;
-    font-size:.6rem;
+    font-size:.7rem;
     font-weight:700;
     color:#B8860B;
   }
@@ -1382,6 +1382,27 @@ try {
 
 function saveCart(){
   try { localStorage.setItem("shopCart", JSON.stringify(cart)); } catch(e){}
+}
+
+/*
+  কার্টে প্রোডাক্ট "স্ন্যাপশট" আকারে সেভ থাকে (যোগ করার মুহূর্তের তথ্য) — তাই
+  পরে প্রোডাক্টের দাম/প্রোমো কোড/ফ্রি ডেলিভারি বদলালে পুরনো কার্ট-এন্ট্রি সেটা
+  জানে না। ওয়েবসাইট খোলার সাথে সাথেই প্রতিটা কার্ট-আইটেমকে সর্বশেষ প্রোডাক্ট
+  তথ্য দিয়ে হালনাগাদ করে দেওয়া হয়, যাতে সবসময় সঠিক দাম/ছাড় দেখায়।
+*/
+function refreshCartProductData(){
+  let changed = false;
+  cart.forEach(item => {
+    const fresh = PRODUCTS.find(p => p.id === item.product.id);
+    if(fresh && JSON.stringify(fresh) !== JSON.stringify(item.product)){
+      item.product = fresh;
+      changed = true;
+    }
+  });
+  if(changed){
+    saveCart();
+    updateCartBadge();
+  }
 }
 
 function updateCartBadge(){
@@ -3077,7 +3098,7 @@ async function loadData(){
     tryFetch("delivery.json"),
   ]);
 
-  if(products){ PRODUCTS = products; render(); }
+  if(products){ PRODUCTS = products; refreshCartProductData(); render(); }
   if(slider){ SLIDER_ITEMS = slider; renderSlider(); }
   if(shops){ SHOPS = shops; render(); }
   if(categories){ CATEGORIES = categories; render(); }

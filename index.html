@@ -4,6 +4,16 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>ফ্যামিলি শপ দেবিদ্বার — লোকাল মার্কেট</title>
+<meta name="description" content="দেবিদ্বার, কুমিল্লার বিশ্বস্ত অনলাইন শপ। দৈনন্দিন প্রয়োজনীয় পণ্য ঘরে বসে অর্ডার করুন, দ্রুত ডেলিভারি পান। কল, SMS বা WhatsApp-এ সহজে অর্ডার করুন।">
+<meta property="og:type" content="website">
+<meta property="og:title" content="ফ্যামিলি শপ দেবিদ্বার — লোকাল মার্কেট">
+<meta property="og:description" content="দেবিদ্বার, কুমিল্লার বিশ্বস্ত অনলাইন শপ। দৈনন্দিন প্রয়োজনীয় পণ্য ঘরে বসে অর্ডার করুন, দ্রুত ডেলিভারি পান।">
+<meta property="og:image" content="https://familyshopdebidwar.com/icon-512.png">
+<meta property="og:url" content="https://familyshopdebidwar.com/">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="ফ্যামিলি শপ দেবিদ্বার — লোকাল মার্কেট">
+<meta name="twitter:description" content="দেবিদ্বার, কুমিল্লার বিশ্বস্ত অনলাইন শপ। দৈনন্দিন প্রয়োজনীয় পণ্য ঘরে বসে অর্ডার করুন।">
+<meta name="twitter:image" content="https://familyshopdebidwar.com/icon-512.png">
 <meta name="theme-color" content="#FFFFFF">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -1467,7 +1477,7 @@ function renderCartModal(){
     const p = item.product;
     subtotal += p.price * item.qty;
     const images = (p.images && p.images.length) ? p.images : (p.image ? [p.image] : []);
-    const thumb = images.length ? `<img src="${images[0]}" alt="${p.name}">` : p.emoji;
+    const thumb = images.length ? `<img src="${cldOptimize(images[0])}" alt="${p.name}">` : p.emoji;
     const row = document.createElement("div");
     row.className = "cart-item";
     const variantText = [item.size, item.color].filter(Boolean).join(" · ");
@@ -1538,7 +1548,7 @@ function openProductDetail(p){
   const hasPromo = !!(p.promoCode && p.promoDiscount && p.promoDiscount > 0);
   const promoPct = hasPromo ? Math.round((p.promoDiscount / p.price) * 100) : 0;
   const images = (p.images && p.images.length) ? p.images : (p.image ? [p.image] : []);
-  const mainInner = images.length ? `<img src="${images[0]}" alt="${p.name}">` : p.emoji;
+  const mainInner = images.length ? `<img src="${cldOptimize(images[0])}" alt="${p.name}">` : p.emoji;
 
   const hasDeliveryFee = !!(p.deliveryFee && p.deliveryFee > 0 && !p.freeDelivery);
   const total = hasDeliveryFee ? p.price + p.deliveryFee : p.price;
@@ -1546,7 +1556,7 @@ function openProductDetail(p){
 
   const thumbsHTML = images.length > 1
     ? `<div class="pd-thumbs">${images.map((img, i) =>
-        `<button class="${i === 0 ? "active" : ""}" data-img="${img}"><img src="${img}" alt="${p.name} ${i+1}"></button>`
+        `<button class="${i === 0 ? "active" : ""}" data-img="${cldOptimize(img)}"><img src="${cldOptimize(img)}" alt="${p.name} ${i+1}"></button>`
       ).join("")}</div>`
     : "";
 
@@ -2355,7 +2365,7 @@ function renderSlider(){
     slide.target = "_blank";
     slide.rel = "noopener";
     const hasImage = !!s.image;
-    const thumbInner = hasImage ? `<img src="${s.image}" alt="${s.title}" loading="lazy">` : s.emoji;
+    const thumbInner = hasImage ? `<img src="${cldOptimize(s.image)}" alt="${s.title}" loading="lazy">` : s.emoji;
     slide.innerHTML = `
       <div class="slide-emoji${hasImage ? "" : " no-image"}">
         ${thumbInner}
@@ -2452,6 +2462,18 @@ function getAvatarColor(name){
   let hash = 0;
   for(let i = 0; i < name.length; i++) hash = name.charCodeAt(i) + ((hash << 5) - hash);
   return AVATAR_COLORS[Math.abs(hash) % AVATAR_COLORS.length];
+}
+
+/*
+  Cloudinary-র ছবির লিংকে f_auto,q_auto যোগ করে দেয় — এতে Cloudinary নিজে থেকেই
+  প্রতিটা ভিজিটরের ব্রাউজার বুঝে সবচেয়ে উপযুক্ত ফরম্যাট (যেমন সাপোর্ট থাকলে AVIF,
+  নাহলে WebP) আর কোয়ালিটি বেছে দেয় — ছবি আরও ছোট, সাইট আরও দ্রুত হয়।
+  Cloudinary-র বাইরের (পুরনো GitHub-হোস্টেড) ছবিতে কোনো প্রভাব পড়ে না।
+*/
+function cldOptimize(url){
+  if(!url || !url.includes("res.cloudinary.com") || !url.includes("/upload/")) return url;
+  if(url.includes("/upload/f_auto")) return url;
+  return url.replace("/upload/", "/upload/f_auto,q_auto/");
 }
 
 function getInitial(name){
@@ -2763,7 +2785,7 @@ function buildShopScroll(){
   SHOPS.forEach(shop => {
     const card = document.createElement("div");
     card.className = "shop-card" + (activeShop === shop.name ? " active" : "");
-    const thumbInner = shop.image ? `<img src="${shop.image}" alt="${shop.name}" loading="lazy">` : shop.emoji;
+    const thumbInner = shop.image ? `<img src="${cldOptimize(shop.image)}" alt="${shop.name}" loading="lazy">` : shop.emoji;
     card.innerHTML = `
       <div class="circle">${thumbInner}</div>
       <div class="name">${shop.name}</div>
@@ -2808,13 +2830,13 @@ function productCard(p){
   const images = (p.images && p.images.length) ? p.images : (p.image ? [p.image] : []);
   const hasRealImage = images.length > 0;
   const thumbInner = hasRealImage
-    ? `<img src="${images[0]}" alt="${p.name}" loading="lazy" onload="this.parentElement.classList.remove('img-loading')" onerror="this.parentElement.classList.remove('img-loading')">`
+    ? `<img src="${cldOptimize(images[0])}" alt="${p.name}" loading="lazy" onload="this.parentElement.classList.remove('img-loading')" onerror="this.parentElement.classList.remove('img-loading')">`
     : p.emoji;
 
   const miniThumbsHTML = images.length > 1
     ? `<div class="mini-thumbs">${images.map((img, i) =>
-        `<button class="mini-thumb${i === 0 ? " active" : ""}" data-img="${img}">
-           <img src="${img}" alt="${p.name} ${i+1}" loading="lazy">
+        `<button class="mini-thumb${i === 0 ? " active" : ""}" data-img="${cldOptimize(img)}">
+           <img src="${cldOptimize(img)}" alt="${p.name} ${i+1}" loading="lazy">
          </button>`
       ).join("")}</div>`
     : "";
@@ -2946,7 +2968,7 @@ function render(){
 
     const head = document.createElement("div");
     head.className = "section-head";
-    const headIcon = cat.image ? `<img src="${cat.image}" alt="${cat.label}">` : cat.emoji;
+    const headIcon = cat.image ? `<img src="${cldOptimize(cat.image)}" alt="${cat.label}">` : cat.emoji;
     head.innerHTML = `<h2>${headIcon} ${cat.label}</h2>`;
     section.appendChild(head);
 

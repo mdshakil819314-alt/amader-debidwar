@@ -1836,13 +1836,23 @@ function closeProductDetail(){
     // এতে ফোনের ব্যাক বাটন আর এই "✕" বাটন ঠিক একই নিয়মে কাজ করে, হিস্ট্রি এলোমেলো হয় না
     history.back();
   } else {
+    pauseProductVideo();
     document.getElementById("productDetail").classList.remove("open");
   }
+}
+
+/* ডিটেইল পেজ বন্ধ করার আগে ভিডিও চলতে থাকলে সেটা থামিয়ে দেয় — নাহলে পেজ
+   "লুকানো" হলেও ভিডিওর শব্দ/চলা পেছনে চলতেই থাকে (CSS display:none ভিডিও
+   থামায় না, শুধু চোখের আড়াল করে)। */
+function pauseProductVideo(){
+  const video = document.querySelector("#pdBody video");
+  if(video) video.pause();
 }
 
 window.addEventListener("popstate", () => {
   if(productDetailHistoryPushed){
     productDetailHistoryPushed = false;
+    pauseProductVideo();
     document.getElementById("productDetail").classList.remove("open");
   }
 });
@@ -2552,7 +2562,7 @@ function cldOptimize(url){
 function cldOptimizeVideo(url){
   if(!url || !url.includes("res.cloudinary.com") || !url.includes("/upload/")) return url;
   if(url.includes("/upload/f_auto")) return url;
-  return url.replace("/upload/", "/upload/f_auto,q_auto,w_480/");
+  return url.replace("/upload/", "/upload/f_auto,q_auto:good,w_480/");
 }
 
 /* কোনো প্রোডাক্টে ছবি না থাকলে (শুধু ভিডিও দেওয়া থাকলে), Cloudinary নিজেই
@@ -2920,7 +2930,7 @@ function productCard(p){
   const hasRealImage = images.length > 0 || hasVideoCard;
   const cardThumbSrc = images.length > 0 ? cldOptimize(images[0]) : (hasVideoCard ? getVideoThumbnail(p.video) : "");
   const thumbInner = hasRealImage
-    ? `<img src="${cardThumbSrc}" alt="${p.name}" loading="lazy" onload="this.parentElement.classList.remove('img-loading')" onerror="this.parentElement.classList.remove('img-loading')">`
+    ? `<img src="${cardThumbSrc}" alt="${p.name}" loading="lazy" onload="this.parentElement.classList.remove('img-loading')" onerror="this.parentElement.classList.remove('img-loading');this.outerHTML='${p.emoji}';">`
     : p.emoji;
 
   const miniThumbsHTML = images.length > 1
@@ -3032,6 +3042,14 @@ function render(){
       const aMatch = a.label.toLowerCase().includes(term) ? 0 : 1;
       const bMatch = b.label.toLowerCase().includes(term) ? 0 : 1;
       return aMatch - bMatch;
+    });
+  } else {
+    // "⭐ এই ক্যাটাগরি সবার আগে দেখান" চালু থাকা ক্যাটাগরি সবার উপরে —
+    // শুধু সার্চ করার সময় না (তখন প্রাসঙ্গিকতাই আগে)
+    visibleCats = [...visibleCats].sort((a, b) => {
+      const aFeatured = a.featured ? 1 : 0;
+      const bFeatured = b.featured ? 1 : 0;
+      return bFeatured - aFeatured;
     });
   }
   let anyProduct = false;

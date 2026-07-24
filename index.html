@@ -914,6 +914,80 @@
   }
   .pd-review-submit:disabled{opacity:.6;}
 
+  /* ---------- অর্ডার ট্র্যাকিং ---------- */
+  .track-overlay{
+    display:none;
+    position:fixed;inset:0;
+    background:#fff;
+    z-index:97;
+    overflow-y:auto;
+  }
+  .track-overlay.open{display:block;}
+  .track-body{max-width:520px;margin:0 auto;padding:24px 20px 40px;}
+  .track-loading{text-align:center;padding:60px 20px;color:var(--muted);}
+  .track-spinner{
+    width:36px;height:36px;margin:0 auto 14px;
+    border:3px solid var(--bg-soft);
+    border-top-color:var(--primary);
+    border-radius:50%;
+    animation:pdSpin .8s linear infinite;
+  }
+  .track-not-found{text-align:center;padding:60px 20px;color:var(--muted);}
+  .track-not-found .emoji{font-size:3rem;margin-bottom:10px;}
+  .track-order-id{
+    font-family:'Tiro Bangla',serif;font-weight:700;font-size:1.2rem;
+    color:var(--primary-dark);text-align:center;
+  }
+  .track-current-label{
+    text-align:center;font-size:.95rem;font-weight:700;
+    color:var(--ink);margin-top:6px;
+  }
+  .track-cancel-note{
+    text-align:center;font-size:.82rem;color:var(--muted);
+    margin-top:6px;background:var(--bg-soft);border-radius:10px;padding:10px 14px;
+  }
+  .track-steps{
+    display:flex;justify-content:space-between;
+    margin-top:28px;position:relative;
+  }
+  .track-steps::before{
+    content:"";position:absolute;top:16px;left:6%;right:6%;
+    height:3px;background:#E1E8E4;z-index:0;
+  }
+  .track-step{
+    position:relative;z-index:1;
+    display:flex;flex-direction:column;align-items:center;
+    flex:1;
+  }
+  .track-step .dot{
+    width:34px;height:34px;border-radius:50%;
+    background:#E1E8E4;color:#fff;
+    display:flex;align-items:center;justify-content:center;
+    font-size:1rem;font-weight:700;
+    border:3px solid #fff;
+  }
+  .track-step.done .dot{background:var(--primary);}
+  .track-step.current .dot{background:var(--gold);}
+  .track-step .label{
+    font-size:.68rem;font-weight:600;color:var(--muted);
+    text-align:center;margin-top:6px;line-height:1.4;
+  }
+  .track-step.done .label, .track-step.current .label{color:var(--ink);}
+  .track-items{
+    margin-top:28px;background:var(--bg-soft);border-radius:14px;
+    padding:14px 16px;font-size:.86rem;line-height:1.9;
+  }
+  .track-total-line{
+    display:flex;justify-content:space-between;
+    margin-top:6px;padding-top:10px;border-top:1px dashed #D7E3DE;
+    font-weight:800;color:var(--red);font-size:1rem;
+  }
+  .track-back-home{
+    display:block;width:100%;margin-top:26px;
+    background:var(--primary);color:#fff;border:none;
+    border-radius:12px;padding:13px;font-weight:700;font-size:.9rem;font-family:inherit;
+  }
+
   /* ---------- order form modal ---------- */
   .modal-overlay{
     display:none;
@@ -1317,6 +1391,17 @@
     </button>
   </div>
   <div class="pd-body" id="pdBody"></div>
+</div>
+
+<div class="track-overlay" id="trackOverlay">
+  <div class="pd-header">
+    <button class="pd-back" id="trackCloseBtn">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+    </button>
+    <div class="pd-header-title">অর্ডার ট্র্যাকিং</div>
+    <div style="width:36px;"></div>
+  </div>
+  <div class="track-body" id="trackBody"></div>
 </div>
 
 <div class="modal-overlay" id="cartModal">
@@ -2599,6 +2684,136 @@ try {
   console.warn("Firebase চালু করা যায়নি:", e);
 }
 
+/*
+  ============================================================
+  অর্ডার ট্র্যাকিং
+  ============================================================
+  URL-এ ?track=ORDER_ID থাকলে (SMS/WhatsApp-এ পাঠানো লিংকে ক্লিক করলে
+  এভাবেই আসে), Firestore-এর "orders" কালেকশন থেকে ওই একটা অর্ডার পড়ে
+  স্ট্যাটাস দেখানো হয়। অ্যাডমিন অ্যাপের Order.java-তে যে status মানগুলো
+  ব্যবহার হয় (pending/packing/out_for_delivery/completed/cancelled/
+  returned), এখানেও ঠিক একই মানগুলো ব্যবহার করা হয়েছে — দুই জায়গায়
+  স্ট্যাটাসের নাম না মিললে ট্র্যাকিং ভুল দেখাবে, তাই এই তালিকা কখনো
+  একপাশে বদলে অন্যপাশে ভুলে গেলে চলবে না।
+*/
+const TRACK_STEPS = [
+  { key: "pending",         label: "🔴 অর্ডার গৃহীত" },
+  { key: "packing",         label: "📦 প্যাকিং হচ্ছে" },
+  { key: "out_for_delivery",label: "🚴 ডেলিভারির জন্য বের হয়েছে" },
+  { key: "completed",       label: "✅ ডেলিভারি সম্পন্ন" }
+];
+
+function checkTrackingParam(){
+  const params = new URLSearchParams(window.location.search);
+  const orderId = params.get("track");
+  if(orderId) showOrderTracking(orderId.trim());
+}
+
+function showOrderTracking(orderId){
+  document.getElementById("trackOverlay").classList.add("open");
+  const body = document.getElementById("trackBody");
+  body.innerHTML = `
+    <div class="track-loading">
+      <div class="track-spinner"></div>
+      অর্ডারের তথ্য আনা হচ্ছে...
+    </div>
+  `;
+
+  if(!firestoreDB){
+    body.innerHTML = `<div class="track-not-found"><div class="emoji">⚠️</div>এখন তথ্য আনা যাচ্ছে না, একটু পরে আবার চেষ্টা করুন।</div>`;
+    return;
+  }
+
+  firestoreDB.collection("orders").doc(orderId).get()
+    .then(doc => {
+      if(!doc.exists){
+        body.innerHTML = `
+          <div class="track-not-found">
+            <div class="emoji">🔍</div>
+            এই অর্ডার আইডি (<strong>${orderId}</strong>) খুঁজে পাওয়া যায়নি।<br>
+            লিংকটা ঠিকভাবে এসেছে কিনা দেখুন, অথবা সরাসরি কল করে জেনে নিন।
+          </div>
+        `;
+        return;
+      }
+      renderTrackingStatus(doc.data());
+    })
+    .catch(err => {
+      console.error("অর্ডার ট্র্যাকিং আনতে সমস্যা:", err);
+      body.innerHTML = `<div class="track-not-found"><div class="emoji">⚠️</div>তথ্য আনতে সমস্যা হয়েছে, একটু পরে আবার চেষ্টা করুন।</div>`;
+    });
+}
+
+function renderTrackingStatus(order){
+  const body = document.getElementById("trackBody");
+  const status = order.status || "pending";
+
+  // বাতিল/ফেরত — সাধারণ ধাপের বাইরের বিশেষ অবস্থা, আলাদাভাবে দেখানো হয়
+  if(status === "cancelled" || status === "returned"){
+    const label = status === "cancelled" ? "❌ অর্ডারটি বাতিল হয়েছে" : "↩️ অর্ডারটি ফেরত নেওয়া হয়েছে";
+    body.innerHTML = `
+      <div class="track-order-id">🆔 ${order.orderId || ""}</div>
+      <div class="track-current-label">${label}</div>
+      <div class="track-cancel-note">কোনো প্রশ্ন থাকলে সরাসরি কল করুন: +8801872280095</div>
+      ${buildTrackItemsHtml(order)}
+      <button class="track-back-home" id="trackBackHomeBtn">🏠 হোমপেজে ফিরে যান</button>
+    `;
+    wireTrackBackButton();
+    return;
+  }
+
+  const currentIndex = TRACK_STEPS.findIndex(s => s.key === status);
+  const safeIndex = currentIndex === -1 ? 0 : currentIndex;
+
+  const stepsHtml = TRACK_STEPS.map((s, i) => {
+    let cls = "track-step";
+    let icon = String(i + 1);
+    if(i < safeIndex){ cls += " done"; icon = "✓"; }
+    else if(i === safeIndex){ cls += " current"; }
+    return `<div class="${cls}"><div class="dot">${icon}</div><div class="label">${s.label}</div></div>`;
+  }).join("");
+
+  body.innerHTML = `
+    <div class="track-order-id">🆔 ${order.orderId || ""}</div>
+    <div class="track-current-label">${TRACK_STEPS[safeIndex].label}</div>
+    <div class="track-steps">${stepsHtml}</div>
+    ${buildTrackItemsHtml(order)}
+    <button class="track-back-home" id="trackBackHomeBtn">🏠 হোমপেজে ফিরে যান</button>
+  `;
+  wireTrackBackButton();
+}
+
+function buildTrackItemsHtml(order){
+  const items = Array.isArray(order.items) ? order.items : [];
+  const lines = items.map(it => {
+    const variant = [it.size, it.color].filter(Boolean).join(" · ");
+    const qtyText = it.qty > 1 ? ` × ${it.qty}` : "";
+    return `${it.name}${variant ? ` (${variant})` : ""}${qtyText} — ৳${(it.price || 0) * (it.qty || 1)}`;
+  }).join("<br>");
+  const total = typeof order.total === "number" ? order.total : 0;
+  return `
+    <div class="track-items">
+      ${lines}
+      <div class="track-total-line"><span>সর্বমোট</span><span>৳${total}</span></div>
+    </div>
+  `;
+}
+
+function wireTrackBackButton(){
+  const btn = document.getElementById("trackBackHomeBtn");
+  if(btn) btn.addEventListener("click", closeTrackOverlay);
+}
+
+function closeTrackOverlay(){
+  document.getElementById("trackOverlay").classList.remove("open");
+  // URL থেকে ?track= প্যারামিটারটা সরিয়ে ফেলা হয়, যাতে পেজ রিফ্রেশ করলে
+  // বারবার এই একই ট্র্যাকিং ওভারলে না খুলে যায়
+  const url = new URL(window.location.href);
+  url.searchParams.delete("track");
+  history.replaceState({}, "", url.toString());
+}
+document.getElementById("trackCloseBtn").addEventListener("click", closeTrackOverlay);
+
 const AVATAR_COLORS = ["#0F8F5F","#1565C0","#B8860B","#D6432E","#7B4EA3","#C2185B","#00796B","#5D4037"];
 
 function getAvatarColor(name){
@@ -3343,6 +3558,7 @@ renderSlider();
 startSliderAutoplay();
 setupHomeScreenIcon();
 loadData();
+checkTrackingParam();
 
 document.getElementById("slider").addEventListener("touchstart", startSliderAutoplay);
 document.getElementById("slider").addEventListener("mousedown", startSliderAutoplay);

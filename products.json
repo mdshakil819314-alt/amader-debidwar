@@ -26,10 +26,8 @@
       "লাল"
     ],
     "freeDelivery": false,
-    "featured": false,
     "promoCode": "SEVE30",
-    "promoDiscount": 30,
-    "video": "https:\/\/res.cloudinary.com\/hkstgbdt\/video\/upload\/v1784876795\/familyshop-products\/fem2vz1ha8pz9n0ijy53.mp4"
+    "promoDiscount": 30
   },
   {
     "id": 21,
@@ -54,8 +52,7 @@
     "colors": [
       "নিল"
     ],
-    "freeDelivery": false,
-    "featured": false
+    "freeDelivery": false
   },
   {
     "id": 3,
@@ -81,8 +78,7 @@
       "খয়েরী",
       "কালো"
     ],
-    "freeDelivery": false,
-    "featured": false
+    "freeDelivery": false
   },
   {
     "id": 24,
@@ -103,8 +99,7 @@
     "colors": [
       "কালো"
     ],
-    "freeDelivery": false,
-    "featured": false
+    "freeDelivery": false
   },
   {
     "id": 17,
@@ -122,8 +117,7 @@
     ],
     "emoji": "📦",
     "sold": 0,
-    "freeDelivery": false,
-    "featured": false
+    "freeDelivery": false
   },
   {
     "id": 27,
@@ -139,8 +133,7 @@
     "emoji": "📦",
     "sold": 1,
     "code": "PP33",
-    "freeDelivery": false,
-    "featured": false
+    "freeDelivery": false
   },
   {
     "id": 28,
@@ -155,8 +148,7 @@
     "image": "https:\/\/res.cloudinary.com\/hkstgbdt\/image\/upload\/v1784859608\/familyshop-products\/tjzp4vytisb1r51uzhov.webp",
     "emoji": "📦",
     "sold": 0,
-    "freeDelivery": false,
-    "featured": false
+    "freeDelivery": false
   },
   {
     "id": 29,
@@ -172,7 +164,6 @@
     "emoji": "📦",
     "sold": 0,
     "freeDelivery": false,
-    "featured": false,
     "video": "https:\/\/res.cloudinary.com\/hkstgbdt\/video\/upload\/v1784877222\/familyshop-products\/eye7w75xz7nmhvlqtswb.mp4"
   },
   {
@@ -191,8 +182,7 @@
     ],
     "emoji": "🧴",
     "sold": 0,
-    "freeDelivery": false,
-    "featured": false
+    "freeDelivery": false
   },
   {
     "id": 14,
@@ -209,8 +199,7 @@
     ],
     "emoji": "💄",
     "sold": 0,
-    "freeDelivery": false,
-    "featured": false
+    "freeDelivery": false
   },
   {
     "id": 33,
@@ -224,8 +213,7 @@
     "image": "",
     "emoji": "👗",
     "sold": 0,
-    "freeDelivery": false,
-    "featured": false
+    "freeDelivery": false
   },
   {
     "id": 34,
@@ -239,8 +227,7 @@
     "image": "",
     "emoji": "👗",
     "sold": 0,
-    "freeDelivery": false,
-    "featured": false
+    "freeDelivery": false
   },
   {
     "id": 37,
@@ -254,8 +241,7 @@
     "image": "",
     "emoji": "🧕",
     "sold": 0,
-    "freeDelivery": false,
-    "featured": false
+    "freeDelivery": false
   },
   {
     "id": 38,
@@ -269,8 +255,7 @@
     "image": "",
     "emoji": "🧕",
     "sold": 0,
-    "freeDelivery": false,
-    "featured": false
+    "freeDelivery": false
   },
   {
     "id": 41,
@@ -284,8 +269,7 @@
     "image": "https:\/\/res.cloudinary.com\/hkstgbdt\/image\/upload\/v1784860771\/familyshop-products\/njez5k7bobeyledjvdxa.webp",
     "emoji": "🧣",
     "sold": 0,
-    "freeDelivery": false,
-    "featured": false
+    "freeDelivery": false
   },
   {
     "id": 42,
@@ -299,8 +283,7 @@
     "image": "https:\/\/res.cloudinary.com\/hkstgbdt\/image\/upload\/v1784860787\/familyshop-products\/fnoi9dopmd5s7fauczmm.webp",
     "emoji": "🧣",
     "sold": 0,
-    "freeDelivery": false,
-    "featured": false
+    "freeDelivery": false
   },
   {
     "id": 45,
@@ -318,8 +301,7 @@
     ],
     "emoji": "💍",
     "sold": 0,
-    "freeDelivery": false,
-    "featured": false
+    "freeDelivery": false
   },
   {
     "id": 46,
@@ -333,8 +315,7 @@
     "image": "https:\/\/raw.githubusercontent.com\/mdshakil819314-alt\/amader-debidwar\/main\/images\/img_1784602242705_bfd660.jpg",
     "emoji": "💍",
     "sold": 0,
-    "freeDelivery": false,
-    "featured": false
+    "freeDelivery": false
   },
   {
     "id": 49,
@@ -362,8 +343,7 @@
       "কালো",
       "খয়েরী"
     ],
-    "freeDelivery": false,
-    "featured": true
+    "freeDelivery": false
   },
   {
     "id": 50,
@@ -388,8 +368,7 @@
     "colors": [
       "কালো"
     ],
-    "freeDelivery": false,
-    "featured": false
+    "freeDelivery": false
   },
   {
     "id": 53,
@@ -403,8 +382,7 @@
     "image": "",
     "emoji": "🧸",
     "sold": 0,
-    "freeDelivery": false,
-    "featured": false
+    "freeDelivery": false
   },
   {
     "id": 54,
@@ -418,8 +396,7 @@
     "image": "",
     "emoji": "🧸",
     "sold": 0,
-    "freeDelivery": false,
-    "featured": false
+    "freeDelivery": false
   },
   {
     "id": 4,
@@ -433,8 +410,7 @@
     "image": "",
     "emoji": "👕",
     "sold": 0,
-    "freeDelivery": false,
-    "featured": false
+    "freeDelivery": false
   },
   {
     "id": 30,
@@ -448,8 +424,7 @@
     "image": "",
     "emoji": "👶",
     "sold": 0,
-    "freeDelivery": false,
-    "featured": false
+    "freeDelivery": false
   },
   {
     "id": 57,
@@ -463,8 +438,7 @@
     "image": "",
     "emoji": "🍼",
     "sold": 0,
-    "freeDelivery": false,
-    "featured": false
+    "freeDelivery": false
   },
   {
     "id": 58,
@@ -478,8 +452,7 @@
     "image": "",
     "emoji": "🍼",
     "sold": 0,
-    "freeDelivery": false,
-    "featured": false
+    "freeDelivery": false
   },
   {
     "id": 61,
@@ -493,8 +466,7 @@
     "image": "",
     "emoji": "🎠",
     "sold": 0,
-    "freeDelivery": false,
-    "featured": false
+    "freeDelivery": false
   },
   {
     "id": 62,
@@ -508,8 +480,7 @@
     "image": "",
     "emoji": "🎠",
     "sold": 0,
-    "freeDelivery": false,
-    "featured": false
+    "freeDelivery": false
   },
   {
     "id": 65,
@@ -523,8 +494,7 @@
     "image": "",
     "emoji": "🎒",
     "sold": 0,
-    "freeDelivery": false,
-    "featured": false
+    "freeDelivery": false
   },
   {
     "id": 67,
@@ -538,8 +508,7 @@
     "image": "",
     "emoji": "🎒",
     "sold": 1,
-    "freeDelivery": false,
-    "featured": false
+    "freeDelivery": false
   },
   {
     "id": 69,
@@ -553,8 +522,7 @@
     "image": "",
     "emoji": "🌸",
     "sold": 0,
-    "freeDelivery": false,
-    "featured": false
+    "freeDelivery": false
   },
   {
     "id": 70,
@@ -568,8 +536,7 @@
     "image": "",
     "emoji": "🌸",
     "sold": 0,
-    "freeDelivery": false,
-    "featured": false
+    "freeDelivery": false
   },
   {
     "id": 73,
@@ -594,8 +561,7 @@
       "সাদা",
       "কালো"
     ],
-    "freeDelivery": false,
-    "featured": false
+    "freeDelivery": false
   },
   {
     "id": 74,
@@ -620,8 +586,7 @@
     "colors": [
       "সাদা"
     ],
-    "freeDelivery": false,
-    "featured": false
+    "freeDelivery": false
   },
   {
     "id": 75,
@@ -649,8 +614,7 @@
       "নিল",
       "সাদা"
     ],
-    "freeDelivery": false,
-    "featured": false
+    "freeDelivery": false
   },
   {
     "id": 76,
@@ -677,8 +641,7 @@
       "সাদা",
       "কালো"
     ],
-    "freeDelivery": false,
-    "featured": false
+    "freeDelivery": false
   },
   {
     "id": 77,
@@ -700,7 +663,6 @@
       "কালো"
     ],
     "freeDelivery": true,
-    "featured": false,
     "promoCode": "SEVEB30",
     "promoDiscount": 30
   },
@@ -728,8 +690,7 @@
     "colors": [
       "কালো"
     ],
-    "freeDelivery": false,
-    "featured": false
+    "freeDelivery": false
   },
   {
     "id": 79,
@@ -755,7 +716,6 @@
     "colors": [
       "কালো"
     ],
-    "freeDelivery": false,
-    "featured": false
+    "freeDelivery": false
   }
 ]

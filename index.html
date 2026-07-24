@@ -2120,7 +2120,12 @@ function buildOrderMessage(){
   const total = deliveryFee !== null ? subtotal + deliveryFee : subtotal;
   const finalTotal = Math.max(0, total - appliedPromoDiscount);
 
+  // অর্ডার ট্র্যাকিং আইডি — এখানেই একবার জেনারেট হয়, যাতে মেসেজে যা লেখা
+  // থাকে আর Firestore-এ যা সেভ হয় দুটো সবসময় একই আইডি বহন করে
+  const orderId = generateOrderId();
+
   let msg = `নতুন অর্ডার - ফ্যামিলি শপ দেবিদ্বার\n`;
+  msg += `অর্ডার আইডি: ${orderId}\n`;
   items.forEach(item => {
     const codeText = item.product.code ? ` [কোড: ${item.product.code}]` : "";
     const variantText = [item.size, item.color].filter(Boolean).join(" · ");
@@ -2139,6 +2144,36 @@ function buildOrderMessage(){
   msg += `গ্রাম: ${village}\n`;
   if(address) msg += `ঠিকানা: ${address}\n`;
   if(currentLocationLink) msg += `লোকেশন: ${currentLocationLink}\n`;
+  msg += `ট্র্যাকিং লিংক: https://familyshopdebidwar.com/?track=${orderId}\n`;
+
+  // এই অর্ডারের সম্পূর্ণ, চূড়ান্ত হিসাব একটা জায়গায় জমা রাখা হচ্ছে — sendOrder()
+  // পরে এই একই অবজেক্ট থেকে Firestore-এ সেভ করবে, নতুন করে আলাদা হিসাব করবে না।
+  // এতে মেসেজে যে টাকা লেখা আছে আর ডাটাবেজে যে টাকা সেভ হবে, তার মধ্যে
+  // কখনো গরমিল হওয়ার সুযোগ থাকে না।
+  lastOrderData = {
+    orderId: orderId,
+    items: items.map(item => ({
+      productId: item.product.id,
+      name: item.product.name,
+      price: item.product.price,
+      qty: item.qty,
+      size: item.size || null,
+      color: item.color || null
+    })),
+    subtotal: subtotal,
+    deliveryFee: deliveryFee,
+    promoCode: appliedPromoDiscount > 0 ? appliedPromoCode : null,
+    promoDiscount: appliedPromoDiscount,
+    total: finalTotal,
+    customerName: name,
+    union: union,
+    ward: wardNum,
+    phone: phone,
+    village: village,
+    address: address || null,
+    locationLink: currentLocationLink || null
+  };
+
   return msg;
 }
 
@@ -2155,7 +2190,34 @@ document.getElementById("ord_submit_call").addEventListener("click", () => {
 let pendingSendChannel = null;
 let pendingOrderMessage = null;
 
+// buildOrderMessage()-এ শেষবার যে অর্ডারের হিসাব হয়েছে, সেটা এখানে জমা থাকে —
+// sendOrder() এটা পড়েই Firestore-এ সেভ করে (নতুন করে হিসাব করে না)
+let lastOrderData = null;
+
+/* সংক্ষিপ্ত, ইউনিক অর্ডার আইডি — কাস্টমারকে দেখানো আর ট্র্যাকিং লিংকে
+   ব্যবহারের মতো। সময়ের উপর ভিত্তি করে বানানো বলে দুইটা অর্ডারের আইডি
+   একসাথে মিলে যাওয়ার সম্ভাবনা কার্যত নেই। */
+function generateOrderId(){
+  const stamp = Date.now().toString(36).toUpperCase();
+  return "DBD-" + stamp.slice(-6);
+}
+
+/* অর্ডারটা Firestore-এর "orders" কালেকশনে সেভ করে — status শুরুতে
+   "pending" থাকে, অ্যাডমিন অ্যাপ থেকে পরে বদলানো হবে। এটা ব্যর্থ হলেও
+   SMS/WhatsApp পাঠানো আটকাবে না (ব্যবসা যেন কখনো থেমে না থাকে), শুধু
+   ব্রাউজার কনসোলে এরর লেখা থাকবে যাতে পরে ডিবাগ করা যায়। */
+function saveOrderToFirestore(orderData){
+  if(!firestoreDB || !orderData) return;
+  const orderDoc = Object.assign({}, orderData, {
+    status: "pending",
+    createdAt: firebase.firestore.FieldValue.serverTimestamp()
+  });
+  firestoreDB.collection("orders").doc(orderData.orderId).set(orderDoc)
+    .catch(err => console.error("অর্ডার Firestore-এ সেভ করতে সমস্যা:", err));
+}
+
 function sendOrder(channel, msg){
+  saveOrderToFirestore(lastOrderData);
   saveReviewReminders(currentOrderItems);
   clearCartAfterOrder();
   if(channel === "sms"){

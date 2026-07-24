@@ -131,7 +131,7 @@
     "description": "ছোট্ট বাচ্চাদের, ডেইলি ইউজ কম্বু প্যাক।",
     "image": "https:\/\/res.cloudinary.com\/hkstgbdt\/image\/upload\/v1784860031\/familyshop-products\/iljls5lwas1cgpawusxm.webp",
     "emoji": "📦",
-    "sold": 0,
+    "sold": 1,
     "code": "PP33",
     "freeDelivery": false
   },
@@ -145,7 +145,7 @@
     "stock": 14,
     "deliveryFee": 0,
     "description": "ডায়াপার প্যাক, ফিডার, বেবি লোশন",
-    "image": "",
+    "image": "https:\/\/res.cloudinary.com\/hkstgbdt\/image\/upload\/v1784859608\/familyshop-products\/tjzp4vytisb1r51uzhov.webp",
     "emoji": "📦",
     "sold": 0,
     "freeDelivery": false

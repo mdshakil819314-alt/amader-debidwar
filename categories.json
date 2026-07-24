@@ -3,132 +3,154 @@
     "key": "threepiece",
     "label": "থ্রি-পিস",
     "emoji": "🛒",
-    "image": ""
+    "image": "",
+    "featured": false
   },
   {
     "key": "saree",
     "label": "শাড়ি",
     "emoji": "🛒",
-    "image": ""
+    "image": "",
+    "featured": false
   },
   {
     "key": "combo",
     "label": "কম্বো প্যাকেজ",
     "emoji": "🛒",
-    "image": ""
+    "image": "",
+    "featured": false
   },
   {
     "key": "grocery",
     "label": "মুদি দোকান",
     "emoji": "🛒",
-    "image": ""
+    "image": "",
+    "featured": false
   },
   {
     "key": "cosmetic",
     "label": "কসমেটিক",
     "emoji": "🛒",
-    "image": ""
+    "image": "",
+    "featured": false
   },
   {
     "key": "women-fashion",
     "label": "মহিলাদের ফ্যাশন",
     "emoji": "🛒",
-    "image": ""
+    "image": "",
+    "featured": false
   },
   {
     "key": "hijab",
     "label": "হিজাব",
     "emoji": "🛒",
-    "image": ""
+    "image": "",
+    "featured": false
   },
   {
     "key": "orna",
     "label": "ওড়না",
     "emoji": "🛒",
-    "image": ""
+    "image": "",
+    "featured": false
   },
   {
     "key": "churi",
     "label": "চুড়ি",
     "emoji": "🛒",
-    "image": ""
+    "image": "",
+    "featured": false
   },
   {
     "key": "handbag",
     "label": "হ্যান্ডব্যাগ",
     "emoji": "🛒",
-    "image": ""
+    "image": "",
+    "featured": false
   },
   {
     "key": "kids-products",
     "label": "শিশুদের প্রোডাক্ট",
     "emoji": "🛒",
-    "image": ""
+    "image": "",
+    "featured": false
   },
   {
     "key": "baby-dress",
     "label": "বেবি ড্রেস",
     "emoji": "🛒",
-    "image": ""
+    "image": "",
+    "featured": false
   },
   {
     "key": "feeder",
     "label": "ফিডার",
     "emoji": "🛒",
-    "image": ""
+    "image": "",
+    "featured": false
   },
   {
     "key": "toys",
     "label": "খেলনা",
     "emoji": "🛒",
-    "image": ""
+    "image": "",
+    "featured": false
   },
   {
     "key": "school-bag",
     "label": "স্কুল ব্যাগ",
     "emoji": "🛒",
-    "image": ""
+    "image": "",
+    "featured": false
   },
   {
     "key": "perfume-attar",
     "label": "সুগন্ধি আতর",
     "emoji": "🛒",
-    "image": ""
+    "image": "",
+    "featured": false
   },
   {
     "key": "LadiesClock",
     "label": "মেয়েদের ঘড়ি",
     "emoji": "🛒",
-    "image": ""
+    "image": "",
+    "featured": false
   },
   {
     "key": "Clock",
     "label": "ছেলেদের ঘড়ি",
     "emoji": "🛒",
-    "image": ""
+    "image": "",
+    "featured": false
   },
   {
     "key": "Punjabi",
     "label": "পাঞ্জাবি",
     "emoji": "🛒",
-    "image": ""
+    "image": "",
+    "featured": false
   },
   {
     "key": "T-shirt",
     "label": "টি শার্ট",
     "emoji": "🛒",
-    "image": ""
+    "image": "",
+    "featured": false
   },
   {
     "key": "Umbrella",
     "label": "ছাতা",
     "emoji": "🛒",
-    "image": ""
+    "image": "",
+    "featured": false
   },
   {
     "key": "Wallet",
     "label": "ছেলেদের ওয়ালেট",
     "emoji": "🛒",
-    "image": ""
+    "image": "",
+    "featured": true
   }
 ]

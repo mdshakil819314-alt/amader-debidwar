@@ -2293,9 +2293,13 @@ function generateOrderId(){
    ব্রাউজার কনসোলে এরর লেখা থাকবে যাতে পরে ডিবাগ করা যায়। */
 function saveOrderToFirestore(orderData){
   if(!firestoreDB || !orderData) return;
+  const expireDate = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000); // ৩০ দিন পর
   const orderDoc = Object.assign({}, orderData, {
     status: "pending",
-    createdAt: firebase.firestore.FieldValue.serverTimestamp()
+    createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+    // Firestore TTL পলিসি এই ফিল্ডটা দেখে ৩০ দিন পর নিজে থেকেই অর্ডারটা মুছে দেবে
+    // (Firebase Console-এ একবার TTL পলিসি চালু করতে হয়, কোনো বাড়তি কোড/খরচ লাগে না)
+    expireAt: firebase.firestore.Timestamp.fromDate(expireDate)
   });
   firestoreDB.collection("orders").doc(orderData.orderId).set(orderDoc)
     .catch(err => console.error("অর্ডার Firestore-এ সেভ করতে সমস্যা:", err));

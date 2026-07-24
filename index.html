@@ -103,7 +103,7 @@
   }
   header.site .logo{
     font-family:'Tiro Bangla',serif;
-    font-size:1.10rem;
+    font-size:1.15rem;
     font-weight:700;
     color:var(--primary-dark);
     display:flex;align-items:center;gap:6px;
@@ -468,6 +468,15 @@
   }
   .card .sold-badge.is-new{background:var(--secondary);color:#fff;}
   .card .sold-badge.is-sold{background:var(--gold);color:#3A2A00;}
+  .card .video-badge{
+    position:absolute;bottom:8px;right:8px;
+    width:26px;height:26px;
+    background:rgba(15,25,20,.6);
+    border-radius:50%;
+    display:flex;align-items:center;justify-content:center;
+    backdrop-filter:blur(2px);
+  }
+  .card .video-badge svg{width:12px;height:12px;}
   .card .mini-thumbs{
     display:flex;gap:6px;
     margin-top:8px;
@@ -742,6 +751,22 @@
     position:relative;
   }
   .pd-main-img img{width:100%;height:100%;object-fit:cover;display:block;}
+  .pd-main-img video{width:100%;height:100%;object-fit:cover;display:block;background:#000;}
+  .pd-video-loading{
+    position:absolute;inset:0;
+    display:flex;align-items:center;justify-content:center;
+    background:#000;color:#fff;
+    font-size:.8rem;font-weight:600;text-align:center;padding:20px;
+    z-index:2;
+  }
+  .pd-spinner{
+    width:34px;height:34px;
+    border:3px solid rgba(255,255,255,.3);
+    border-top-color:#fff;
+    border-radius:50%;
+    animation:pdSpin .8s linear infinite;
+  }
+  @keyframes pdSpin{to{transform:rotate(360deg);}}
   .pd-discount-badge{
     position:absolute;top:12px;left:12px;
     background:var(--red);color:#fff;
@@ -764,6 +789,18 @@
   }
   .pd-thumbs button.active{border-color:var(--primary);}
   .pd-thumbs img{width:100%;height:100%;object-fit:cover;display:block;}
+  .pd-video-thumb{
+    width:64px;height:64px;flex:0 0 auto;
+    border-radius:12px;
+    border:2px solid var(--gold);
+    padding:0;background:#FFF7E6;
+    display:flex;flex-direction:column;align-items:center;justify-content:center;
+    gap:2px;
+    font-size:1.1rem;
+    color:#B8860B;
+  }
+  .pd-video-thumb span{font-size:.6rem;font-weight:700;color:#8A6300;}
+  .pd-video-thumb.active{border-color:var(--red);}
   .pd-name{font-family:'Tiro Bangla',serif;font-weight:700;font-size:1.25rem;margin-top:18px;line-height:1.4;}
   .pd-code{font-size:.78rem;color:var(--muted);font-weight:600;margin-top:4px;}
   .pd-shop{font-size:.88rem;color:var(--secondary);font-weight:600;margin-top:6px;}
@@ -1566,15 +1603,16 @@ function openProductDetail(p){
   const promoPct = hasPromo ? Math.round((p.promoDiscount / p.price) * 100) : 0;
   const images = (p.images && p.images.length) ? p.images : (p.image ? [p.image] : []);
   const mainInner = images.length ? `<img src="${cldOptimize(images[0])}" alt="${p.name}">` : p.emoji;
+  const hasVideo = !!(p.video && p.video.trim());
 
   const hasDeliveryFee = !!(p.deliveryFee && p.deliveryFee > 0 && !p.freeDelivery);
   const total = hasDeliveryFee ? p.price + p.deliveryFee : p.price;
   const hasExtra = !!(p.stock || hasDeliveryFee || !p.freeDelivery);
 
-  const thumbsHTML = images.length > 1
+  const thumbsHTML = (images.length > 1 || hasVideo)
     ? `<div class="pd-thumbs">${images.map((img, i) =>
         `<button class="${i === 0 ? "active" : ""}" data-img="${cldOptimize(img)}"><img src="${cldOptimize(img)}" alt="${p.name} ${i+1}"></button>`
-      ).join("")}</div>`
+      ).join("")}${hasVideo ? `<button class="pd-video-thumb" data-video="${cldOptimizeVideo(p.video)}"><svg viewBox="0 0 24 24" fill="currentColor" width="18" height="18"><path d="M8 5v14l11-7z"/></svg><span>ভিডিও</span></button>` : ""}</div>`
     : "";
 
   const pdSoldCount = p.sold || 0;
@@ -1674,13 +1712,29 @@ function openProductDetail(p){
 
   loadReviews(p.id);
 
-  if(images.length > 1){
-    const mainImgEl = document.querySelector("#pdBody .pd-main-img img");
+  if(images.length > 1 || hasVideo){
+    const mainImgContainer = document.querySelector("#pdBody .pd-main-img");
     document.querySelectorAll("#pdBody .pd-thumbs button").forEach(btn => {
       btn.addEventListener("click", () => {
-        if(mainImgEl) mainImgEl.src = btn.dataset.img;
         document.querySelectorAll("#pdBody .pd-thumbs button").forEach(b => b.classList.remove("active"));
         btn.classList.add("active");
+        if(btn.dataset.video){
+          // ভিডিও দেখানো — লোড হওয়ার সময় একটা স্পিনার দেখাবে (দুর্বল নেটেও
+          // কাস্টমার বুঝবে ভিডিও আসছে, কালো/ফাঁকা স্ক্রিন মনে হবে না)
+          mainImgContainer.innerHTML = `
+            <div class="pd-video-loading"><div class="pd-spinner"></div></div>
+            <video src="${btn.dataset.video}" autoplay muted loop playsinline controls
+              onloadeddata="this.previousElementSibling.remove()"
+              onerror="this.previousElementSibling.innerHTML='⚠️ ভিডিও লোড করা যায়নি, একটু পরে চেষ্টা করুন'"></video>
+          `;
+        } else {
+          // ছবিতে ফিরে আসা — ভিডিও চলছিল থাকলে বন্ধ হয়ে আগের ব্যাজসহ ছবি ফিরে আসে
+          mainImgContainer.innerHTML = `
+            ${hasDiscount ? `<span class="pd-discount-badge">${discountPct}% ছাড়</span>` : ""}
+            ${pdSoldBadgeHTML}
+            <img src="${btn.dataset.img}" alt="${p.name}">
+          `;
+        }
       });
     });
   }
@@ -2493,6 +2547,23 @@ function cldOptimize(url){
   return url.replace("/upload/", "/upload/f_auto,q_auto/");
 }
 
+/* প্রোডাক্ট ভিডিওর জন্য — ছবির মতোই f_auto,q_auto, সাথে w_480 দিয়ে প্রস্থ
+   সীমিত রাখা হয় (মোবাইল স্ক্রিনে এর বেশি রেজোলিউশনের দরকার নেই, ব্যান্ডউইথ বাঁচে) */
+function cldOptimizeVideo(url){
+  if(!url || !url.includes("res.cloudinary.com") || !url.includes("/upload/")) return url;
+  if(url.includes("/upload/f_auto")) return url;
+  return url.replace("/upload/", "/upload/f_auto,q_auto,w_480/");
+}
+
+/* কোনো প্রোডাক্টে ছবি না থাকলে (শুধু ভিডিও দেওয়া থাকলে), Cloudinary নিজেই
+   ভিডিওর প্রথম মুহূর্ত থেকে একটা ছবি (thumbnail) বানিয়ে দিতে পারে — এতে
+   কার্ডে খালি ইমোজির বদলে ভিডিওর একটা ঝলক দেখা যায়। */
+function getVideoThumbnail(videoUrl){
+  if(!videoUrl || !videoUrl.includes("res.cloudinary.com") || !videoUrl.includes("/upload/")) return "";
+  const withThumb = videoUrl.replace("/video/upload/", "/video/upload/so_0,f_auto,q_auto,w_480/");
+  return withThumb.replace(/\.(mp4|mov|webm|mkv)(\?.*)?$/i, ".jpg$2");
+}
+
 function getInitial(name){
   const trimmed = (name || "?").trim();
   return trimmed.charAt(0).toUpperCase() || "?";
@@ -2845,9 +2916,11 @@ function productCard(p){
   const hasPromo = !!(p.promoCode && p.promoDiscount && p.promoDiscount > 0);
   const promoPct = hasPromo ? Math.round((p.promoDiscount / p.price) * 100) : 0;
   const images = (p.images && p.images.length) ? p.images : (p.image ? [p.image] : []);
-  const hasRealImage = images.length > 0;
+  const hasVideoCard = !!(p.video && p.video.trim());
+  const hasRealImage = images.length > 0 || hasVideoCard;
+  const cardThumbSrc = images.length > 0 ? cldOptimize(images[0]) : (hasVideoCard ? getVideoThumbnail(p.video) : "");
   const thumbInner = hasRealImage
-    ? `<img src="${cldOptimize(images[0])}" alt="${p.name}" loading="lazy" onload="this.parentElement.classList.remove('img-loading')" onerror="this.parentElement.classList.remove('img-loading')">`
+    ? `<img src="${cardThumbSrc}" alt="${p.name}" loading="lazy" onload="this.parentElement.classList.remove('img-loading')" onerror="this.parentElement.classList.remove('img-loading')">`
     : p.emoji;
 
   const miniThumbsHTML = images.length > 1
@@ -2885,6 +2958,7 @@ function productCard(p){
         ${hasDiscount ? `<span class="discount-badge">${discountPct}% ছাড়</span>` : ""}
         ${soldBadgeHTML}
         ${thumbInner}
+        ${hasVideoCard ? `<span class="video-badge" aria-label="ভিডিও আছে"><svg viewBox="0 0 24 24" fill="white"><path d="M8 5v14l11-7z"/></svg></span>` : ""}
       </div>
       <div class="info">
         <div class="name">${p.name}</div>
@@ -2965,7 +3039,13 @@ function render(){
   const catItemsList = [];
   visibleCats.forEach(cat => {
     const items = PRODUCTS.filter(p => p.category === cat.key && matches(p));
-    items.sort((a, b) => (b.sold || 0) - (a.sold || 0));
+    items.sort((a, b) => {
+      // "⭐ সবার আগে দেখান" চালু করা প্রোডাক্ট সবার আগে, তারপর বিক্রি অনুযায়ী
+      const aFeatured = a.featured ? 1 : 0;
+      const bFeatured = b.featured ? 1 : 0;
+      if(aFeatured !== bFeatured) return bFeatured - aFeatured;
+      return (b.sold || 0) - (a.sold || 0);
+    });
     if(items.length > 0) catItemsList.push({ cat, items });
   });
 

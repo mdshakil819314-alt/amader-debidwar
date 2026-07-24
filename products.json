@@ -121,17 +121,18 @@
   },
   {
     "id": 27,
-    "name": "ঈদ স্পেশাল কম্বো",
+    "name": "স্পেশাল কম্বো",
     "category": "combo",
     "shop": "ফ্যামিলি শপ",
     "price": 650,
     "originalPrice": 750,
     "stock": 20,
     "deliveryFee": 0,
-    "description": "৩ কেজি চাল, ১ লিটার সয়াবিন তেল, ১ কেজি চিনি",
-    "image": "",
+    "description": "ছোট্ট বাচ্চাদের, ডেইলি ইউজ কম্বু প্যাক।",
+    "image": "https:\/\/res.cloudinary.com\/hkstgbdt\/image\/upload\/v1784860031\/familyshop-products\/iljls5lwas1cgpawusxm.webp",
     "emoji": "📦",
     "sold": 0,
+    "code": "PP33",
     "freeDelivery": false
   },
   {

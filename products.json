@@ -110,8 +110,11 @@
     "originalPrice": 1650,
     "stock": 12,
     "deliveryFee": 0,
-    "description": "৫ কেজি চাল, ১ কেজি আলু, ১ কেজি সয়াবিন তেল, ১ কেজি মসুর ডাল, ১ কেজি চিনি, ১ কেজি মুড়ি",
-    "image": "",
+    "description": "১ কেজি সোয়াবিন তেল, কাপড় খাঁচার সাবান, দৈনন্দিন ব্যবহৃত কিচেন শ্যাম্পু, ভিম,ইত্যাদি",
+    "images": [
+      "https:\/\/res.cloudinary.com\/hkstgbdt\/image\/upload\/v1784859598\/familyshop-products\/xmbbywinorvxadz2oeib.webp",
+      "https:\/\/res.cloudinary.com\/hkstgbdt\/image\/upload\/v1784859608\/familyshop-products\/tjzp4vytisb1r51uzhov.webp"
+    ],
     "emoji": "📦",
     "sold": 0,
     "freeDelivery": false

@@ -3057,13 +3057,7 @@ function render(){
   const catItemsList = [];
   visibleCats.forEach(cat => {
     const items = PRODUCTS.filter(p => p.category === cat.key && matches(p));
-    items.sort((a, b) => {
-      // "⭐ সবার আগে দেখান" চালু করা প্রোডাক্ট সবার আগে, তারপর বিক্রি অনুযায়ী
-      const aFeatured = a.featured ? 1 : 0;
-      const bFeatured = b.featured ? 1 : 0;
-      if(aFeatured !== bFeatured) return bFeatured - aFeatured;
-      return (b.sold || 0) - (a.sold || 0);
-    });
+    items.sort((a, b) => (b.sold || 0) - (a.sold || 0));
     if(items.length > 0) catItemsList.push({ cat, items });
   });
 

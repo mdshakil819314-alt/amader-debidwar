@@ -1471,6 +1471,9 @@
     <label class="m-label">আপনার নাম *</label>
     <input type="text" id="ord_name" class="m-input" placeholder="যেমন: করিম উদ্দিন">
 
+    <label class="m-label">উপজেলা *</label>
+    <input type="text" id="ord_upazila" class="m-input" placeholder="যেমন: দেবিদ্বার" value="দেবিদ্বার">
+
     <label class="m-label">ইউনিয়ন *</label>
     <input type="text" id="ord_union" class="m-input" placeholder="যেমন: দেবিদ্বার সদর">
 
@@ -2203,6 +2206,7 @@ document.getElementById("locationBtn").addEventListener("click", () => {
 function buildOrderMessage(){
   const items = currentOrderItems;
   const name = document.getElementById("ord_name").value.trim();
+  const upazila = document.getElementById("ord_upazila").value.trim();
   const union = document.getElementById("ord_union").value.trim();
   const ward = document.getElementById("ord_ward").value.trim();
   const phone = document.getElementById("ord_phone").value.trim();
@@ -2210,7 +2214,7 @@ function buildOrderMessage(){
   const address = document.getElementById("ord_address").value.trim();
   const errBox = document.getElementById("ord_error");
 
-  if(!name || !union || !ward || !phone || !village){
+  if(!name || !upazila || !union || !ward || !phone || !village){
     errBox.textContent = "দয়া করে * চিহ্নিত সবগুলো বক্স পূরণ করুন।";
     return null;
   }
@@ -2259,6 +2263,7 @@ function buildOrderMessage(){
   msg += `সর্বমোট: ৳${finalTotal}\n`;
   msg += `---\n`;
   msg += `নাম: ${name}\n`;
+  msg += `উপজেলা: ${upazila}\n`;
   msg += `ইউনিয়ন: ${union}\n`;
   msg += `ওয়ার্ড: ${ward}\n`;
   msg += `ফোন: ${phone}\n`;
@@ -2287,6 +2292,7 @@ function buildOrderMessage(){
     promoDiscount: appliedPromoDiscount,
     total: finalTotal,
     customerName: name,
+    upazila: upazila,
     union: union,
     ward: wardNum,
     phone: phone,

@@ -1874,14 +1874,21 @@ function openProductDetail(p){
     });
   }
 
-  // রিভিউ ফর্ম দেখানো/লুকানো — শুধু যারা এই প্রোডাক্ট আগে অর্ডার করেছে তারাই লিখতে পারবে
+  // রিভিউ ফর্ম দেখানো/লুকানো — শুধু যারা এই প্রোডাক্ট আগে অর্ডার করেছে, আর
+  // অন্তত ৭২ ঘণ্টা ব্যবহার করার সুযোগ পেয়েছে, তারাই লিখতে পারবে
   let selectedReviewStar = 0;
   const reviewToggleBtn = document.getElementById("pdReviewFormToggle");
+  const orderedAtMillis = getOrderedAtMillis(p.id);
+  const timeElapsedEnough = orderedAtMillis === null || (Date.now() - orderedAtMillis) >= REVIEW_REMINDER_DELAY_MS;
   if(getReviewedProductIds().includes(p.id)){
     reviewToggleBtn.textContent = "✅ আপনি রিভিউ দিয়েছেন";
     reviewToggleBtn.disabled = true;
   } else if(!hasOrderedProduct(p.id)){
     reviewToggleBtn.textContent = "🛍️ প্রোডাক্টটি কিনুন, ব্যবহার করুন — তারপর এখানেই রিভিউ লেখার সুযোগ পাবেন";
+    reviewToggleBtn.disabled = true;
+    reviewToggleBtn.classList.add("pd-review-locked");
+  } else if(!timeElapsedEnough){
+    reviewToggleBtn.textContent = "🕐 প্রোডাক্টটা একটু ব্যবহার করে দেখুন — অর্ডারের ৭২ ঘণ্টা পর এখানে রিভিউ লেখা যাবে";
     reviewToggleBtn.disabled = true;
     reviewToggleBtn.classList.add("pd-review-locked");
   } else {
@@ -2378,6 +2385,19 @@ function hasOrderedProduct(productId){
   } catch(e){ return false; }
 }
 
+/* কবে এই প্রোডাক্টটা অর্ডার করা হয়েছিল সেটা reviewReminders থেকে বের করে —
+   রিভিউ ফর্ম কতক্ষণ পর আনলক হবে সেটা হিসাব করতে কাজে লাগে। পুরনো কোনো
+   অর্ডারের এন্ট্রি যদি (এই ফিচার আসার আগের অর্ডার বলে) খুঁজে না পাওয়া যায়,
+   null ফেরত দেয় — তখন নিরাপদভাবে ধরে নেওয়া হয় সময় পার হয়ে গেছে, যাতে
+   পুরনো কাস্টমার চিরতরে আটকে না থাকে। */
+function getOrderedAtMillis(productId){
+  try {
+    const reminders = JSON.parse(localStorage.getItem("reviewReminders") || "[]");
+    const entry = reminders.find(r => r.productId === productId);
+    return entry ? entry.orderedAt : null;
+  } catch(e){ return null; }
+}
+
 let currentReminderProductId = null;
 
 function removeReviewReminder(productId){
@@ -2732,6 +2752,8 @@ function checkTrackingParam(){
   if(orderId) showOrderTracking(orderId.trim());
 }
 
+let trackUnsubscribe = null; // চালু থাকা লাইভ লিসেনার বন্ধ করার জন্য
+
 function showOrderTracking(orderId){
   document.getElementById("trackOverlay").classList.add("open");
   const body = document.getElementById("trackBody");
@@ -2747,8 +2769,13 @@ function showOrderTracking(orderId){
     return;
   }
 
-  firestoreDB.collection("orders").doc(orderId).get()
-    .then(doc => {
+  if(trackUnsubscribe) trackUnsubscribe();
+
+  // .get()-এর বদলে .onSnapshot() — এতে অ্যাডমিন অ্যাপ থেকে স্ট্যাটাস বদলানোর
+  // সাথে সাথে (পেজ রিফ্রেশ ছাড়াই) এই খোলা থাকা পেজেও লাইভ আপডেট হয়ে যায়,
+  // তাই কখনো পুরনো/আগের স্ট্যাটাস আটকে থাকার সুযোগ থাকে না
+  trackUnsubscribe = firestoreDB.collection("orders").doc(orderId).onSnapshot(
+    doc => {
       if(!doc.exists){
         body.innerHTML = `
           <div class="track-not-found">
@@ -2760,11 +2787,12 @@ function showOrderTracking(orderId){
         return;
       }
       renderTrackingStatus(doc.data());
-    })
-    .catch(err => {
+    },
+    err => {
       console.error("অর্ডার ট্র্যাকিং আনতে সমস্যা:", err);
       body.innerHTML = `<div class="track-not-found"><div class="emoji">⚠️</div>তথ্য আনতে সমস্যা হয়েছে, একটু পরে আবার চেষ্টা করুন।</div>`;
-    });
+    }
+  );
 }
 
 function renderTrackingStatus(order){
@@ -2829,6 +2857,7 @@ function wireTrackBackButton(){
 
 function closeTrackOverlay(){
   document.getElementById("trackOverlay").classList.remove("open");
+  if(trackUnsubscribe){ trackUnsubscribe(); trackUnsubscribe = null; }
   // URL থেকে ?track= প্যারামিটারটা সরিয়ে ফেলা হয়, যাতে পেজ রিফ্রেশ করলে
   // বারবার এই একই ট্র্যাকিং ওভারলে না খুলে যায়
   const url = new URL(window.location.href);

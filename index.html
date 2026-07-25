@@ -363,9 +363,16 @@
     background:var(--primary);
     box-shadow:var(--shadow);
   }
-  .offer-chip:nth-child(3n+1){background:var(--red);}
+  .offer-chip:nth-child(3n+1){
+    background:var(--red);
+    animation:chip-fade-pulse 2.4s ease-in-out infinite;
+  }
   .offer-chip:nth-child(3n+2){background:var(--secondary);}
   .offer-chip:nth-child(3n){background:var(--gold);color:#3A2A00;}
+  @keyframes chip-fade-pulse{
+    0%, 100%{opacity:1; transform:scale(1);}
+    50%{opacity:.4; transform:scale(.97);}
+  }
 
   /* ---------- popular shops ---------- */
   .shop-scroll{
@@ -1249,6 +1256,7 @@
     .card{transition:none;}
     .install-banner{transition:none;}
     .card .order-actions a, .card .order-actions button{animation:none;}
+    .offer-chip:nth-child(3n+1){animation:none;}
     .card .discount-badge{animation:none;}
     .card .thumb.img-loading{animation:none;}
   }
@@ -2387,8 +2395,11 @@ function closeReviewReminderModal(){
 }
 
 function checkReviewReminders(){
-  // একই ব্রাউজিং সেশনে একবার দেখানোর পর আর দেখাবে না
-  if(sessionStorage.getItem("reviewReminderShownThisSession")) return;
+  // "একই সেশনে একবার" এর বদলে "একই দিনে একবার" — কারণ PWA হিসেবে ইনস্টল
+  // করা থাকলে সেশন অনেক দিন ধরে "খোলা" থেকে যেতে পারে, sessionStorage
+  // ব্যবহার করলে তখন পপ-আপ স্থায়ীভাবে আটকে যেত
+  const todayStr = new Date().toDateString();
+  if(localStorage.getItem("reviewReminderLastShownDate") === todayStr) return;
 
   let reminders;
   try {
@@ -2402,7 +2413,7 @@ function checkReviewReminders(){
   );
   if(!eligible) return;
 
-  sessionStorage.setItem("reviewReminderShownThisSession", "1");
+  localStorage.setItem("reviewReminderLastShownDate", todayStr);
   currentReminderProductId = eligible.productId;
   bumpReviewReminderShownCount(eligible.productId);
 

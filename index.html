@@ -2816,14 +2816,14 @@ function renderTrackingStatus(order){
   const currentIndex = TRACK_STEPS.findIndex(s => s.key === status);
   const safeIndex = currentIndex === -1 ? 0 : currentIndex;
 
+  const isLastStep = safeIndex === TRACK_STEPS.length - 1;
   const stepsHtml = TRACK_STEPS.map((s, i) => {
     let cls = "track-step";
     let icon = String(i + 1);
-    // যে ধাপ পর্যন্ত পৌঁছেছে (বর্তমান ধাপ সহ), সবগুলোতেই টিক দেখানো হয় —
-    // শুধু বর্তমান ধাপটা আলাদা রঙে (সোনালি) হাইলাইট থাকে বোঝানোর জন্য এটাই
-    // এখন চলছে। এতে "সম্পন্ন" স্ট্যাটাসে গেলে চারটা ধাপই টিক পায়, কোনোটাই
-    // অসম্পূর্ণ সংখ্যা হয়ে আটকে থাকে না।
-    if(i < safeIndex){ cls += " done"; icon = "✓"; }
+    // "সম্পন্ন" (শেষ ধাপ) পর্যন্ত পৌঁছে গেলে সবগুলো ধাপই স্থায়ীভাবে সবুজ টিক
+    // পাবে — সোনালি রঙ শুধু "এখনো চলছে" বোঝাতে ব্যবহার হয়, অর্ডার পুরোপুরি
+    // শেষ হয়ে গেলে আর কিছু "চলমান" থাকে না, তাই সোনালির দরকার নেই
+    if(i < safeIndex || (i === safeIndex && isLastStep)){ cls += " done"; icon = "✓"; }
     else if(i === safeIndex){ cls += " current done"; icon = "✓"; }
     return `<div class="${cls}"><div class="dot">${icon}</div><div class="label">${s.label}</div></div>`;
   }).join("");

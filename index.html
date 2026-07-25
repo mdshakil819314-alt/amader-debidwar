@@ -1272,6 +1272,19 @@
 <!-- কাস্টমার রিভিউ সিস্টেমের জন্য Firebase (শুধু Firestore Database ব্যবহার হবে) -->
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+
+<!--
+  Google Analytics (GA4) — কতজন ওয়েবসাইটে ঢুকছে, কোন এলাকা থেকে, মোবাইল না
+  কম্পিউটার দিয়ে, এসব দেখার জন্য। Measurement ID: G-ZQX417LWDX (familyshop-reviews
+  Google Analytics প্রপার্টি)
+-->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-ZQX417LWDX"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-ZQX417LWDX');
+</script>
 </head>
 <body>
 
@@ -3513,6 +3526,14 @@ window.addEventListener('beforeinstallprompt', (e) => {
   e.preventDefault();
   deferredPrompt = e;
   showInstallBanner(false);
+});
+
+/* কাস্টমার সত্যিকারভাবে হোমস্ক্রিনে ইনস্টল করলে (আইকনে "যোগ করুন" চেপে
+   নিশ্চিত করলে) ব্রাউজার এই ইভেন্টটা ফায়ার করে — শুধু ব্যানার দেখানো বা
+   বাটনে চাপ দেওয়া না, সত্যিকারের ইনস্টলই এখানে গোনা হয়। Google
+   Analytics-এ "pwa_install" নামে আলাদা একটা ইভেন্ট হিসেবে দেখা যাবে। */
+window.addEventListener('appinstalled', () => {
+  if(typeof gtag === "function") gtag('event', 'pwa_install');
 });
 
 document.getElementById('installBtn').addEventListener('click', async () => {

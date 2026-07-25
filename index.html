@@ -2163,7 +2163,7 @@ document.getElementById("locationBtn").addEventListener("click", () => {
       currentLocationDistanceKm = null;
       status.className = "location-status error";
       if(err.code === err.PERMISSION_DENIED){
-        status.textContent = "লোকেশনের অনুমতি দেওয়া হয়নি — ব্রাউজারের সেটিংস থেকে অনুমতি দিন, অথবা ম্যানুয়ালি ঠিকানা লিখুন।";
+        status.textContent = "লোকেশনের অনুমতি বন্ধ আছে — ব্রাউজারের ঠিকানা বারে (URL-এর বাম পাশে) 🔒 বা ⓘ আইকনে চেপে Location অপশন \"Allow\" করুন, তারপর পেজ রিফ্রেশ করে আবার চেষ্টা করুন। অথবা নিচে ম্যানুয়ালি ঠিকানা লিখুন।";
       } else {
         status.textContent = "লোকেশন পাওয়া যায়নি, ম্যানুয়ালি ঠিকানা লিখুন।";
       }

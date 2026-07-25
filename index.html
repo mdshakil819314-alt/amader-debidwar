@@ -411,8 +411,16 @@
   /* ---------- product grid ---------- */
   .grid{
     display:grid;
-    grid-template-columns:repeat(auto-fit,minmax(165px,1fr));
+    /* ফোনে সবসময় ঠিক ২ কলাম — আগে "auto-fit, minmax(165px,1fr)" ছিল, যেটা কিছু
+       ফোনে (স্ক্রিনের প্রস্থ/ফন্ট-জুম/ডিসপ্লে-সাইজ সেটিং ভেদে) অনিশ্চিতভাবে ১
+       কলামে নেমে যেত। "repeat(2,1fr)" ব্যবহার করায় যেকোনো ফোনেই নিশ্চিতভাবে
+       ২ কলাম থাকবে, কার্ডের প্রস্থ কমবেশি হবে শুধু */
+    grid-template-columns:repeat(2,1fr);
     gap:16px;
+  }
+  /* বড় স্ক্রিনে (ট্যাবলেট/ডেস্কটপ) জায়গা থাকলে বেশি কলাম দেখাবে */
+  @media (min-width:640px){
+    .grid{grid-template-columns:repeat(auto-fit,minmax(180px,1fr));}
   }
   .grid.grid-single{
     grid-template-columns:minmax(165px, 48%);
@@ -3323,10 +3331,17 @@ function render(){
 
   const term = searchTerm.trim().toLowerCase();
   const catLabelMap = Object.fromEntries(CATEGORIES.map(c => [c.key, c.label.toLowerCase()]));
-  const matches = p =>
-    (activeFilter === "all" || p.category === activeFilter) &&
-    (!activeShop || p.shop === activeShop) &&
-    (!term || p.name.toLowerCase().includes(term) || p.shop.toLowerCase().includes(term) || (catLabelMap[p.category] || "").includes(term));
+  // সার্চ টার্মকে আলাদা শব্দে ভেঙে প্রতিটা শব্দ আলাদাভাবে মেলানো হয় — তাই
+  // কাস্টমার "ঘরি ছেলেদের" লিখলেও "ছেলেদের ঘড়ি" প্রোডাক্টটা খুঁজে পাবে,
+  // শব্দের ক্রম উল্টে থাকলেও সমস্যা হবে না
+  const searchWords = term.split(/\s+/).filter(Boolean);
+  const matches = p => {
+    if(!(activeFilter === "all" || p.category === activeFilter)) return false;
+    if(activeShop && p.shop !== activeShop) return false;
+    if(!searchWords.length) return true;
+    const haystack = `${p.name} ${p.shop} ${catLabelMap[p.category] || ""}`.toLowerCase();
+    return searchWords.every(w => haystack.includes(w));
+  };
 
   let visibleCats = activeFilter === "all" ? CATEGORIES : CATEGORIES.filter(c => c.key === activeFilter);
   if(term){

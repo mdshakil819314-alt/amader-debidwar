@@ -2819,8 +2819,12 @@ function renderTrackingStatus(order){
   const stepsHtml = TRACK_STEPS.map((s, i) => {
     let cls = "track-step";
     let icon = String(i + 1);
+    // যে ধাপ পর্যন্ত পৌঁছেছে (বর্তমান ধাপ সহ), সবগুলোতেই টিক দেখানো হয় —
+    // শুধু বর্তমান ধাপটা আলাদা রঙে (সোনালি) হাইলাইট থাকে বোঝানোর জন্য এটাই
+    // এখন চলছে। এতে "সম্পন্ন" স্ট্যাটাসে গেলে চারটা ধাপই টিক পায়, কোনোটাই
+    // অসম্পূর্ণ সংখ্যা হয়ে আটকে থাকে না।
     if(i < safeIndex){ cls += " done"; icon = "✓"; }
-    else if(i === safeIndex){ cls += " current"; }
+    else if(i === safeIndex){ cls += " current done"; icon = "✓"; }
     return `<div class="${cls}"><div class="dot">${icon}</div><div class="label">${s.label}</div></div>`;
   }).join("");
 

@@ -504,7 +504,11 @@
     "originalPrice": 250,
     "stock": 22,
     "deliveryFee": 50,
-    "image": "https:\/\/res.cloudinary.com\/hkstgbdt\/image\/upload\/v1785032960\/familyshop-products\/doopkv4mdkvw9rtskbso.webp",
+    "images": [
+      "https:\/\/res.cloudinary.com\/hkstgbdt\/image\/upload\/v1785032960\/familyshop-products\/doopkv4mdkvw9rtskbso.webp",
+      "https:\/\/res.cloudinary.com\/hkstgbdt\/image\/upload\/v1785033189\/familyshop-products\/pqazonjkg1bji2pmfq9s.webp",
+      "https:\/\/res.cloudinary.com\/hkstgbdt\/image\/upload\/v1785033178\/familyshop-products\/mvqorr4gfoqvrql6g7ca.webp"
+    ],
     "emoji": "🎒",
     "sold": 1,
     "freeDelivery": false,

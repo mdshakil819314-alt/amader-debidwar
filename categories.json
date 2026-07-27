@@ -18,7 +18,7 @@
     "label": "কম্বো প্যাকেজ",
     "emoji": "🛒",
     "image": "",
-    "featured": false
+    "featured": true
   },
   {
     "key": "grocery",
@@ -102,7 +102,7 @@
     "label": "স্কুল ব্যাগ",
     "emoji": "🛒",
     "image": "",
-    "featured": true
+    "featured": false
   },
   {
     "key": "perfume-attar",

@@ -1843,7 +1843,7 @@ function openProductDetail(p){
           <span>নির্বাচিত মূল্য</span>
           <span id="pdComboSelectedTotal">৳${p.price}</span>
         </div>
-        <div class="pd-combo-empty-warning" id="pdComboEmptyWarning" style="display:none;">⚠️ কম্বো প্যাকেজ থেকে অন্তত একটা আইটেম রাখতে হবে</div>
+        <div class="pd-combo-empty-warning" id="pdComboEmptyWarning" style="display:none;">⚠️ দাম ৳০ হয়ে গেছে — অন্তত একটা আইটেম রাখতে হবে</div>
       </div>
     </div>` : "";
 
@@ -1993,9 +1993,12 @@ function openProductDetail(p){
       const extraTotalEl = document.getElementById("pdExtraTotal");
       if(extraTotalEl && hasDeliveryFee) extraTotalEl.textContent = `সর্বমোট: ৳${adjustedPrice + p.deliveryFee}`;
 
-      const allExcluded = comboExcluded.length >= p.comboItems.length;
-      comboEmptyWarning.style.display = allExcluded ? "block" : "none";
-      pdOrderBtn.classList.toggle("disabled", allExcluded);
+      // গণনা "কয়টা আনটিক করা হয়েছে" দিয়ে না করে সরাসরি "দামটা আসলে কত হয়ে
+      // গেছে" দিয়ে করা হচ্ছে — কারণ উপরের মূল দাম আর ভিতরের আইটেমগুলোর
+      // যোগফল হুবহু না মিললে, সবগুলো আনটিক না করেও দাম ৳০-তে নেমে যেতে পারে
+      const priceIsZero = adjustedPrice <= 0;
+      comboEmptyWarning.style.display = priceIsZero ? "block" : "none";
+      pdOrderBtn.classList.toggle("disabled", priceIsZero);
     };
     document.querySelectorAll("#pdComboList .pd-combo-check").forEach(chk => {
       chk.addEventListener("change", () => {
@@ -2018,9 +2021,13 @@ function openProductDetail(p){
     window.location.href = "tel:+8801872280095";
   });
   pdOrderBtn.addEventListener("click", () => {
-    if(hasCombo && comboExcluded.length >= p.comboItems.length){
-      showCartToast("⚠️ কম্বো প্যাকেজ থেকে অন্তত একটা আইটেম রাখতে হবে");
-      return;
+    if(hasCombo){
+      const excludedSum = comboExcluded.reduce((sum, c) => sum + c.price, 0);
+      const adjustedPrice = Math.max(0, p.price - excludedSum);
+      if(adjustedPrice <= 0){
+        showCartToast("⚠️ দাম ৳০ হয়ে গেছে — অন্তত একটা আইটেম রাখতে হবে");
+        return;
+      }
     }
     addToCart(p, selectedSize, selectedColor, comboExcluded);
   });
@@ -2399,7 +2406,7 @@ function buildOrderMessage(){
     const variantText = [item.size, item.color].filter(Boolean).join(" · ");
     const effPrice = getEffectivePrice(item);
     const comboNoteText = (item.comboExcluded && item.comboExcluded.length)
-      ? ` [বাদ দেওয়া হয়েছে: ${item.comboExcluded.map(c => c.name).join(", ")}]` : "";
+      ? `\n   ❌ বাদ দেওয়া হয়েছে: ${item.comboExcluded.map(c => c.name).join(", ")}` : "";
     msg += `প্রোডাক্ট: ${item.product.name}${codeText}${variantText ? ` (${variantText})` : ""}${item.qty > 1 ? ` (${item.qty} পিস)` : ""} - ৳${effPrice * item.qty}${comboNoteText}\n`;
   });
   if(currentLocationDistanceKm !== null) msg += `দূরত্ব (আনুমানিক): ${currentLocationDistanceKm.toFixed(1)} কিমি\n`;
@@ -2426,7 +2433,7 @@ function buildOrderMessage(){
     orderId: orderId,
     items: items.map(item => {
       const comboNoteText = (item.comboExcluded && item.comboExcluded.length)
-        ? ` (বাদ: ${item.comboExcluded.map(c => c.name).join(", ")})` : "";
+        ? `\n❌ বাদ দেওয়া হয়েছে: ${item.comboExcluded.map(c => c.name).join(", ")}` : "";
       return {
         productId: item.product.id,
         name: item.product.name + comboNoteText,
@@ -2722,6 +2729,11 @@ document.getElementById("ord_submit_wa").addEventListener("click", () => trySubm
     সর্বমোট অটোমেটিক দেখাবে; না দিলে বা 0/null রাখলে এই লাইন দেখাবে না
   - description: প্রোডাক্টের নামের নিচে ছোট বিবরণ (কম্বো প্যাকেজে কী কী
     আছে লিখতে কাজে লাগে), না দিলে এই লাইন দেখাবে না
+  - comboItems: কম্বো প্যাকেজের ভিতরের আইটেম লিস্ট — [{"name":"...", "price":...}, ...],
+    দিলে প্রোডাক্ট ডিটেইল পেজে কাস্টমার চেকলিস্ট থেকে আইটেম বাদ দিয়ে দাম কমাতে
+    পারবে (checkout সবসময় উপরের "price" ফিল্ডকেই মূল ধরে, এই লিস্টের যোগফল
+    আলাদাভাবে মেলানো হয় না — অ্যাডমিন অ্যাপেই মিলিয়ে বসাতে হয়); না দিলে বা
+    ফাঁকা রাখলে সাধারণ প্রোডাক্টের মতোই আচরণ করবে
 */
 
 /*
@@ -3010,9 +3022,15 @@ function renderTrackingStatus(order){
 function buildTrackItemsHtml(order){
   const items = Array.isArray(order.items) ? order.items : [];
   const lines = items.map(it => {
+    // it.name-এ কম্বো থেকে বাদ-দেওয়া আইটেমের নোট থাকলে সেটা একটা "\n" দিয়ে
+    // আলাদা করা থাকে — এখানে সেটা ভেঙে মূল নামের লাইন আর নোট-লাইন আলাদাভাবে
+    // সাজানো হচ্ছে, নাহলে ভ্যারিয়ান্ট/দাম নোটের মাঝখানে ঢুকে এলোমেলো দেখাতো
+    const [mainName, ...noteParts] = String(it.name || "").split("\n");
+    const noteLine = noteParts.length
+      ? `<br><span style="color:var(--red);font-size:.82em;">${noteParts.join(" ")}</span>` : "";
     const variant = [it.size, it.color].filter(Boolean).join(" · ");
     const qtyText = it.qty > 1 ? ` × ${it.qty}` : "";
-    return `${it.name}${variant ? ` (${variant})` : ""}${qtyText} — ৳${(it.price || 0) * (it.qty || 1)}`;
+    return `${mainName}${variant ? ` (${variant})` : ""}${qtyText} — ৳${(it.price || 0) * (it.qty || 1)}${noteLine}`;
   }).join("<br>");
   const total = typeof order.total === "number" ? order.total : 0;
   return `

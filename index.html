@@ -850,6 +850,40 @@
     line-height:1.8;
   }
   .pd-extra .pd-total{font-weight:700;color:var(--primary-dark);}
+
+  /* কম্বো প্যাকেজ কাস্টমাইজেশন — অ্যাকর্ডিয়ন (বন্ধ অবস্থায় শুরু হয়, ডিজাইন নষ্ট করে না) */
+  .pd-combo-section{margin-top:16px;}
+  .pd-combo-toggle{
+    width:100%;display:flex;align-items:center;justify-content:space-between;
+    background:var(--bg-soft);border:1.5px solid #E1E8E4;border-radius:14px;
+    padding:13px 16px;font-weight:700;font-size:.88rem;color:var(--primary-dark);
+  }
+  .pd-combo-arrow{transition:transform .2s;font-size:.8rem;}
+  .pd-combo-toggle.open .pd-combo-arrow{transform:rotate(180deg);}
+  .pd-combo-list{
+    max-height:0;overflow:hidden;transition:max-height .25s ease;
+    border:1.5px solid #E1E8E4;border-top:none;border-radius:0 0 14px 14px;
+    margin-top:-1px;
+  }
+  .pd-combo-list.open{max-height:600px;overflow-y:auto;}
+  .pd-combo-item{
+    display:flex;align-items:center;gap:10px;padding:11px 16px;
+    border-top:1px solid #EEF2F0;font-size:.87rem;cursor:pointer;
+  }
+  .pd-combo-item input[type="checkbox"]{
+    width:19px;height:19px;accent-color:var(--primary);flex-shrink:0;cursor:pointer;
+  }
+  .pd-combo-item-name{flex:1;color:var(--ink);}
+  .pd-combo-item.unchecked .pd-combo-item-name{color:var(--muted);text-decoration:line-through;}
+  .pd-combo-item-price{font-weight:700;color:var(--primary-dark);white-space:nowrap;}
+  .pd-combo-item.unchecked .pd-combo-item-price{color:var(--muted);text-decoration:line-through;}
+  .pd-combo-total-row{
+    display:flex;justify-content:space-between;align-items:center;
+    padding:13px 16px;border-top:1.5px solid #E1E8E4;background:var(--bg-soft);
+    font-weight:700;font-size:.9rem;
+  }
+  .pd-combo-total-row span:last-child{color:var(--red);font-size:1.05rem;}
+
   .pd-actions{display:flex;gap:10px;margin-top:22px;}
   .pd-actions button{
     flex:1;
@@ -1226,6 +1260,7 @@
   .cart-item .ci-name{font-weight:700;font-size:.86rem;}
   .cart-item .ci-variant{font-size:.74rem;color:var(--secondary);font-weight:600;margin-top:2px;}
   .cart-item .ci-price{font-size:.78rem;color:var(--muted);margin-top:2px;}
+  .cart-item .ci-combo-note{font-size:.72rem;color:var(--red);margin-top:2px;}
   .cart-item .ci-qty{
     display:flex;align-items:center;gap:8px;
     flex:0 0 auto;
@@ -1613,16 +1648,40 @@ wireComingSoon("footerYtLink", "▶️ আমাদের YouTube চ্যা�
 wireComingSoon("footerMessengerLink", "💬 মেসেঞ্জার শীঘ্রই চালু হবে, ততক্ষণ কল বা WhatsApp ব্যবহার করুন!");
 wireComingSoon("footerTermsLink", "📄 শর্তাবলী পেজ শীঘ্রই আসছে!");
 
-function addToCart(p, size, color){
+/*
+  কম্বো প্যাকেজ থেকে কাস্টমার কিছু আইটেম বাদ দিলে সেই তথ্য প্রোডাক্ট অবজেক্টে না
+  রেখে কার্ট-আইটেমের আলাদা ফিল্ডে (comboExcluded) রাখা হয় — ইচ্ছাকৃতভাবে।
+  কারণ refreshCartProductData() পেজ লোডে প্রোডাক্ট ডাটা "সবচেয়ে নতুন" ভার্সন
+  দিয়ে বদলে দেয়; যদি বাদ-দেওয়া দাম সরাসরি product.price-এ বসানো হতো, রিলোডে
+  সেটা মুছে আসল দামে ফিরে যেত। এই ফাংশনটাই একমাত্র জায়গা যেখান থেকে "আসল"
+  দাম বের করা হয় — বাকি সব জায়গা (কার্ট, অর্ডার, প্রোমো) এটাই ব্যবহার করে।
+*/
+function getEffectivePrice(item){
+  if(item.comboExcluded && item.comboExcluded.length){
+    const excludedSum = item.comboExcluded.reduce((sum, c) => sum + c.price, 0);
+    return Math.max(0, item.product.price - excludedSum);
+  }
+  return item.product.price;
+}
+
+function comboKeyOf(item){
+  return item.comboExcluded && item.comboExcluded.length
+    ? JSON.stringify(item.comboExcluded.map(c => c.name).sort())
+    : "";
+}
+
+function addToCart(p, size, color, comboExcluded){
   size = size || null;
   color = color || null;
+  comboExcluded = (comboExcluded && comboExcluded.length) ? comboExcluded : null;
+  const newComboKey = comboExcluded ? JSON.stringify(comboExcluded.map(c => c.name).sort()) : "";
   const existing = cart.find(item =>
-    item.product.id === p.id && item.size === size && item.color === color
+    item.product.id === p.id && item.size === size && item.color === color && comboKeyOf(item) === newComboKey
   );
   if(existing){
     existing.qty += 1;
   } else {
-    cart.push({ product: p, qty: 1, size, color });
+    cart.push({ product: p, qty: 1, size, color, comboExcluded });
   }
   saveCart();
   updateCartBadge();
@@ -1646,18 +1705,22 @@ function renderCartModal(){
   let subtotal = 0;
   cart.forEach((item, idx) => {
     const p = item.product;
-    subtotal += p.price * item.qty;
+    const effPrice = getEffectivePrice(item);
+    subtotal += effPrice * item.qty;
     const images = (p.images && p.images.length) ? p.images : (p.image ? [p.image] : []);
     const thumb = images.length ? `<img src="${cldOptimize(images[0])}" alt="${p.name}">` : p.emoji;
     const row = document.createElement("div");
     row.className = "cart-item";
     const variantText = [item.size, item.color].filter(Boolean).join(" · ");
+    const comboNoteText = (item.comboExcluded && item.comboExcluded.length)
+      ? `বাদ দেওয়া হয়েছে: ${item.comboExcluded.map(c => c.name).join(", ")}` : "";
     row.innerHTML = `
       <div class="ci-emoji">${thumb}</div>
       <div class="ci-info">
         <div class="ci-name">${p.name}</div>
         ${variantText ? `<div class="ci-variant">${variantText}</div>` : ""}
-        <div class="ci-price">৳${p.price} × ${item.qty} = ৳${p.price * item.qty}</div>
+        ${comboNoteText ? `<div class="ci-combo-note">${comboNoteText}</div>` : ""}
+        <div class="ci-price">৳${effPrice} × ${item.qty} = ৳${effPrice * item.qty}</div>
       </div>
       <div class="ci-qty">
         <button class="ci-minus">−</button>
@@ -1708,7 +1771,7 @@ document.getElementById("cartModal").addEventListener("click", (e) => {
 document.getElementById("cartCheckoutBtn").addEventListener("click", () => {
   if(cart.length === 0) return;
   closeCartModal();
-  openOrderModal(cart.map(item => ({ product: item.product, qty: item.qty, size: item.size, color: item.color })));
+  openOrderModal(cart.map(item => ({ product: item.product, qty: item.qty, size: item.size, color: item.color, comboExcluded: item.comboExcluded })));
 });
 
 updateCartBadge();
@@ -1754,6 +1817,30 @@ function openProductDetail(p){
       </div>
     </div>` : "";
 
+  // কম্বো প্যাকেজের ভিতরের আইটেম — অ্যাডমিন অ্যাপ থেকে সেট করা (ঐচ্ছিক)।
+  // না থাকলে এই সেকশনটাই দেখাবে না, বাকি প্রোডাক্টে কোনো প্রভাব নেই।
+  const hasCombo = !!(p.comboItems && p.comboItems.length);
+  const comboHTML = hasCombo ? `
+    <div class="pd-combo-section">
+      <button type="button" class="pd-combo-toggle" id="pdComboToggle">
+        <span>📦 কম্বো প্যাকেজের বিবরণ দেখুন (${p.comboItems.length}টি আইটেম)</span>
+        <span class="pd-combo-arrow">▾</span>
+      </button>
+      <div class="pd-combo-list" id="pdComboList">
+        ${p.comboItems.map((ci, i) => `
+          <label class="pd-combo-item" data-idx="${i}">
+            <input type="checkbox" class="pd-combo-check" data-idx="${i}" checked>
+            <span class="pd-combo-item-name">${ci.name}</span>
+            <span class="pd-combo-item-price">৳${ci.price}</span>
+          </label>
+        `).join("")}
+        <div class="pd-combo-total-row">
+          <span>নির্বাচিত মূল্য</span>
+          <span id="pdComboSelectedTotal">৳${p.price}</span>
+        </div>
+      </div>
+    </div>` : "";
+
   document.getElementById("pdBody").innerHTML = `
     <div class="pd-main-img">
       ${hasDiscount ? `<span class="pd-discount-badge">${discountPct}% ছাড়</span>` : ""}
@@ -1778,10 +1865,11 @@ function openProductDetail(p){
     ` : ""}
     ${sizesHTML}
     ${colorsHTML}
+    ${comboHTML}
     ${hasExtra ? `
       <div class="pd-extra">
         ${p.stock ? `<div>স্টক: ${p.stock} পিস</div>` : ""}
-        ${hasDeliveryFee ? `<div>ডেলিভারি ফি: ৳${p.deliveryFee}</div><div class="pd-total">সর্বমোট: ৳${total}</div>` : ""}
+        ${hasDeliveryFee ? `<div>ডেলিভারি ফি: ৳${p.deliveryFee}</div><div class="pd-total" id="pdExtraTotal">সর্বমোট: ৳${total}</div>` : ""}
         ${!p.freeDelivery ? `<div class="delivery-hint">📍 অর্ডারের সময় লোকেশন দিলে, আপনার দূরত্ব অনুযায়ী সঠিক ডেলিভারি ফি দেখানো হবে</div>` : ""}
       </div>
     ` : ""}
@@ -1878,11 +1966,45 @@ function openProductDetail(p){
     });
   }
 
+  // কম্বো চেকলিস্ট — সব আইটেম ডিফল্ট টিক দেওয়া থাকে, আনটিক করলে সেই
+  // আইটেমের দাম "নির্বাচিত মূল্য" থেকে সাথে সাথে বাদ যায়
+  let comboExcluded = [];
+  if(hasCombo){
+    const comboToggleBtn = document.getElementById("pdComboToggle");
+    const comboListEl = document.getElementById("pdComboList");
+    comboToggleBtn.addEventListener("click", () => {
+      comboToggleBtn.classList.toggle("open");
+      comboListEl.classList.toggle("open");
+    });
+    const recomputeComboTotal = () => {
+      const excludedSum = comboExcluded.reduce((sum, c) => sum + c.price, 0);
+      const adjustedPrice = Math.max(0, p.price - excludedSum);
+      document.getElementById("pdComboSelectedTotal").textContent = `৳${adjustedPrice}`;
+      const extraTotalEl = document.getElementById("pdExtraTotal");
+      if(extraTotalEl && hasDeliveryFee) extraTotalEl.textContent = `সর্বমোট: ৳${adjustedPrice + p.deliveryFee}`;
+    };
+    document.querySelectorAll("#pdComboList .pd-combo-check").forEach(chk => {
+      chk.addEventListener("change", () => {
+        const idx = parseInt(chk.dataset.idx, 10);
+        const ci = p.comboItems[idx];
+        const rowEl = chk.closest(".pd-combo-item");
+        if(chk.checked){
+          comboExcluded = comboExcluded.filter(c => c.name !== ci.name);
+          rowEl.classList.remove("unchecked");
+        } else {
+          if(!comboExcluded.some(c => c.name === ci.name)) comboExcluded.push({ name: ci.name, price: ci.price });
+          rowEl.classList.add("unchecked");
+        }
+        recomputeComboTotal();
+      });
+    });
+  }
+
   document.getElementById("pdCallBtn").addEventListener("click", () => {
     window.location.href = "tel:+8801872280095";
   });
   document.getElementById("pdOrderBtn").addEventListener("click", () => {
-    addToCart(p, selectedSize, selectedColor);
+    addToCart(p, selectedSize, selectedColor, comboExcluded);
   });
   if(hasPromo){
     document.getElementById("pdPromoCopyBtn").addEventListener("click", () => {
@@ -1985,7 +2107,7 @@ document.getElementById("pdCloseBtn").addEventListener("click", closeProductDeta
 
 function renderOrderSummary(isUpdate){
   const items = currentOrderItems;
-  const subtotal = items.reduce((sum, item) => sum + item.product.price * item.qty, 0);
+  const subtotal = items.reduce((sum, item) => sum + getEffectivePrice(item) * item.qty, 0);
 
   const hasProductDeliveryFee = items.some(item => item.product.deliveryFee && item.product.deliveryFee > 0);
   const productMaxFee = Math.max(0, ...items.map(item => item.product.freeDelivery ? 0 : (item.product.deliveryFee || 0)));
@@ -2012,7 +2134,10 @@ function renderOrderSummary(isUpdate){
 
   const itemsListHTML = items.map(item => {
     const variantText = [item.size, item.color].filter(Boolean).join(" · ");
-    return `<div class="mp-line">${item.product.name}${variantText ? ` (${variantText})` : ""}${item.qty > 1 ? ` × ${item.qty}` : ""} — ৳${item.product.price * item.qty}</div>`;
+    const effPrice = getEffectivePrice(item);
+    const comboNote = (item.comboExcluded && item.comboExcluded.length)
+      ? ` <span style="color:var(--red);">(বাদ: ${item.comboExcluded.map(c => c.name).join(", ")})</span>` : "";
+    return `<div class="mp-line">${item.product.name}${variantText ? ` (${variantText})` : ""}${item.qty > 1 ? ` × ${item.qty}` : ""} — ৳${effPrice * item.qty}${comboNote}</div>`;
   }).join("");
 
   const promoLineHTML = appliedPromoDiscount > 0
@@ -2231,7 +2356,7 @@ function buildOrderMessage(){
 
   const hasProductDeliveryFee = items.some(item => item.product.deliveryFee && item.product.deliveryFee > 0);
   const productMaxFee = Math.max(0, ...items.map(item => item.product.freeDelivery ? 0 : (item.product.deliveryFee || 0)));
-  const subtotal = items.reduce((sum, item) => sum + item.product.price * item.qty, 0);
+  const subtotal = items.reduce((sum, item) => sum + getEffectivePrice(item) * item.qty, 0);
   const allFreeDelivery = items.length > 0 && items.every(item => item.product.freeDelivery === true);
 
   let deliveryFee = null;
@@ -2254,7 +2379,10 @@ function buildOrderMessage(){
   items.forEach(item => {
     const codeText = item.product.code ? ` [কোড: ${item.product.code}]` : "";
     const variantText = [item.size, item.color].filter(Boolean).join(" · ");
-    msg += `প্রোডাক্ট: ${item.product.name}${codeText}${variantText ? ` (${variantText})` : ""}${item.qty > 1 ? ` (${item.qty} পিস)` : ""} - ৳${item.product.price * item.qty}\n`;
+    const effPrice = getEffectivePrice(item);
+    const comboNoteText = (item.comboExcluded && item.comboExcluded.length)
+      ? ` [বাদ দেওয়া হয়েছে: ${item.comboExcluded.map(c => c.name).join(", ")}]` : "";
+    msg += `প্রোডাক্ট: ${item.product.name}${codeText}${variantText ? ` (${variantText})` : ""}${item.qty > 1 ? ` (${item.qty} পিস)` : ""} - ৳${effPrice * item.qty}${comboNoteText}\n`;
   });
   if(currentLocationDistanceKm !== null) msg += `দূরত্ব (আনুমানিক): ${currentLocationDistanceKm.toFixed(1)} কিমি\n`;
   if(allFreeDelivery) msg += `ডেলিভারি ফি: 🆓 ফ্রি\n`;
@@ -2278,14 +2406,18 @@ function buildOrderMessage(){
   // কখনো গরমিল হওয়ার সুযোগ থাকে না।
   lastOrderData = {
     orderId: orderId,
-    items: items.map(item => ({
-      productId: item.product.id,
-      name: item.product.name,
-      price: item.product.price,
-      qty: item.qty,
-      size: item.size || null,
-      color: item.color || null
-    })),
+    items: items.map(item => {
+      const comboNoteText = (item.comboExcluded && item.comboExcluded.length)
+        ? ` (বাদ: ${item.comboExcluded.map(c => c.name).join(", ")})` : "";
+      return {
+        productId: item.product.id,
+        name: item.product.name + comboNoteText,
+        price: getEffectivePrice(item),
+        qty: item.qty,
+        size: item.size || null,
+        color: item.color || null
+      };
+    }),
     subtotal: subtotal,
     deliveryFee: deliveryFee,
     promoCode: appliedPromoDiscount > 0 ? appliedPromoCode : null,
@@ -2509,7 +2641,7 @@ function trySubmit(channel){
 function showPromoConfirm(channel){
   pendingSendChannel = channel;
   const items = currentOrderItems;
-  const subtotal = items.reduce((sum, item) => sum + item.product.price * item.qty, 0);
+  const subtotal = items.reduce((sum, item) => sum + getEffectivePrice(item) * item.qty, 0);
 
   const hasProductDeliveryFee = items.some(item => item.product.deliveryFee && item.product.deliveryFee > 0);
   const productMaxFee = Math.max(0, ...items.map(item => item.product.freeDelivery ? 0 : (item.product.deliveryFee || 0)));
@@ -3345,7 +3477,7 @@ function productCard(p){
       </button>
     </div>
   `;
-  const hasVariants = !!((p.sizes && p.sizes.length) || (p.colors && p.colors.length));
+  const hasVariants = !!((p.sizes && p.sizes.length) || (p.colors && p.colors.length) || (p.comboItems && p.comboItems.length));
   card.querySelector(".order-btn").addEventListener("click", (e) => {
     e.stopPropagation();
     if(hasVariants) openProductDetail(p);

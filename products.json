@@ -125,7 +125,7 @@
     "category": "combo",
     "shop": "ফ্যামিলি শপ",
     "price": 1211,
-    "originalPrice": 750,
+    "originalPrice": 1300,
     "stock": 20,
     "deliveryFee": 0,
     "description": "ছোট্ট বাচ্চাদের, ডেইলি ইউজ কম্বু প্যাক।",
@@ -134,6 +134,8 @@
     "sold": 1,
     "code": "PP33",
     "freeDelivery": false,
+    "promoCode": "সেভ",
+    "promoDiscount": 50,
     "comboItems": [
       {
         "name": "👕 ছেলেদের গেঞ্জি",

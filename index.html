@@ -883,6 +883,11 @@
     font-weight:700;font-size:.9rem;
   }
   .pd-combo-total-row span:last-child{color:var(--red);font-size:1.05rem;}
+  .pd-combo-empty-warning{
+    padding:10px 16px;background:#FDECEA;color:var(--red);
+    font-size:.8rem;font-weight:700;text-align:center;
+  }
+  .pd-order.disabled{opacity:.5;pointer-events:none;}
 
   .pd-actions{display:flex;gap:10px;margin-top:22px;}
   .pd-actions button{
@@ -1838,6 +1843,7 @@ function openProductDetail(p){
           <span>নির্বাচিত মূল্য</span>
           <span id="pdComboSelectedTotal">৳${p.price}</span>
         </div>
+        <div class="pd-combo-empty-warning" id="pdComboEmptyWarning" style="display:none;">⚠️ কম্বো প্যাকেজ থেকে অন্তত একটা আইটেম রাখতে হবে</div>
       </div>
     </div>` : "";
 
@@ -1967,11 +1973,15 @@ function openProductDetail(p){
   }
 
   // কম্বো চেকলিস্ট — সব আইটেম ডিফল্ট টিক দেওয়া থাকে, আনটিক করলে সেই
-  // আইটেমের দাম "নির্বাচিত মূল্য" থেকে সাথে সাথে বাদ যায়
+  // আইটেমের দাম "নির্বাচিত মূল্য" থেকে সাথে সাথে বাদ যায়। সবগুলো আইটেম বাদ
+  // দিলে (কিছুই বাকি না থাকলে) "কার্টে যোগ করুন" বাটন বন্ধ হয়ে যায় — খালি
+  // কম্বো প্যাকেজ (৳০ দামে) অর্ডার হয়ে ডেলিভারি পর্যন্ত চলে যেতে পারবে না।
   let comboExcluded = [];
+  const pdOrderBtn = document.getElementById("pdOrderBtn");
   if(hasCombo){
     const comboToggleBtn = document.getElementById("pdComboToggle");
     const comboListEl = document.getElementById("pdComboList");
+    const comboEmptyWarning = document.getElementById("pdComboEmptyWarning");
     comboToggleBtn.addEventListener("click", () => {
       comboToggleBtn.classList.toggle("open");
       comboListEl.classList.toggle("open");
@@ -1982,6 +1992,10 @@ function openProductDetail(p){
       document.getElementById("pdComboSelectedTotal").textContent = `৳${adjustedPrice}`;
       const extraTotalEl = document.getElementById("pdExtraTotal");
       if(extraTotalEl && hasDeliveryFee) extraTotalEl.textContent = `সর্বমোট: ৳${adjustedPrice + p.deliveryFee}`;
+
+      const allExcluded = comboExcluded.length >= p.comboItems.length;
+      comboEmptyWarning.style.display = allExcluded ? "block" : "none";
+      pdOrderBtn.classList.toggle("disabled", allExcluded);
     };
     document.querySelectorAll("#pdComboList .pd-combo-check").forEach(chk => {
       chk.addEventListener("change", () => {
@@ -2003,7 +2017,11 @@ function openProductDetail(p){
   document.getElementById("pdCallBtn").addEventListener("click", () => {
     window.location.href = "tel:+8801872280095";
   });
-  document.getElementById("pdOrderBtn").addEventListener("click", () => {
+  pdOrderBtn.addEventListener("click", () => {
+    if(hasCombo && comboExcluded.length >= p.comboItems.length){
+      showCartToast("⚠️ কম্বো প্যাকেজ থেকে অন্তত একটা আইটেম রাখতে হবে");
+      return;
+    }
     addToCart(p, selectedSize, selectedColor, comboExcluded);
   });
   if(hasPromo){

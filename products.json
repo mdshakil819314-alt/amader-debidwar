@@ -218,7 +218,29 @@
     "image": "https:\/\/res.cloudinary.com\/hkstgbdt\/image\/upload\/v1784859608\/familyshop-products\/tjzp4vytisb1r51uzhov.webp",
     "emoji": "📦",
     "sold": 0,
-    "freeDelivery": false
+    "freeDelivery": false,
+    "comboItems": [
+      {
+        "name": "🧥 ছেলেদের হুডি",
+        "price": 245
+      },
+      {
+        "name": "🧦 ছেলেদের মোজা (জোড়া)",
+        "price": 25
+      },
+      {
+        "name": "🧢 ছেলেদের ক্যাপ",
+        "price": 65
+      },
+      {
+        "name": "👟 ছেলেদের স্যান্ডেল",
+        "price": 185
+      },
+      {
+        "name": "🩴 ছেলেদের স্লিপার",
+        "price": 110
+      }
+    ]
   },
   {
     "id": 29,

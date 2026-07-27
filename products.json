@@ -133,7 +133,25 @@
     "emoji": "📦",
     "sold": 1,
     "code": "PP33",
-    "freeDelivery": false
+    "freeDelivery": false,
+    "comboItems": [
+      {
+        "name": "বাচ্চাদের গেঞ্জি",
+        "price": 500
+      },
+      {
+        "name": "ছেলেদের গেঞ্জি",
+        "price": 55
+      },
+      {
+        "name": "বাচ্চাদের জুতা",
+        "price": 66
+      },
+      {
+        "name": "হগতগহহন",
+        "price": 88
+      }
+    ]
   },
   {
     "id": 28,

@@ -1151,6 +1151,10 @@
   .promo-status.success{color:var(--primary-dark);}
   .promo-status.error{color:var(--red);}
   .promo-confirm-card{max-width:380px;}
+  .delivery-notice-text{
+    font-size:.88rem;line-height:1.8;color:var(--ink);
+    background:var(--bg-soft);border-radius:14px;padding:14px;margin-top:4px;
+  }
   .review-reminder-card{
     text-align:center;
     padding:32px 24px 28px;
@@ -1571,6 +1575,25 @@
     <div class="promo-confirm-actions">
       <button class="m-submit" id="promoConfirmCancel" style="background:#fff;border:1.5px solid var(--muted);color:var(--muted);">✏️ বাতিল</button>
       <button class="m-submit" id="promoConfirmProceed" style="background:var(--primary);">✅ নিশ্চিত করে পাঠান</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="deliveryNoticeModal">
+  <div class="modal-card promo-confirm-card">
+    <div class="modal-head">
+      <div class="modal-title">📦 ডেলিভারি ফি সংক্রান্ত জানানো</div>
+      <button class="modal-close" id="deliveryNoticeClose">✕</button>
+    </div>
+    <div class="delivery-notice-text">
+      আসসালামু আলাইকুম প্রিয় গ্রাহক। আমরা আপনাদের খরচ বাঁচাতে দূরত্ব অনুযায়ী সঠিক ও
+      ন্যায্য ডেলিভারি ফি হিসাবের সিস্টেম চালু করেছি। যেহেতু আপনি লোকেশন দিচ্ছেন না
+      বা দিতে পারছেন না, তাই আপনার প্রোডাক্টের মূল দাম থেকে ডেলিভারির সময় সামান্য
+      কিছু বাড়তে পারে।
+    </div>
+    <div class="promo-confirm-actions">
+      <button class="m-submit" id="deliveryNoticeBack" style="background:#fff;border:1.5px solid var(--muted);color:var(--muted);">↩️ ফিরে যান</button>
+      <button class="m-submit" id="deliveryNoticeOk" style="background:var(--primary);">✅ ঠিক আছে, অর্ডার করুন</button>
     </div>
   </div>
 </div>
@@ -2180,15 +2203,10 @@ function renderOrderSummary(isUpdate){
     ? `<div class="mp-line" style="color:var(--primary-dark);font-weight:700;">🎟️ প্রোমো ছাড় (${appliedPromoCode}) — −৳${appliedPromoDiscount}</div>`
     : "";
 
-  const deliveryWarningHTML = deliveryFeeUnknown
-    ? `<div class="mp-delivery-warning">⚠️ ডেলিভারি ফি এখনো নির্ধারণ করা যায়নি — উপরে "বর্তমান লোকেশন যোগ করুন" চাপুন, নাহলে ডেলিভারির সময় বাড়তি চার্জ প্রযোজ্য হতে পারে।</div>`
-    : "";
-
   document.getElementById("modalProductInfo").innerHTML = `
     ${itemsListHTML}
     ${promoLineHTML}
     <div class="mp-price">${deliveryFee !== null ? deliveryLabel : ""}<strong id="mpTotalAmount">সর্বমোট ৳${finalTotal}</strong></div>
-    ${deliveryWarningHTML}
   `;
 
   // লোকেশন দেওয়ার কারণে দাম বদলে গেলে, স্পষ্টভাবে চোখে পড়ে এমন হাইলাইট দেখানো —
@@ -2674,14 +2692,41 @@ document.getElementById("reviewReminderLaterBtn").addEventListener("click", () =
 function trySubmit(channel){
   const msg = buildOrderMessage(); // এখানেই ফর্ম যাচাই হয়ে যায়
   if(!msg) return;
+  pendingOrderMessage = msg;
+  pendingSendChannel = channel;
+
+  // ডেলিভারি ফি নির্ধারণ করা না গেলে (lastOrderData.deliveryFee === null মানেই
+  // এই অবস্থা — buildOrderMessage() একই ভ্যারিয়েবল থেকে এটা সেট করে) পাঠানোর
+  // ঠিক আগে একটা বন্ধুত্বপূর্ণ নোটিশ দেখানো হয়, পুরো ফর্মে ছড়িয়ে না রেখে
+  if(lastOrderData && lastOrderData.deliveryFee === null){
+    document.getElementById("deliveryNoticeModal").classList.add("open");
+    return;
+  }
+  continueSubmitAfterDeliveryNotice(channel, msg);
+}
+
+function continueSubmitAfterDeliveryNotice(channel, msg){
   if(appliedPromoDiscount > 0){
     // প্রোমো ছাড় প্রয়োগ থাকলে, পাঠানোর আগে একবার সুন্দর করে হিসাবটা দেখিয়ে
     // নিশ্চিত হয়ে নেওয়া হয় — কাস্টমার যেন ঠিক জানে কত ছাড় পাচ্ছে
-    pendingOrderMessage = msg;
     showPromoConfirm(channel);
     return;
   }
   sendOrder(channel, msg);
+}
+
+document.getElementById("deliveryNoticeClose").addEventListener("click", closeDeliveryNotice);
+document.getElementById("deliveryNoticeBack").addEventListener("click", closeDeliveryNotice);
+document.getElementById("deliveryNoticeOk").addEventListener("click", () => {
+  document.getElementById("deliveryNoticeModal").classList.remove("open");
+  const channel = pendingSendChannel;
+  const msg = pendingOrderMessage;
+  if(channel && msg) continueSubmitAfterDeliveryNotice(channel, msg);
+});
+function closeDeliveryNotice(){
+  document.getElementById("deliveryNoticeModal").classList.remove("open");
+  pendingSendChannel = null;
+  pendingOrderMessage = null;
 }
 
 function showPromoConfirm(channel){
@@ -2707,7 +2752,6 @@ function showPromoConfirm(channel){
     ${deliveryFee !== null ? `<div class="promo-breakdown-line"><span>ডেলিভারি ফি</span><span>${allFreeDelivery ? "🆓 ফ্রি" : "৳" + deliveryFee}</span></div>` : ""}
     <div class="promo-breakdown-line discount"><span>🎟️ প্রোমো ছাড় (${appliedPromoCode})</span><span>−৳${appliedPromoDiscount}</span></div>
     <div class="promo-breakdown-line total"><span>সর্বমোট</span><span>৳${finalTotal}</span></div>
-    ${deliveryFeeUnknown ? `<div class="mp-delivery-warning">⚠️ ডেলিভারি ফি এখনো নির্ধারণ করা যায়নি — লোকেশন যোগ করুন।</div>` : ""}
   `;
   document.getElementById("promoConfirmModal").classList.add("open");
 }

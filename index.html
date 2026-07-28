@@ -1081,6 +1081,11 @@
   .modal-product .mp-line{font-weight:600;font-size:.85rem;padding:3px 0;border-bottom:1px dashed #E1E8E4;}
   .modal-product .mp-price{font-size:.8rem;color:var(--muted);margin-top:8px;line-height:1.6;}
   .modal-product .mp-price strong{color:var(--red);}
+  .mp-delivery-warning{
+    background:#FFF4E5;border:1.5px solid var(--gold);border-radius:12px;
+    padding:10px 12px;margin-top:8px;font-size:.8rem;font-weight:700;
+    color:#8A5A00;line-height:1.6;
+  }
   .price-updated-flash{
     display:inline-block;
     animation:price-flash 1.8s ease;
@@ -2157,6 +2162,12 @@ function renderOrderSummary(isUpdate){
   const total = deliveryFee !== null ? subtotal + deliveryFee : subtotal;
   const finalTotal = Math.max(0, total - appliedPromoDiscount);
 
+  // ডেলিভারি ফি "সত্যিই ফ্রি" (allFreeDelivery) না, বরং "এখনো ঠিক করাই যায়নি"
+  // (না প্রোডাক্টে ফি বসানো আছে, না কাস্টমার লোকেশন দিয়েছে) — এই অবস্থায়
+  // আগে সাইলেন্টলি ৳০ ডেলিভারি দেখাতো, যেটা আসলে বিক্রেতার জন্য লোকসানের
+  // ঝুঁকি। এখন স্পষ্ট সতর্কবার্তা দেখানো হয়।
+  const deliveryFeeUnknown = !allFreeDelivery && deliveryFee === null;
+
   const itemsListHTML = items.map(item => {
     const variantText = [item.size, item.color].filter(Boolean).join(" · ");
     const effPrice = getEffectivePrice(item);
@@ -2169,10 +2180,15 @@ function renderOrderSummary(isUpdate){
     ? `<div class="mp-line" style="color:var(--primary-dark);font-weight:700;">🎟️ প্রোমো ছাড় (${appliedPromoCode}) — −৳${appliedPromoDiscount}</div>`
     : "";
 
+  const deliveryWarningHTML = deliveryFeeUnknown
+    ? `<div class="mp-delivery-warning">⚠️ ডেলিভারি ফি এখনো নির্ধারণ করা যায়নি — উপরে "বর্তমান লোকেশন যোগ করুন" চাপুন, নাহলে ডেলিভারির সময় বাড়তি চার্জ প্রযোজ্য হতে পারে।</div>`
+    : "";
+
   document.getElementById("modalProductInfo").innerHTML = `
     ${itemsListHTML}
     ${promoLineHTML}
     <div class="mp-price">${deliveryFee !== null ? deliveryLabel : ""}<strong id="mpTotalAmount">সর্বমোট ৳${finalTotal}</strong></div>
+    ${deliveryWarningHTML}
   `;
 
   // লোকেশন দেওয়ার কারণে দাম বদলে গেলে, স্পষ্টভাবে চোখে পড়ে এমন হাইলাইট দেখানো —
@@ -2344,7 +2360,7 @@ document.getElementById("locationBtn").addEventListener("click", () => {
       currentLocationDistanceKm = null;
       status.className = "location-status error";
       if(err.code === err.PERMISSION_DENIED){
-        status.textContent = "লোকেশনের অনুমতি বন্ধ আছে — ব্রাউজারের ঠিকানা বারে (URL-এর বাম পাশে) 🔒 বা ⓘ আইকনে চেপে Location অপশন \"Allow\" করুন, তারপর পেজ রিফ্রেশ করে আবার চেষ্টা করুন। অথবা নিচে ম্যানুয়ালি ঠিকানা লিখুন।";
+        status.textContent = "লোকেশনের অনুমতি পাওয়া যায়নি। দুটো কারণ হতে পারে: (১) ব্রাউজারেই লোকেশন বন্ধ করা — ঠিকানা বারের বাম পাশে 🔒 বা ⓘ চেপে Location অপশন \"Allow\" করুন। (২) ফোনে কোনো ভাসমান বাবল/ওভারলে অ্যাপ (যেমন Messenger চ্যাট হেড, স্ক্রিন রেকর্ডারের গোল আইকন) চালু থাকলে অ্যান্ড্রয়েড নিরাপত্তার কারণে অনুমতির পপ-আপ দেখায় না — সেই অ্যাপটা বন্ধ করে বা ফোনের Settings → Apps → \"Display over other apps\" থেকে সেটার অনুমতি বন্ধ করে আবার চেষ্টা করুন। অথবা এসব ঝামেলা এড়াতে নিচে সরাসরি ঠিকানা লিখে দিন, লোকেশন ছাড়াও অর্ডার করা যায়।";
       } else {
         status.textContent = "লোকেশন পাওয়া যায়নি, ম্যানুয়ালি ঠিকানা লিখুন।";
       }
@@ -2394,6 +2410,7 @@ function buildOrderMessage(){
   }
   const total = deliveryFee !== null ? subtotal + deliveryFee : subtotal;
   const finalTotal = Math.max(0, total - appliedPromoDiscount);
+  const deliveryFeeUnknown = !allFreeDelivery && deliveryFee === null;
 
   // অর্ডার ট্র্যাকিং আইডি — এখানেই একবার জেনারেট হয়, যাতে মেসেজে যা লেখা
   // থাকে আর Firestore-এ যা সেভ হয় দুটো সবসময় একই আইডি বহন করে
@@ -2412,6 +2429,7 @@ function buildOrderMessage(){
   if(currentLocationDistanceKm !== null) msg += `দূরত্ব (আনুমানিক): ${currentLocationDistanceKm.toFixed(1)} কিমি\n`;
   if(allFreeDelivery) msg += `ডেলিভারি ফি: 🆓 ফ্রি\n`;
   else if(deliveryFee !== null) msg += `ডেলিভারি ফি: ৳${deliveryFee}\n`;
+  else if(deliveryFeeUnknown) msg += `⚠️ ডেলিভারি ফি: এখনো নির্ধারণ করা যায়নি (কাস্টমার লোকেশন দেননি) — কল করে ঠিক করে নিন, নিচের সর্বমোটে যোগ হয়নি!\n`;
   if(appliedPromoDiscount > 0) msg += `প্রোমো ছাড় (${appliedPromoCode}): −৳${appliedPromoDiscount}\n`;
   msg += `সর্বমোট: ৳${finalTotal}\n`;
   msg += `---\n`;
@@ -2431,7 +2449,10 @@ function buildOrderMessage(){
   // কখনো গরমিল হওয়ার সুযোগ থাকে না।
   lastOrderData = {
     orderId: orderId,
-    items: items.map(item => {
+    items: (deliveryFeeUnknown
+      ? [{ productId: "_delivery_fee_warning", name: "⚠️ ডেলিভারি ফি নির্ধারণ করা যায়নি — কল করে যোগ করুন", price: 0, qty: 1, size: null, color: null }]
+      : []
+    ).concat(items.map(item => {
       const comboNoteText = (item.comboExcluded && item.comboExcluded.length)
         ? `\n❌ বাদ দেওয়া হয়েছে: ${item.comboExcluded.map(c => c.name).join(", ")}` : "";
       return {
@@ -2442,7 +2463,7 @@ function buildOrderMessage(){
         size: item.size || null,
         color: item.color || null
       };
-    }),
+    })),
     subtotal: subtotal,
     deliveryFee: deliveryFee,
     promoCode: appliedPromoDiscount > 0 ? appliedPromoCode : null,
@@ -2679,12 +2700,14 @@ function showPromoConfirm(channel){
 
   const total = deliveryFee !== null ? subtotal + deliveryFee : subtotal;
   const finalTotal = Math.max(0, total - appliedPromoDiscount);
+  const deliveryFeeUnknown = !allFreeDelivery && deliveryFee === null;
 
   document.getElementById("promoConfirmBody").innerHTML = `
     <div class="promo-breakdown-line"><span>প্রোডাক্টের দাম</span><span>৳${subtotal}</span></div>
     ${deliveryFee !== null ? `<div class="promo-breakdown-line"><span>ডেলিভারি ফি</span><span>${allFreeDelivery ? "🆓 ফ্রি" : "৳" + deliveryFee}</span></div>` : ""}
     <div class="promo-breakdown-line discount"><span>🎟️ প্রোমো ছাড় (${appliedPromoCode})</span><span>−৳${appliedPromoDiscount}</span></div>
     <div class="promo-breakdown-line total"><span>সর্বমোট</span><span>৳${finalTotal}</span></div>
+    ${deliveryFeeUnknown ? `<div class="mp-delivery-warning">⚠️ ডেলিভারি ফি এখনো নির্ধারণ করা যায়নি — লোকেশন যোগ করুন।</div>` : ""}
   `;
   document.getElementById("promoConfirmModal").classList.add("open");
 }

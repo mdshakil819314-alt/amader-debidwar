@@ -2241,6 +2241,14 @@ function openOrderModal(items){
   renderOrderSummary();
   document.getElementById("ord_error").textContent = "";
   document.getElementById("orderModal").classList.add("open");
+  prefillCustomerInfoIfSaved();
+
+  // আগে কখনো এই ডিভাইস থেকে লোকেশন দিয়ে থাকলে, এবার বাটনে ক্লিক করা ছাড়াই
+  // চুপচাপ আবার লোকেশন নিয়ে ডেলিভারি ফি বসিয়ে দেওয়া হয় (ব্রাউজার নিজেই
+  // অনুমতি মনে রাখে বলে নতুন করে পপ-আপও দেখাবে না)
+  if(localStorage.getItem("locationPermissionGranted") === "1"){
+    fetchLocationAndFee(true);
+  }
 }
 
 function closeOrderModal(){
@@ -2250,6 +2258,48 @@ document.getElementById("orderModalClose").addEventListener("click", closeOrderM
 document.getElementById("orderModal").addEventListener("click", (e) => {
   if(e.target.id === "orderModal") closeOrderModal();
 });
+
+/*
+  কাস্টমারের তথ্য মনে রাখা:
+  একবার সফলভাবে অর্ডার করলে (মানে ফর্ম সঠিকভাবে পূরণ হয়েছিল), নাম/উপজেলা/
+  ইউনিয়ন/ওয়ার্ড/ফোন/গ্রাম/ঠিকানা — এই ডিভাইসের localStorage-এ সেভ হয়ে যায়।
+  পরের বার এই একই ডিভাইস থেকে অর্ডার ফর্ম খুললেই এগুলো আগে থেকে বসানো থাকবে —
+  কাস্টমারকে আর নতুন করে টাইপ করতে হবে না। শুধু এই ডিভাইসেই কাজ করে (অন্য
+  ফোন/ব্রাউজারে নতুন করে লিখতে হবে), আর ব্রাউজারের ডাটা/ক্যাশ মুছে ফেললে
+  এটাও মুছে যাবে — এটা localStorage-এর স্বাভাবিক সীমাবদ্ধতা, ওয়েবসাইট কোড
+  দিয়ে এর বেশি স্থায়ী কিছু করা সম্ভব না।
+*/
+const CUSTOMER_INFO_STORAGE_KEY = "savedCustomerInfo";
+
+function saveCustomerInfoToDevice(){
+  try {
+    const info = {
+      name: document.getElementById("ord_name").value.trim(),
+      upazila: document.getElementById("ord_upazila").value.trim(),
+      union: document.getElementById("ord_union").value.trim(),
+      ward: document.getElementById("ord_ward").value.trim(),
+      phone: document.getElementById("ord_phone").value.trim(),
+      village: document.getElementById("ord_village").value.trim(),
+      address: document.getElementById("ord_address").value.trim()
+    };
+    localStorage.setItem(CUSTOMER_INFO_STORAGE_KEY, JSON.stringify(info));
+  } catch(e){ /* সেভ ব্যর্থ হলেও অর্ডারে কোনো প্রভাব পড়বে না, চুপচাপ উপেক্ষা */ }
+}
+
+function prefillCustomerInfoIfSaved(){
+  try {
+    const raw = localStorage.getItem(CUSTOMER_INFO_STORAGE_KEY);
+    if(!raw) return;
+    const info = JSON.parse(raw);
+    if(info.name) document.getElementById("ord_name").value = info.name;
+    if(info.upazila) document.getElementById("ord_upazila").value = info.upazila;
+    if(info.union) document.getElementById("ord_union").value = info.union;
+    if(info.ward) document.getElementById("ord_ward").value = info.ward;
+    if(info.phone) document.getElementById("ord_phone").value = info.phone;
+    if(info.village) document.getElementById("ord_village").value = info.village;
+    if(info.address) document.getElementById("ord_address").value = info.address;
+  } catch(e){ /* কিছু ভুল থাকলে সাদা ফর্মই দেখানো হবে, ক্ষতি নেই */ }
+}
 
 /*
   বর্তমান লোকেশন ফিচার:
@@ -2323,21 +2373,34 @@ document.getElementById("promoApplyBtn").addEventListener("click", () => {
   renderOrderSummary(true);
 });
 
-document.getElementById("locationBtn").addEventListener("click", () => {
+/*
+  একবার লোকেশন দিলে ব্রাউজার নিজেই সেই অনুমতি মনে রাখে (আবার জিজ্ঞেস করে না) —
+  তাই পরের বার এই ডিভাইস থেকে অর্ডার ফর্ম খুললে আমরা localStorage-এ রাখা একটা
+  ফ্ল্যাগ দেখে বুঝি আগে অনুমতি দেওয়া ছিল, আর চুপচাপ (বাটনে ক্লিক ছাড়াই) আবার
+  লোকেশন নিয়ে ডেলিভারি ফি বসিয়ে দিই। অনুমতি যদি মাঝে ব্রাউজার সেটিংস থেকে
+  বন্ধ করে দেওয়া হয়, এই স্বয়ংক্রিয় চেষ্টা নিঃশব্দে ব্যর্থ হবে (কোনো এরর
+  মেসেজ দেখাবে না) — কাস্টমার তখন আগের মতো ম্যানুয়ালি বাটনে ক্লিক করতে পারবে।
+*/
+function fetchLocationAndFee(isAuto){
   const status = document.getElementById("locationStatus");
   const btn = document.getElementById("locationBtn");
 
   if(!navigator.geolocation){
-    status.textContent = "আপনার ব্রাউজার লোকেশন সাপোর্ট করে না।";
-    status.className = "location-status error";
+    if(!isAuto){
+      status.textContent = "আপনার ব্রাউজার লোকেশন সাপোর্ট করে না।";
+      status.className = "location-status error";
+    }
     return;
   }
 
-  status.textContent = "লোকেশন খোঁজা হচ্ছে...";
-  status.className = "location-status";
+  if(!isAuto){
+    status.textContent = "লোকেশন খোঁজা হচ্ছে...";
+    status.className = "location-status";
+  }
 
   navigator.geolocation.getCurrentPosition(
     (pos) => {
+      localStorage.setItem("locationPermissionGranted", "1");
       const lat = pos.coords.latitude;
       const lng = pos.coords.longitude;
       currentLocationLink = `https://www.google.com/maps?q=${lat.toFixed(6)},${lng.toFixed(6)}`;
@@ -2376,6 +2439,11 @@ document.getElementById("locationBtn").addEventListener("click", () => {
       currentLocationLink = null;
       currentLocationDeliveryFee = null;
       currentLocationDistanceKm = null;
+      if(isAuto){
+        // স্বয়ংক্রিয় চেষ্টা চুপচাপ ব্যর্থ হলো (হয়তো এই সেশনে অনুমতি বন্ধ করা
+        // হয়েছে) — কোনো এরর দেখানো হবে না, বাটন আগের মতোই ম্যানুয়াল থেকে যাবে
+        return;
+      }
       status.className = "location-status error";
       if(err.code === err.PERMISSION_DENIED){
         status.textContent = "লোকেশনের অনুমতি পাওয়া যায়নি। দুটো কারণ হতে পারে: (১) ব্রাউজারেই লোকেশন বন্ধ করা — ঠিকানা বারের বাম পাশে 🔒 বা ⓘ চেপে Location অপশন \"Allow\" করুন। (২) ফোনে কোনো ভাসমান বাবল/ওভারলে অ্যাপ (যেমন Messenger চ্যাট হেড, স্ক্রিন রেকর্ডারের গোল আইকন) চালু থাকলে অ্যান্ড্রয়েড নিরাপত্তার কারণে অনুমতির পপ-আপ দেখায় না — সেই অ্যাপটা বন্ধ করে বা ফোনের Settings → Apps → \"Display over other apps\" থেকে সেটার অনুমতি বন্ধ করে আবার চেষ্টা করুন। অথবা এসব ঝামেলা এড়াতে নিচে সরাসরি ঠিকানা লিখে দিন, লোকেশন ছাড়াও অর্ডার করা যায়।";
@@ -2385,7 +2453,9 @@ document.getElementById("locationBtn").addEventListener("click", () => {
     },
     { enableHighAccuracy: true, timeout: 10000 }
   );
-});
+}
+
+document.getElementById("locationBtn").addEventListener("click", () => fetchLocationAndFee(false));
 
 function buildOrderMessage(){
   const items = currentOrderItems;
@@ -2545,6 +2615,7 @@ function saveOrderToFirestore(orderData){
 
 function sendOrder(channel, msg){
   saveOrderToFirestore(lastOrderData);
+  saveCustomerInfoToDevice();
   saveReviewReminders(currentOrderItems);
   clearCartAfterOrder();
   if(channel === "sms"){

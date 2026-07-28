@@ -2425,11 +2425,17 @@ function fetchLocationAndFee(isAuto){
         currentLocationDeliveryFee = result.fee;
         // এতক্ষণ পর্যন্ত স্ক্রিনে যে ফি দেখানো ছিল (প্রোডাক্টের নিজস্ব ফি), সেটার সাথে
         // তুলনা করে স্পষ্ট করে বলা হচ্ছে দাম বাড়লো নাকি কমলো — কাস্টমার যেন কখনো
-        // না বুঝে ভুল দামে অর্ডার কনফার্ম না করে ফেলে
-        const previousFee = Math.max(0, ...currentOrderItems.map(item => item.product.deliveryFee || 0));
+        // না বুঝে ভুল দামে অর্ডার কনফার্ম না করে ফেলে। এই তুলনা তখনই দেখানো হয়
+        // যখন প্রোডাক্টে সত্যিই একটা ফি বসানো ছিল — প্রোডাক্টে কোনো ফি-ই না
+        // থাকলে (অজানা অবস্থা) সেটাকে "আগে ৳০ ছিল" ধরে ভুল "বেশি/কম" বলা হতো,
+        // যেটা বিভ্রান্তিকর (আসলে তুলনা করার মতো কোনো "আগের দাম"ই ছিল না)
+        const hasProductDeliveryFee = currentOrderItems.some(item => item.product.deliveryFee && item.product.deliveryFee > 0);
         let changeNote = "";
-        if(result.fee > previousFee) changeNote = ` (আগের চেয়ে ৳${result.fee - previousFee} বেশি)`;
-        else if(result.fee < previousFee) changeNote = ` (আগের চেয়ে ৳${previousFee - result.fee} কম)`;
+        if(hasProductDeliveryFee){
+          const previousFee = Math.max(0, ...currentOrderItems.map(item => item.product.deliveryFee || 0));
+          if(result.fee > previousFee) changeNote = ` (আগের চেয়ে ৳${result.fee - previousFee} বেশি)`;
+          else if(result.fee < previousFee) changeNote = ` (আগের চেয়ে ৳${previousFee - result.fee} কম)`;
+        }
         status.textContent = `দূরত্ব: প্রায় ${distanceKm.toFixed(1)} কিমি — আসল ডেলিভারি ফি: ৳${result.fee}${changeNote}`;
         status.className = "location-status success";
       }

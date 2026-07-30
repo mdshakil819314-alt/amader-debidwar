@@ -2697,7 +2697,7 @@ function generateOrderId(){
    SMS/WhatsApp পাঠানো আটকাবে না (ব্যবসা যেন কখনো থেমে না থাকে), শুধু
    ব্রাউজার কনসোলে এরর লেখা থাকবে যাতে পরে ডিবাগ করা যায়। */
 function saveOrderToFirestore(orderData){
-  if(!firestoreDB || !orderData) return;
+  if(!firestoreDB || !orderData) return Promise.reject(new Error("firestoreDB বা orderData পাওয়া যায়নি"));
   const expireDate = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000); // ৩০ দিন পর
   const orderDoc = Object.assign({}, orderData, {
     status: "pending",
@@ -2706,26 +2706,48 @@ function saveOrderToFirestore(orderData){
     // (Firebase Console-এ একবার TTL পলিসি চালু করতে হয়, কোনো বাড়তি কোড/খরচ লাগে না)
     expireAt: firebase.firestore.Timestamp.fromDate(expireDate)
   });
-  firestoreDB.collection("orders").doc(orderData.orderId).set(orderDoc)
-    .catch(err => console.error("অর্ডার Firestore-এ সেভ করতে সমস্যা:", err));
+  // ⚠️ এই প্রমিজটা রিটার্ন করা জরুরি — "direct" চ্যানেলে অর্ডার সেভ হওয়ার আগেই
+  // পেজ নেভিগেট (?track=) করলে ব্রাউজার এই এখনো-চলতে-থাকা রিকোয়েস্টটা বাতিল
+  // করে দিতে পারে, ফলে অর্ডার আসলে সেভই হতো না — এটাই ছিল আসল বাগ।
+  return firestoreDB.collection("orders").doc(orderData.orderId).set(orderDoc);
 }
 
 function sendOrder(channel, msg){
-  saveOrderToFirestore(lastOrderData);
+  const orderIdForRedirect = lastOrderData ? lastOrderData.orderId : null;
+
+  if(channel === "direct"){
+    const confirmBtn = document.getElementById("ord_confirm_btn");
+    const errBox = document.getElementById("ord_error");
+    if(confirmBtn){ confirmBtn.disabled = true; confirmBtn.textContent = "⏳ অর্ডার সেভ হচ্ছে..."; }
+    if(errBox) errBox.textContent = "";
+    saveOrderToFirestore(lastOrderData).then(() => {
+      // Firestore-এ সেভ পাকাপাকিভাবে শেষ হওয়ার পরই বাকি কাজ (ডিভাইসে সেভ,
+      // কার্ট খালি করা, পেজ পরিবর্তন) — নাহলে ট্র্যাকিং পেজে গিয়ে হয়তো
+      // "অর্ডার পাওয়া যায়নি" দেখাতো, যদিও কাস্টমার ঠিকই কনফার্ম করেছিল
+      saveCustomerInfoToDevice();
+      saveReviewReminders(currentOrderItems);
+      addOrderToMyOrdersList(orderIdForRedirect);
+      clearCartAfterOrder();
+      window.location.href = `${window.location.pathname}?track=${orderIdForRedirect}`;
+    }).catch(err => {
+      console.error("অর্ডার Firestore-এ সেভ করতে সমস্যা:", err);
+      if(confirmBtn){ confirmBtn.disabled = false; confirmBtn.textContent = "✅ অর্ডার কনফার্ম করুন"; }
+      if(errBox) errBox.textContent = "⚠️ অর্ডার সেভ করতে সমস্যা হয়েছে — ইন্টারনেট সংযোগ চেক করে আবার চেষ্টা করুন।";
+    });
+    return;
+  }
+
+  // পুরনো চ্যানেল (call/SMS/WhatsApp) — এগুলো পেজ থেকে সরাসরি নেভিগেট করে না
+  // (নতুন ট্যাব/অ্যাপ খোলে), তাই আগের ফায়ার-অ্যান্ড-ফরগেট আচরণ অক্ষত রাখা হলো
+  saveOrderToFirestore(lastOrderData).catch(err => console.error("অর্ডার Firestore-এ সেভ করতে সমস্যা:", err));
   saveCustomerInfoToDevice();
   saveReviewReminders(currentOrderItems);
-  const orderIdForRedirect = lastOrderData ? lastOrderData.orderId : null;
   addOrderToMyOrdersList(orderIdForRedirect);
   clearCartAfterOrder();
   if(channel === "sms"){
     window.location.href = `sms:${ORDER_SMS_NUMBER}?body=${encodeURIComponent(msg)}`;
   } else if(channel === "wa"){
     window.open(`https://wa.me/8801872280095?text=${encodeURIComponent(msg)}`, "_blank");
-  } else if(channel === "direct" && orderIdForRedirect){
-    // WhatsApp/SMS ছাড়াই সরাসরি Firestore-এ সেভ হয়ে গেছে — এখন বিদ্যমান,
-    // আগে থেকে কাজ করা লাইভ ট্র্যাকিং পেজেই (?track=) কাস্টমারকে পাঠিয়ে দেওয়া
-    // হচ্ছে, নতুন কোনো কনফার্মেশন UI বানানোর দরকার হয়নি
-    window.location.href = `${window.location.pathname}?track=${orderIdForRedirect}`;
   }
 }
 

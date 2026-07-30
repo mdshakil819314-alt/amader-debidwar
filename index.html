@@ -1271,19 +1271,40 @@
     border-radius:8px;padding:6px 12px;font-weight:700;font-size:.74rem;font-family:inherit;
   }
   .m-confirm-btn{
-    display:block;width:100%;
-    background:var(--primary);color:#fff;border:none;
-    border-radius:12px;padding:15px;
-    font-weight:800;font-size:.98rem;font-family:inherit;
-    margin-top:14px;
+    position:relative;
+    display:flex;align-items:center;justify-content:center;gap:10px;
+    width:100%;
+    background:linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+    color:#fff;border:none;
+    border-radius:999px;padding:18px 20px;
+    font-weight:800;font-size:1.05rem;font-family:inherit;
+    margin-top:16px;
+    box-shadow:0 6px 18px rgba(15,143,95,.35);
+    transition:transform .12s ease, box-shadow .12s ease;
   }
-  .m-call-secondary{
+  .m-confirm-btn:active{transform:scale(.97);box-shadow:0 3px 10px rgba(15,143,95,.3);}
+  .m-confirm-btn:disabled{opacity:.85;}
+  .m-confirm-btn .btn-spinner{
+    display:none;
+    width:20px;height:20px;flex:0 0 auto;
+    border:3px solid rgba(255,255,255,.4);
+    border-top-color:#fff;
+    border-radius:50%;
+    animation:btnSpin .7s linear infinite;
+  }
+  .m-confirm-btn.loading .btn-spinner{display:inline-block;}
+  @keyframes btnSpin{to{transform:rotate(360deg);}}
+
+  .m-secondary-row{display:flex;gap:10px;margin-top:10px;}
+  .m-secondary-btn{
+    flex:1;
     display:flex;align-items:center;justify-content:center;gap:6px;
-    width:100%;background:#fff;border:1.5px solid var(--secondary);color:var(--secondary);
-    border-radius:10px;padding:10px;margin-top:8px;
+    background:#fff;border-radius:999px;padding:11px;
     font-weight:700;font-size:.8rem;font-family:inherit;
   }
-  .m-call-secondary svg{width:16px;height:16px;}
+  .m-secondary-btn svg{width:16px;height:16px;flex:0 0 auto;}
+  .m-secondary-btn.call-btn{border:1.5px solid var(--secondary);color:var(--secondary);}
+  .m-secondary-btn.wa-btn{border:1.5px solid #25D366;color:#1DA851;}
 
   .my-orders-list{max-height:65vh;overflow-y:auto;}
   .my-order-item{
@@ -1296,13 +1317,6 @@
   .my-order-item .mo-total{font-size:.8rem;color:var(--muted);margin-top:2px;}
   .my-orders-empty{text-align:center;color:var(--muted);font-size:.85rem;padding:30px 10px;}
 
-  .imo-note{
-    text-align:center;
-    font-size:.72rem;
-    color:var(--muted);
-    margin-top:10px;
-  }
-  .imo-note strong{color:var(--ink);}
   #cartCheckoutBtn{
     border-radius:10px;
     flex-direction:row;
@@ -1619,12 +1633,20 @@
 
     <div class="m-error" id="ord_error"></div>
 
-    <button type="button" class="m-confirm-btn" id="ord_confirm_btn">✅ অর্ডার কনফার্ম করুন</button>
-    <button type="button" class="m-call-secondary" id="ord_submit_call">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.91.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
-      বুঝতে সমস্যা হলে কল করুন
+    <button type="button" class="m-confirm-btn" id="ord_confirm_btn">
+      <span class="btn-spinner" id="confirmBtnSpinner"></span>
+      <span id="confirmBtnText">✅ অর্ডার কনফার্ম করুন</span>
     </button>
-    <div class="imo-note">📱 ইমোতে অর্ডার করতে চাইলে সরাসরি মেসেজ দিন: <strong>+8801872280095</strong></div>
+    <div class="m-secondary-row">
+      <button type="button" class="m-secondary-btn call-btn" id="ord_submit_call">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.91.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+        কল করুন
+      </button>
+      <a class="m-secondary-btn wa-btn" href="https://wa.me/8801872280095" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
+        হোয়াটসঅ্যাপ
+      </a>
+    </div>
   </div>
 </div>
 
@@ -2293,8 +2315,8 @@ function renderOrderSummary(isUpdate){
 }
 
 function updateSubmitButtonLabels(total){
-  const confirmBtn = document.getElementById("ord_confirm_btn");
-  if(confirmBtn) confirmBtn.textContent = `✅ অর্ডার কনফার্ম করুন (৳${total})`;
+  const confirmBtnText = document.getElementById("confirmBtnText");
+  if(confirmBtnText) confirmBtnText.textContent = `✅ অর্ডার কনফার্ম করুন (৳${total})`;
 }
 
 function refreshOrderModalSummary(){
@@ -2517,9 +2539,21 @@ function fetchLocationAndFee(isAuto){
       currentLocationLink = null;
       currentLocationDeliveryFee = null;
       currentLocationDistanceKm = null;
+
+      const previouslyGranted = localStorage.getItem("locationPermissionGranted") === "1";
+      if(previouslyGranted){
+        // আগে এই ডিভাইস থেকে একবার অনুমতি দেওয়া হয়েছিল বলে এবার ব্যর্থ হওয়ার
+        // সবচেয়ে সম্ভাব্য কারণ পারমিশন সমস্যা না, বরং ফোনের GPS/লোকেশন সার্ভিস
+        // এই মুহূর্তে বন্ধ থাকা। এই মেসেজটা ছোট আর কাজের বলে auto-চেষ্টাতেও
+        // দেখানো হয় (isAuto হলেও), লম্বা টেকনিক্যাল মেসেজের মতো ভীতিকর না
+        status.className = "location-status error";
+        status.textContent = "📍 লোকেশন খুঁজে পাওয়া যাচ্ছে না — দয়া করে ফোনের উপর থেকে টেনে নামিয়ে GPS/লোকেশন চালু করুন, তারপর আবার চেষ্টা করুন।";
+        return;
+      }
+
       if(isAuto){
-        // স্বয়ংক্রিয় চেষ্টা চুপচাপ ব্যর্থ হলো (হয়তো এই সেশনে অনুমতি বন্ধ করা
-        // হয়েছে) — কোনো এরর দেখানো হবে না, বাটন আগের মতোই ম্যানুয়াল থেকে যাবে
+        // প্রথমবার হলে, আর অনুমতিই আগে দেওয়া না থাকলে, স্বয়ংক্রিয় চেষ্টা
+        // চুপচাপ ব্যর্থ হবে — বাটন আগের মতোই ম্যানুয়াল থেকে যাবে
         return;
       }
       status.className = "location-status error";
@@ -2717,8 +2751,10 @@ function sendOrder(channel, msg){
 
   if(channel === "direct"){
     const confirmBtn = document.getElementById("ord_confirm_btn");
+    const confirmBtnText = document.getElementById("confirmBtnText");
     const errBox = document.getElementById("ord_error");
-    if(confirmBtn){ confirmBtn.disabled = true; confirmBtn.textContent = "⏳ অর্ডার সেভ হচ্ছে..."; }
+    if(confirmBtn){ confirmBtn.disabled = true; confirmBtn.classList.add("loading"); }
+    if(confirmBtnText) confirmBtnText.textContent = "অর্ডার সেভ হচ্ছে...";
     if(errBox) errBox.textContent = "";
     saveOrderToFirestore(lastOrderData).then(() => {
       // Firestore-এ সেভ পাকাপাকিভাবে শেষ হওয়ার পরই বাকি কাজ (ডিভাইসে সেভ,
@@ -2731,7 +2767,8 @@ function sendOrder(channel, msg){
       window.location.href = `${window.location.pathname}?track=${orderIdForRedirect}`;
     }).catch(err => {
       console.error("অর্ডার Firestore-এ সেভ করতে সমস্যা:", err);
-      if(confirmBtn){ confirmBtn.disabled = false; confirmBtn.textContent = "✅ অর্ডার কনফার্ম করুন"; }
+      if(confirmBtn){ confirmBtn.disabled = false; confirmBtn.classList.remove("loading"); }
+      if(confirmBtnText) confirmBtnText.textContent = "✅ অর্ডার কনফার্ম করুন";
       if(errBox) errBox.textContent = "⚠️ অর্ডার সেভ করতে সমস্যা হয়েছে — ইন্টারনেট সংযোগ চেক করে আবার চেষ্টা করুন।";
     });
     return;

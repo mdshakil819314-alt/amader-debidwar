@@ -23,7 +23,7 @@
 <link rel="icon" type="image/png" href="favicon.png">
 <link rel="apple-touch-icon" href="icon-192.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Tiro+Bangla:ital@0;1&family=Hind+Siliguri:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Tiro+Bangla:ital@0;1&family=Hind+Siliguri:wght@400;500;600;700&family=Noto+Sans+Bengali:wght@500;600&display=swap" rel="stylesheet">
 <style>
   :root{
     --primary:#0F8F5F;
@@ -509,7 +509,7 @@
   .card .mini-thumb img{width:100%;height:100%;object-fit:cover;display:block;}
   .card .info{display:flex;flex-direction:column;}
   .card .name{font-weight:700;font-size:1.02rem;line-height:1.35;}
-  .card .detail-description{font-size:.76rem;color:var(--muted);line-height:1.5;margin-bottom:8px;}
+  .card .detail-description{font-size:.76rem;color:var(--muted);line-height:1.5;margin-bottom:8px;font-family:'Noto Sans Bengali','Hind Siliguri',sans-serif;}
   .card .shop{font-size:.8rem;color:var(--secondary);font-weight:600;margin-top:4px;}
   .card .detail-toggle{
     margin-top:3px;
@@ -820,7 +820,7 @@
   .pd-name{font-family:'Tiro Bangla',serif;font-weight:700;font-size:1.25rem;margin-top:18px;line-height:1.4;}
   .pd-code{font-size:.78rem;color:var(--muted);font-weight:600;margin-top:4px;}
   .pd-shop{font-size:.88rem;color:var(--secondary);font-weight:600;margin-top:6px;}
-  .pd-description{font-size:.85rem;color:var(--muted);line-height:1.7;margin-top:8px;}
+  .pd-description{font-size:.85rem;color:var(--muted);line-height:1.7;margin-top:8px;font-family:'Noto Sans Bengali','Hind Siliguri',sans-serif;}
   .pd-price-row{display:flex;align-items:baseline;gap:10px;margin-top:14px;}
   .pd-price{font-family:'Hind Siliguri',sans-serif;font-weight:700;color:var(--red);font-size:1.7rem;}
   .pd-price.no-discount{color:var(--primary-dark);}
@@ -874,7 +874,7 @@
   .pd-combo-item input[type="checkbox"]{
     width:19px;height:19px;accent-color:var(--primary);flex-shrink:0;cursor:pointer;
   }
-  .pd-combo-item-name{flex:1;color:var(--ink);}
+  .pd-combo-item-name{flex:1;color:var(--ink);font-family:'Noto Sans Bengali','Hind Siliguri',sans-serif;}
   .pd-combo-item.unchecked .pd-combo-item-name{color:var(--muted);text-decoration:line-through;}
   .pd-combo-item-price{font-weight:700;color:var(--primary-dark);white-space:nowrap;}
   .pd-combo-item.unchecked .pd-combo-item-price{color:var(--muted);text-decoration:line-through;}
@@ -3951,7 +3951,7 @@ function render(){
   const wrap = document.getElementById("productSections");
   wrap.innerHTML = "";
 
-  const term = searchTerm.trim().toLowerCase();
+  const term = searchTerm.trim().toLowerCase().normalize("NFC");
   const catLabelMap = Object.fromEntries(CATEGORIES.map(c => [c.key, c.label.toLowerCase()]));
   // সার্চ টার্মকে আলাদা শব্দে ভেঙে প্রতিটা শব্দ আলাদাভাবে মেলানো হয় — তাই
   // কাস্টমার "ঘরি ছেলেদের" লিখলেও "ছেলেদের ঘড়ি" প্রোডাক্টটা খুঁজে পাবে,
@@ -3961,15 +3961,16 @@ function render(){
     if(!(activeFilter === "all" || p.category === activeFilter)) return false;
     if(activeShop && p.shop !== activeShop) return false;
     if(!searchWords.length) return true;
-    const haystack = `${p.name} ${p.shop} ${catLabelMap[p.category] || ""}`.toLowerCase();
+    const haystack = `${p.name} ${p.shop} ${catLabelMap[p.category] || ""} ${p.description || ""}`
+      .toLowerCase().normalize("NFC");
     return searchWords.every(w => haystack.includes(w));
   };
 
   let visibleCats = activeFilter === "all" ? CATEGORIES : CATEGORIES.filter(c => c.key === activeFilter);
   if(term){
     visibleCats = [...visibleCats].sort((a, b) => {
-      const aMatch = a.label.toLowerCase().includes(term) ? 0 : 1;
-      const bMatch = b.label.toLowerCase().includes(term) ? 0 : 1;
+      const aMatch = a.label.toLowerCase().normalize("NFC").includes(term) ? 0 : 1;
+      const bMatch = b.label.toLowerCase().normalize("NFC").includes(term) ? 0 : 1;
       return aMatch - bMatch;
     });
   } else {

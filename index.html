@@ -144,6 +144,7 @@
   header.site .icon-btn.search-toggle{background:#fff;border:2px solid var(--gold);color:#B8860B;}
   header.site .icon-btn.search-toggle.active{background:var(--gold);color:#3A2A00;}
   header.site .icon-btn.cart-toggle{background:#fff;border:2px solid var(--red);color:var(--red);position:relative;}
+  header.site .icon-btn.my-orders-toggle{background:#fff;border:2px solid var(--primary);color:var(--primary);}
   .cart-badge{
     position:absolute;top:-6px;right:-6px;
     background:var(--red);color:#fff;
@@ -1247,6 +1248,54 @@
   .m-submit-call{background:#fff;border:1.5px solid var(--secondary);color:var(--secondary);}
   .m-submit-sms{background:#fff;border:1.5px solid var(--gold);color:#B8860B;}
   .m-submit-wa{background:#fff;border:1.5px solid #25D366;color:#1DA851;}
+  .payment-method-box{margin-top:16px;}
+  .payment-method-row{display:flex;gap:8px;margin-top:6px;}
+  .payment-method-option{
+    flex:1;display:flex;align-items:center;gap:8px;
+    border:1.5px solid #E1E8E4;border-radius:10px;padding:11px 10px;
+    font-size:.82rem;font-weight:700;color:var(--ink);cursor:pointer;
+    background:#fff;
+  }
+  .payment-method-option input{width:16px;height:16px;accent-color:var(--primary);flex:0 0 auto;}
+  .payment-method-option.active{border-color:var(--primary);background:var(--bg-soft);color:var(--primary-dark);}
+  .bkash-details{
+    margin-top:10px;background:#FFF0F5;border:1.5px dashed #E2136E;
+    border-radius:12px;padding:12px;
+  }
+  .bkash-number-row{
+    display:flex;align-items:center;justify-content:space-between;gap:8px;
+    font-size:.84rem;font-weight:700;color:#C4126A;margin-bottom:8px;
+  }
+  .bkash-number-row button{
+    flex:0 0 auto;background:#E2136E;color:#fff;border:none;
+    border-radius:8px;padding:6px 12px;font-weight:700;font-size:.74rem;font-family:inherit;
+  }
+  .m-confirm-btn{
+    display:block;width:100%;
+    background:var(--primary);color:#fff;border:none;
+    border-radius:12px;padding:15px;
+    font-weight:800;font-size:.98rem;font-family:inherit;
+    margin-top:14px;
+  }
+  .m-call-secondary{
+    display:flex;align-items:center;justify-content:center;gap:6px;
+    width:100%;background:#fff;border:1.5px solid var(--secondary);color:var(--secondary);
+    border-radius:10px;padding:10px;margin-top:8px;
+    font-weight:700;font-size:.8rem;font-family:inherit;
+  }
+  .m-call-secondary svg{width:16px;height:16px;}
+
+  .my-orders-list{max-height:65vh;overflow-y:auto;}
+  .my-order-item{
+    display:block;width:100%;text-align:left;
+    background:var(--bg-soft);border:1.5px solid #E1E8E4;border-radius:12px;
+    padding:12px 14px;margin-bottom:10px;font-family:inherit;
+  }
+  .my-order-item .mo-id{font-weight:800;font-size:.86rem;color:var(--ink);}
+  .my-order-item .mo-status{font-size:.78rem;font-weight:700;margin-top:4px;}
+  .my-order-item .mo-total{font-size:.8rem;color:var(--muted);margin-top:2px;}
+  .my-orders-empty{text-align:center;color:var(--muted);font-size:.85rem;padding:30px 10px;}
+
   .imo-note{
     text-align:center;
     font-size:.72rem;
@@ -1350,9 +1399,9 @@
     <a class="icon-btn call" href="tel:+8801872280095" aria-label="কল করুন">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.91.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
     </a>
-    <a class="icon-btn fb" href="#" id="headerFbLink" target="_blank" rel="noopener" aria-label="Facebook">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>
-    </a>
+    <button class="icon-btn my-orders-toggle" id="myOrdersToggleBtn" aria-label="আমার অর্ডার">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.5 7.28a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4a2 2 0 0 0-1 1.73v9.44a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4a2 2 0 0 0 1-1.73z"/><polyline points="3.29 7 12 12 20.71 7"/><line x1="12" y1="22" x2="12" y2="12"/></svg>
+    </button>
     <button class="icon-btn cart-toggle" id="cartToggleBtn" aria-label="কার্ট">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
       <span class="cart-badge" id="cartBadge" style="display:none;">0</span>
@@ -1544,23 +1593,37 @@
     </button>
     <div class="location-status" id="locationStatus"></div>
 
+    <div class="payment-method-box">
+      <label class="m-label">পেমেন্ট পদ্ধতি বেছে নিন *</label>
+      <div class="payment-method-row">
+        <label class="payment-method-option active" id="paymentCodOption">
+          <input type="radio" name="paymentMethod" id="pay_cod" value="cod" checked>
+          <span>💵 ক্যাশ অন ডেলিভারি</span>
+        </label>
+        <label class="payment-method-option" id="paymentBkashOption">
+          <input type="radio" name="paymentMethod" id="pay_bkash" value="bkash">
+          <span>📱 বিকাশ</span>
+        </label>
+      </div>
+      <div class="bkash-details" id="bkashDetailsBox" style="display:none;">
+        <div class="bkash-number-row">
+          <span>বিকাশ (Send Money): <strong>01872280095</strong></span>
+          <button type="button" id="bkashCopyBtn">কপি</button>
+        </div>
+        <label class="m-label">ট্রানজেকশন আইডি *</label>
+        <input type="text" id="ord_bkash_trxid" class="m-input" placeholder="যেমন: 8N7A6B5C4D">
+        <label class="m-label">যে নম্বর থেকে পাঠিয়েছেন *</label>
+        <input type="tel" id="ord_bkash_sender" class="m-input" placeholder="01XXXXXXXXX" maxlength="11">
+      </div>
+    </div>
+
     <div class="m-error" id="ord_error"></div>
 
-    <div class="m-send-label">যেভাবে অর্ডার পাঠাতে চান বেছে নিন</div>
-    <div class="m-send-row">
-      <button class="m-submit m-submit-call" id="ord_submit_call">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.91.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
-        <span id="ord_submit_call_label">কল</span>
-      </button>
-      <button class="m-submit m-submit-sms" id="ord_submit_sms">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16v12H7l-3 3z"/></svg>
-        <span id="ord_submit_sms_label">SMS</span>
-      </button>
-      <button class="m-submit m-submit-wa" id="ord_submit_wa">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
-        <span id="ord_submit_wa_label">হোয়াটসঅ্যাপ</span>
-      </button>
-    </div>
+    <button type="button" class="m-confirm-btn" id="ord_confirm_btn">✅ অর্ডার কনফার্ম করুন</button>
+    <button type="button" class="m-call-secondary" id="ord_submit_call">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.91.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+      বুঝতে সমস্যা হলে কল করুন
+    </button>
     <div class="imo-note">📱 ইমোতে অর্ডার করতে চাইলে সরাসরি মেসেজ দিন: <strong>+8801872280095</strong></div>
   </div>
 </div>
@@ -1595,6 +1658,16 @@
       <button class="m-submit" id="deliveryNoticeBack" style="background:#fff;border:1.5px solid var(--muted);color:var(--muted);">↩️ ফিরে যান</button>
       <button class="m-submit" id="deliveryNoticeOk" style="background:var(--primary);">✅ ঠিক আছে, অর্ডার করুন</button>
     </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="myOrdersModal">
+  <div class="modal-card promo-confirm-card">
+    <div class="modal-head">
+      <div class="modal-title">📦 আমার অর্ডার</div>
+      <button class="modal-close" id="myOrdersClose">✕</button>
+    </div>
+    <div class="my-orders-list" id="myOrdersListBody"></div>
   </div>
 </div>
 
@@ -1675,7 +1748,6 @@ function wireComingSoon(id, message){
     showCartToast(message);
   });
 }
-wireComingSoon("headerFbLink", "📘 আমাদের Facebook পেজ শীঘ্রই আসছে!");
 wireComingSoon("footerFbLink", "📘 আমাদের Facebook পেজ শীঘ্রই আসছে!");
 wireComingSoon("footerYtLink", "▶️ আমাদের YouTube চ্যানেল শীঘ্রই আসছে!");
 wireComingSoon("footerMessengerLink", "💬 মেসেঞ্জার শীঘ্রই চালু হবে, ততক্ষণ কল বা WhatsApp ব্যবহার করুন!");
@@ -2221,12 +2293,8 @@ function renderOrderSummary(isUpdate){
 }
 
 function updateSubmitButtonLabels(total){
-  const callLabel = document.getElementById("ord_submit_call_label");
-  const smsLabel = document.getElementById("ord_submit_sms_label");
-  const waLabel = document.getElementById("ord_submit_wa_label");
-  if(callLabel) callLabel.textContent = "কল";
-  if(smsLabel) smsLabel.textContent = `SMS (৳${total})`;
-  if(waLabel) waLabel.textContent = `হোয়াটসঅ্যাপ (৳${total})`;
+  const confirmBtn = document.getElementById("ord_confirm_btn");
+  if(confirmBtn) confirmBtn.textContent = `✅ অর্ডার কনফার্ম করুন (৳${total})`;
 }
 
 function refreshOrderModalSummary(){
@@ -2238,6 +2306,10 @@ function openOrderModal(items){
   currentOrderItems = items;
   resetLocationState();
   resetPromoState();
+  document.getElementById("pay_cod").checked = true;
+  document.getElementById("ord_bkash_trxid").value = "";
+  document.getElementById("ord_bkash_sender").value = "";
+  updatePaymentMethodUI();
   renderOrderSummary();
   document.getElementById("ord_error").textContent = "";
   document.getElementById("orderModal").classList.add("open");
@@ -2487,6 +2559,21 @@ function buildOrderMessage(){
     errBox.textContent = "ফোন নম্বর ১১ ডিজিটের সঠিক বাংলাদেশি নম্বর হতে হবে (যেমন 01712345678)।";
     return null;
   }
+
+  const isBkash = document.getElementById("pay_bkash").checked;
+  const bkashTrxId = document.getElementById("ord_bkash_trxid").value.trim();
+  const bkashSenderNumber = document.getElementById("ord_bkash_sender").value.trim();
+  if(isBkash){
+    if(!bkashTrxId){
+      errBox.textContent = "বিকাশের ট্রানজেকশন আইডি লিখুন।";
+      return null;
+    }
+    if(!/^01[0-9]{9}$/.test(bkashSenderNumber)){
+      errBox.textContent = "যে নম্বর থেকে বিকাশ করেছেন, সেটা সঠিক ১১ ডিজিটের নম্বর হতে হবে।";
+      return null;
+    }
+  }
+  const paymentMethod = isBkash ? "bkash" : "cod";
   errBox.textContent = "";
 
   const hasProductDeliveryFee = items.some(item => item.product.deliveryFee && item.product.deliveryFee > 0);
@@ -2525,6 +2612,7 @@ function buildOrderMessage(){
   else if(deliveryFee !== null) msg += `ডেলিভারি ফি: ৳${deliveryFee}\n`;
   else if(deliveryFeeUnknown) msg += `⚠️ ডেলিভারি ফি: এখনো নির্ধারণ করা যায়নি (কাস্টমার লোকেশন দেননি) — কল করে ঠিক করে নিন, নিচের সর্বমোটে যোগ হয়নি!\n`;
   if(appliedPromoDiscount > 0) msg += `প্রোমো ছাড় (${appliedPromoCode}): −৳${appliedPromoDiscount}\n`;
+  msg += isBkash ? `পেমেন্ট: বিকাশ (Trx ID: ${bkashTrxId}, নম্বর: ${bkashSenderNumber})\n` : `পেমেন্ট: ক্যাশ অন ডেলিভারি\n`;
   msg += `সর্বমোট: ৳${finalTotal}\n`;
   msg += `---\n`;
   msg += `নাম: ${name}\n`;
@@ -2570,7 +2658,10 @@ function buildOrderMessage(){
     phone: phone,
     village: village,
     address: address || null,
-    locationLink: currentLocationLink || null
+    locationLink: currentLocationLink || null,
+    paymentMethod: paymentMethod,
+    bkashTrxId: isBkash ? bkashTrxId : null,
+    bkashSenderNumber: isBkash ? bkashSenderNumber : null
   };
 
   return msg;
@@ -2623,12 +2714,37 @@ function sendOrder(channel, msg){
   saveOrderToFirestore(lastOrderData);
   saveCustomerInfoToDevice();
   saveReviewReminders(currentOrderItems);
+  const orderIdForRedirect = lastOrderData ? lastOrderData.orderId : null;
+  addOrderToMyOrdersList(orderIdForRedirect);
   clearCartAfterOrder();
   if(channel === "sms"){
     window.location.href = `sms:${ORDER_SMS_NUMBER}?body=${encodeURIComponent(msg)}`;
   } else if(channel === "wa"){
     window.open(`https://wa.me/8801872280095?text=${encodeURIComponent(msg)}`, "_blank");
+  } else if(channel === "direct" && orderIdForRedirect){
+    // WhatsApp/SMS ছাড়াই সরাসরি Firestore-এ সেভ হয়ে গেছে — এখন বিদ্যমান,
+    // আগে থেকে কাজ করা লাইভ ট্র্যাকিং পেজেই (?track=) কাস্টমারকে পাঠিয়ে দেওয়া
+    // হচ্ছে, নতুন কোনো কনফার্মেশন UI বানানোর দরকার হয়নি
+    window.location.href = `${window.location.pathname}?track=${orderIdForRedirect}`;
   }
+}
+
+/*
+  "আমার অর্ডার" — এই ডিভাইস থেকে দেওয়া সব অর্ডারের আইডি (চ্যানেল যাই হোক)
+  localStorage-এ জমা রাখা হয়, যাতে কাস্টমার পরে হেডারের 📦 বাটনে চেপে
+  নিজের সবগুলো অর্ডারের বর্তমান অবস্থা এক জায়গায় দেখতে পারে।
+*/
+const MY_ORDERS_STORAGE_KEY = "myOrderIds";
+
+function addOrderToMyOrdersList(orderId){
+  if(!orderId) return;
+  try {
+    const list = JSON.parse(localStorage.getItem(MY_ORDERS_STORAGE_KEY) || "[]");
+    if(!list.some(o => o.orderId === orderId)){
+      list.unshift({ orderId, createdAt: Date.now() });
+    }
+    localStorage.setItem(MY_ORDERS_STORAGE_KEY, JSON.stringify(list.slice(0, 50)));
+  } catch(e){}
 }
 
 /*
@@ -2847,8 +2963,91 @@ document.getElementById("promoConfirmProceed").addEventListener("click", () => {
   if(channel && msg) sendOrder(channel, msg);
 });
 
-document.getElementById("ord_submit_sms").addEventListener("click", () => trySubmit("sms"));
-document.getElementById("ord_submit_wa").addEventListener("click", () => trySubmit("wa"));
+document.getElementById("ord_confirm_btn").addEventListener("click", () => trySubmit("direct"));
+
+/* পেমেন্ট পদ্ধতি বাছাই — কার্ড হাইলাইট আর বিকাশের বাড়তি ফিল্ড দেখানো/লুকানো */
+function updatePaymentMethodUI(){
+  const isBkash = document.getElementById("pay_bkash").checked;
+  document.getElementById("paymentCodOption").classList.toggle("active", !isBkash);
+  document.getElementById("paymentBkashOption").classList.toggle("active", isBkash);
+  document.getElementById("bkashDetailsBox").style.display = isBkash ? "block" : "none";
+}
+document.getElementById("pay_cod").addEventListener("change", updatePaymentMethodUI);
+document.getElementById("pay_bkash").addEventListener("change", updatePaymentMethodUI);
+
+document.getElementById("bkashCopyBtn").addEventListener("click", () => {
+  const btn = document.getElementById("bkashCopyBtn");
+  navigator.clipboard.writeText("01872280095").then(() => {
+    const original = btn.textContent;
+    btn.textContent = "✅ কপি হয়েছে";
+    setTimeout(() => { btn.textContent = original; }, 1500);
+  }).catch(() => {});
+});
+
+/*
+  "আমার অর্ডার" মডাল — এই ডিভাইস থেকে দেওয়া অর্ডারগুলোর আইডি localStorage
+  থেকে পড়ে, প্রতিটার সর্বশেষ অবস্থা Firestore থেকে সরাসরি টেনে দেখায়। কোনো
+  অর্ডার Firestore-এ না পাওয়া গেলে (যেমন ৩০ দিন পর TTL-এ মুছে গেছে) সেটা
+  লিস্টে "পুরনো অর্ডার" হিসেবে দেখানো হয়, লিস্ট থেকে বাদ দেওয়া হয় না — যাতে
+  কাস্টমার নিজের অর্ডারের ইতিহাস হারিয়ে যাওয়ার মতো মনে না করে।
+*/
+function openMyOrdersModal(){
+  const modal = document.getElementById("myOrdersModal");
+  const body = document.getElementById("myOrdersListBody");
+  modal.classList.add("open");
+
+  let list = [];
+  try { list = JSON.parse(localStorage.getItem(MY_ORDERS_STORAGE_KEY) || "[]"); } catch(e){}
+
+  if(!list.length){
+    body.innerHTML = `<div class="my-orders-empty">এখনো এই ডিভাইস থেকে কোনো অর্ডার করা হয়নি।</div>`;
+    return;
+  }
+
+  body.innerHTML = `<div class="my-orders-empty">লোড হচ্ছে...</div>`;
+
+  if(!firestoreDB){
+    body.innerHTML = `<div class="my-orders-empty">এই মুহূর্তে অর্ডারের অবস্থা আনা যাচ্ছে না, একটু পর আবার চেষ্টা করুন।</div>`;
+    return;
+  }
+
+  const fetches = list.map(entry =>
+    firestoreDB.collection("orders").doc(entry.orderId).get()
+      .then(doc => ({ orderId: entry.orderId, exists: doc.exists, data: doc.exists ? doc.data() : null }))
+      .catch(() => ({ orderId: entry.orderId, exists: false, data: null }))
+  );
+
+  Promise.all(fetches).then(results => {
+    body.innerHTML = results.map(r => {
+      if(!r.exists){
+        return `
+          <div class="my-order-item">
+            <div class="mo-id">${r.orderId}</div>
+            <div class="mo-status" style="color:var(--muted);">পুরনো অর্ডার (বিস্তারিত আর নেই)</div>
+          </div>`;
+      }
+      const step = TRACK_STEPS.find(s => s.key === r.data.status);
+      let statusLabel = step ? step.label : r.data.status;
+      if(r.data.status === "cancelled") statusLabel = "⚫ বাতিল";
+      else if(r.data.status === "returned") statusLabel = "🟣 ফেরত";
+      const statusColor = (r.data.status === "cancelled" || r.data.status === "returned") ? "var(--red)" : "var(--primary-dark)";
+      return `
+        <button type="button" class="my-order-item" onclick="window.location.href='${window.location.pathname}?track=${r.orderId}'">
+          <div class="mo-id">${r.orderId}</div>
+          <div class="mo-status" style="color:${statusColor};">${statusLabel}</div>
+          <div class="mo-total">৳${r.data.total}</div>
+        </button>`;
+    }).join("");
+  });
+}
+
+document.getElementById("myOrdersToggleBtn").addEventListener("click", openMyOrdersModal);
+document.getElementById("myOrdersClose").addEventListener("click", () => {
+  document.getElementById("myOrdersModal").classList.remove("open");
+});
+document.getElementById("myOrdersModal").addEventListener("click", (e) => {
+  if(e.target.id === "myOrdersModal") document.getElementById("myOrdersModal").classList.remove("open");
+});
 </script>
 
 <script>

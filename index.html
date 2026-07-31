@@ -859,7 +859,7 @@
   .stock-badge{
     display:inline-flex;align-items:center;gap:6px;
     background:#fff;border:1.5px solid #E1E8E4;color:var(--ink);
-    font-weight:700;font-size:.8rem;
+    font-weight:700;font-size:.76rem;white-space:nowrap;
     padding:5px 12px;border-radius:999px;
   }
   .stock-badge.stock-low{
@@ -1488,7 +1488,7 @@
   <div class="f-links">
     <a href="about.html">About</a>
     <a href="privacy.html">Privacy Policy</a>
-    <a href="#" id="footerTermsLink">Terms</a>
+    <a href="terms.html">Terms</a>
     <a href="https://wa.me/8801872280095" target="_blank" rel="noopener">Contact</a>
   </div>
   <div class="f-social">
@@ -1787,7 +1787,6 @@ function wireComingSoon(id, message){
   });
 }
 wireComingSoon("footerYtLink", "▶️ আমাদের YouTube চ্যানেল শীঘ্রই আসছে!");
-wireComingSoon("footerTermsLink", "📄 শর্তাবলী পেজ শীঘ্রই আসছে!");
 
 /*
   কম্বো প্যাকেজ থেকে কাস্টমার কিছু আইটেম বাদ দিলে সেই তথ্য প্রোডাক্ট অবজেক্টে না
@@ -2011,7 +2010,9 @@ function openProductDetail(p){
     ${comboHTML}
     ${hasExtra ? `
       <div class="pd-extra">
-        ${p.stock ? `<div class="stock-badge${p.stock < 5 ? " stock-low" : ""}">📦 স্টক: ${p.stock} পিস${p.stock < 5 ? " — মাত্র সীমিত স্টক আছে, আজই অর্ডার করুন!" : ""}</div>` : ""}
+        ${p.stock ? (p.stock < 5
+          ? `<div class="stock-badge stock-low">⚠️ মাত্র ${p.stock} পিস বাকি — দ্রুত নিন!</div>`
+          : `<div class="stock-badge">📦 স্টক: ${p.stock} পিস</div>`) : ""}
         ${hasDeliveryFee ? `<div>ডেলিভারি ফি: ৳${p.deliveryFee}</div><div class="pd-total" id="pdExtraTotal">সর্বমোট: ৳${total}</div>` : ""}
         ${!p.freeDelivery ? `<div class="delivery-hint">📍 অর্ডারের সময় লোকেশন দিলে, আপনার দূরত্ব অনুযায়ী সঠিক ডেলিভারি ফি দেখানো হবে</div>` : ""}
       </div>
@@ -3886,7 +3887,9 @@ function productCard(p){
          ${p.description ? `<div class="detail-description">${p.description}</div>` : ""}
          ${miniThumbsHTML}
          ${p.code ? `<div>কোড: ${p.code}</div>` : ""}
-         ${p.stock ? `<div class="stock-badge${p.stock < 5 ? " stock-low" : ""}">📦 স্টক: ${p.stock} পিস${p.stock < 5 ? " — মাত্র সীমিত স্টক আছে, আজই অর্ডার করুন!" : ""}</div>` : ""}
+         ${p.stock ? (p.stock < 5
+           ? `<div class="stock-badge stock-low">⚠️ মাত্র ${p.stock} পিস বাকি — দ্রুত নিন!</div>`
+           : `<div class="stock-badge">📦 স্টক: ${p.stock} পিস</div>`) : ""}
          ${hasDeliveryFee ? `<div>ডেলিভারি ফি: ৳${p.deliveryFee}</div><div class="total-line">সর্বমোট: ৳${p.price + p.deliveryFee}</div>` : ""}
          ${!p.freeDelivery ? `<div class="delivery-hint">📍 অর্ডারের সময় লোকেশন দিলে, আপনার দূরত্ব অনুযায়ী সঠিক ডেলিভারি ফি দেখানো হবে</div>` : ""}
        </div>`

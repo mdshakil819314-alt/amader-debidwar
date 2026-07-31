@@ -1937,7 +1937,7 @@ function openProductDetail(p){
 
   const pdSoldCount = p.sold || 0;
   const pdSoldBadgeHTML = pdSoldCount > 0
-    ? `<span class="pd-sold-badge is-sold">🔥 ${pdSoldCount} বার অর্ডার</span>`
+    ? `<span class="pd-sold-badge is-sold">sales ${pdSoldCount}</span>`
     : `<span class="pd-sold-badge is-new">NEW</span>`;
 
   const hasSizes = !!(p.sizes && p.sizes.length);
@@ -2011,7 +2011,7 @@ function openProductDetail(p){
     ${hasExtra ? `
       <div class="pd-extra">
         ${p.stock ? (p.stock < 5
-          ? `<div class="stock-badge stock-low">⚠️ মাত্র ${p.stock} পিস বাকি — দ্রুত নিন!</div>`
+          ? `<div class="stock-badge stock-low">⚠️ আমাদের স্টোরে মাত্র ${p.stock} পিস আছে দ্রুত নিন!</div>`
           : `<div class="stock-badge">📦 স্টক: ${p.stock} পিস</div>`) : ""}
         ${hasDeliveryFee ? `<div>ডেলিভারি ফি: ৳${p.deliveryFee}</div><div class="pd-total" id="pdExtraTotal">সর্বমোট: ৳${total}</div>` : ""}
         ${!p.freeDelivery ? `<div class="delivery-hint">📍 অর্ডারের সময় লোকেশন দিলে, আপনার দূরত্ব অনুযায়ী সঠিক ডেলিভারি ফি দেখানো হবে</div>` : ""}
@@ -3888,7 +3888,7 @@ function productCard(p){
          ${miniThumbsHTML}
          ${p.code ? `<div>কোড: ${p.code}</div>` : ""}
          ${p.stock ? (p.stock < 5
-           ? `<div class="stock-badge stock-low">⚠️ মাত্র ${p.stock} পিস বাকি — দ্রুত নিন!</div>`
+           ? `<div class="stock-badge stock-low">⚠️ আমাদের স্টোরে মাত্র ${p.stock} পিস আছে দ্রুত নিন!</div>`
            : `<div class="stock-badge">📦 স্টক: ${p.stock} পিস</div>`) : ""}
          ${hasDeliveryFee ? `<div>ডেলিভারি ফি: ৳${p.deliveryFee}</div><div class="total-line">সর্বমোট: ৳${p.price + p.deliveryFee}</div>` : ""}
          ${!p.freeDelivery ? `<div class="delivery-hint">📍 অর্ডারের সময় লোকেশন দিলে, আপনার দূরত্ব অনুযায়ী সঠিক ডেলিভারি ফি দেখানো হবে</div>` : ""}
@@ -3897,7 +3897,7 @@ function productCard(p){
 
   const soldCount = p.sold || 0;
   const soldBadgeHTML = soldCount > 0
-    ? `<span class="sold-badge is-sold">🔥 ${soldCount} সেল</span>`
+    ? `<span class="sold-badge is-sold">sales ${soldCount}</span>`
     : `<span class="sold-badge is-new">NEW</span>`;
 
   const card = document.createElement("div");

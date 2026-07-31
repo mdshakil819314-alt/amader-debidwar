@@ -467,8 +467,8 @@
   .card .discount-badge{
     position:absolute;top:8px;left:8px;
     background:var(--red);color:#fff;
-    font-size:.62rem;font-weight:800;
-    padding:3px 8px;border-radius:6px;
+    font-size:.56rem;font-weight:800;
+    padding:2px 7px;border-radius:6px;
     animation:badge-pulse 1.6s ease-in-out infinite;
   }
   @keyframes badge-pulse{
@@ -3934,12 +3934,16 @@ function productCard(p){
     </div>
   `;
   const hasVariants = !!((p.sizes && p.sizes.length) || (p.colors && p.colors.length) || (p.comboItems && p.comboItems.length));
-  card.querySelector(".order-btn").addEventListener("click", (e) => {
-    e.stopPropagation();
-    if(hasVariants) openProductDetail(p);
-    else addToCart(p);
-  });
-  card.querySelector(".call-btn").addEventListener("click", (e) => e.stopPropagation());
+  const orderBtnEl = card.querySelector(".order-btn");
+  if(orderBtnEl){
+    orderBtnEl.addEventListener("click", (e) => {
+      e.stopPropagation();
+      if(hasVariants) openProductDetail(p);
+      else addToCart(p);
+    });
+  }
+  const callBtnEl = card.querySelector(".call-btn");
+  if(callBtnEl) callBtnEl.addEventListener("click", (e) => e.stopPropagation());
 
   // পুরো কার্ডের যেকোনো জায়গায় (ছবি, নাম, "বিস্তারিত দেখুন" — যেকোনো কিছুতে)
   // ক্লিক করলেই সরাসরি ফুল-স্ক্রিন ডিটেইল পেজে চলে যাবে। এতে কার্ডের ভেতরে

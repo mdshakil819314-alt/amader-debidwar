@@ -519,16 +519,32 @@
   },
   {
     "id": 4,
-    "name": "বাচ্চাদের জামা",
-    "category": "baby-dress",
-    "shop": "ফ্যামিলি শপ",
-    "price": 450,
-    "originalPrice": null,
-    "stock": 20,
-    "deliveryFee": 50,
-    "image": "",
+    "name": "ছেলেদের গেঞ্জি",
+    "category": "kids-products",
+    "shop": "ফ্যামিলি শপ দেবিদ্দার",
+    "price": 160,
+    "originalPrice": 250,
+    "stock": 30,
+    "deliveryFee": 30,
+    "description": "প্রিমিয়াম কোয়ালিটি",
+    "images": [
+      "https:\/\/res.cloudinary.com\/hkstgbdt\/image\/upload\/v1786807325\/familyshop-products\/wgynxrclltit87vcovwj.webp",
+      "https:\/\/res.cloudinary.com\/hkstgbdt\/image\/upload\/v1786807480\/familyshop-products\/iwdenrdyrmq4vsrthp4x.webp"
+    ],
     "emoji": "👕",
-    "sold": 1,
+    "sold": 0,
+    "code": "TRX08",
+    "sizes": [
+      "98",
+      "104",
+      "110",
+      "116",
+      "122",
+      "128"
+    ],
+    "colors": [
+      "সাদামিক্স"
+    ],
     "freeDelivery": false
   },
   {

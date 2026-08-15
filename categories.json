@@ -1,12 +1,5 @@
 [
   {
-    "key": "combo",
-    "label": "কম্বো প্যাকেজ",
-    "emoji": "🛒",
-    "image": "",
-    "featured": true
-  },
-  {
     "key": "grocery",
     "label": "মুদি দোকান",
     "emoji": "🛒",

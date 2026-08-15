@@ -518,20 +518,6 @@
     "freeDelivery": false
   },
   {
-    "id": 54,
-    "name": "কিডস হাইজিন কিট",
-    "category": "kids-products",
-    "shop": "ফ্যামিলি শপ",
-    "price": 450,
-    "originalPrice": 500,
-    "stock": 15,
-    "deliveryFee": 50,
-    "image": "",
-    "emoji": "🧸",
-    "sold": 0,
-    "freeDelivery": false
-  },
-  {
     "id": 4,
     "name": "বাচ্চাদের জামা",
     "category": "baby-dress",

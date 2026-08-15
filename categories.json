@@ -1,12 +1,5 @@
 [
   {
-    "key": "handbag",
-    "label": "হ্যান্ডব্যাগ",
-    "emoji": "🛒",
-    "image": "",
-    "featured": false
-  },
-  {
     "key": "kids-products",
     "label": "শিশুদের প্রোডাক্ট",
     "emoji": "🛒",

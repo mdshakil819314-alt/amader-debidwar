@@ -1,12 +1,5 @@
 [
   {
-    "key": "cosmetic",
-    "label": "কসমেটিক",
-    "emoji": "🛒",
-    "image": "",
-    "featured": false
-  },
-  {
     "key": "women-fashion",
     "label": "মহিলাদের ফ্যাশন",
     "emoji": "🛒",

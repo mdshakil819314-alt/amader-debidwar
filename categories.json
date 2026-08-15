@@ -1,12 +1,5 @@
 [
   {
-    "key": "saree",
-    "label": "শাড়ি",
-    "emoji": "🛒",
-    "image": "",
-    "featured": false
-  },
-  {
     "key": "combo",
     "label": "কম্বো প্যাকেজ",
     "emoji": "🛒",

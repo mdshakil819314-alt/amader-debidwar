@@ -28,13 +28,6 @@
     "featured": false
   },
   {
-    "key": "LadiesClock",
-    "label": "মেয়েদের ঘড়ি",
-    "emoji": "🛒",
-    "image": "",
-    "featured": false
-  },
-  {
     "key": "Clock",
     "label": "ছেলেদের ঘড়ি",
     "emoji": "🛒",

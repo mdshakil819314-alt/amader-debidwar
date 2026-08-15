@@ -1,12 +1,5 @@
 [
   {
-    "key": "grocery",
-    "label": "মুদি দোকান",
-    "emoji": "🛒",
-    "image": "",
-    "featured": false
-  },
-  {
     "key": "cosmetic",
     "label": "কসমেটিক",
     "emoji": "🛒",

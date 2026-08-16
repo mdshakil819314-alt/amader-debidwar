@@ -12,5 +12,12 @@
     "emoji": "🛒",
     "image": "",
     "featured": false
+  },
+  {
+    "key": "Adult product",
+    "label": "ছেলেদের গেঞ্জি",
+    "emoji": "🏷️",
+    "image": "",
+    "featured": false
   }
 ]

@@ -842,5 +842,30 @@
       "কালো"
     ],
     "freeDelivery": false
+  },
+  {
+    "id": 80,
+    "name": "ছেলেদের গেঞ্জি",
+    "category": "Adult-product",
+    "shop": "ফ্যামিলি শপ দেবিদ্দার",
+    "price": 220,
+    "originalPrice": 300,
+    "stock": 12,
+    "deliveryFee": 50,
+    "description": "ছেলেদের গেঞ্জি। জার্সি কাপড়। প্রিমিয়াম কোয়ালিটি",
+    "images": [
+      "https:\/\/res.cloudinary.com\/hkstgbdt\/image\/upload\/v1786977395\/familyshop-products\/sooyk5fd9dswyubpirsg.webp",
+      "https:\/\/res.cloudinary.com\/hkstgbdt\/image\/upload\/v1786977405\/familyshop-products\/drflgxbjxweb08ysflub.webp",
+      "https:\/\/res.cloudinary.com\/hkstgbdt\/image\/upload\/v1786977864\/familyshop-products\/ufriamglod7sdx95dbp2.webp"
+    ],
+    "emoji": "👕",
+    "sold": 0,
+    "sizes": [
+      "32-34"
+    ],
+    "colors": [
+      "1-2-3-4-5-6"
+    ],
+    "freeDelivery": false
   }
 ]

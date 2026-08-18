@@ -892,14 +892,18 @@
     "deliveryFee": 40,
     "description": "সন্দেহ হইলে ফোন দিয়ে দেখতে পারেন",
     "images": [
-      "https:\/\/res.cloudinary.com\/hkstgbdt\/image\/upload\/v1787060041\/familyshop-products\/ej0uymwv832oec4wv56w.webp",
-      "https:\/\/res.cloudinary.com\/hkstgbdt\/image\/upload\/v1787060023\/familyshop-products\/wmiohjub2ud3hkuemfmt.webp"
+      "https:\/\/res.cloudinary.com\/hkstgbdt\/image\/upload\/v1787061737\/familyshop-products\/g49viz44cum3zi2rsyoc.webp",
+      "https:\/\/res.cloudinary.com\/hkstgbdt\/image\/upload\/v1787060023\/familyshop-products\/wmiohjub2ud3hkuemfmt.webp",
+      "https:\/\/res.cloudinary.com\/hkstgbdt\/image\/upload\/v1787061775\/familyshop-products\/xrcf9cxrmq8u8edmq0jr.webp"
     ],
     "emoji": "👕",
     "sold": 0,
     "code": "TRX05",
     "sizes": [
       "32-34"
+    ],
+    "colors": [
+      "নীল কালার-হালকা লাল কালার-মাটি কালার-কমলা কালার"
     ],
     "freeDelivery": false
   }

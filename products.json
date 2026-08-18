@@ -879,5 +879,26 @@
       "1-2-3-4-5-6"
     ],
     "freeDelivery": false
+  },
+  {
+    "id": 81,
+    "name": "ছেলেদের গেঞ্জি",
+    "category": "Adult-product",
+    "shop": "ফ্যামিলি শপ দেবিদ্দার",
+    "price": 150,
+    "originalPrice": 180,
+    "stock": 12,
+    "deliveryFee": 40,
+    "description": "সন্দেহ হইলে ফোন দিয়ে দেখতে পারেন",
+    "images": [
+      "https:\/\/res.cloudinary.com\/hkstgbdt\/image\/upload\/v1787060041\/familyshop-products\/ej0uymwv832oec4wv56w.webp",
+      "https:\/\/res.cloudinary.com\/hkstgbdt\/image\/upload\/v1787060023\/familyshop-products\/wmiohjub2ud3hkuemfmt.webp"
+    ],
+    "emoji": "👕",
+    "sold": 0,
+    "sizes": [
+      "32-34"
+    ],
+    "freeDelivery": false
   }
 ]

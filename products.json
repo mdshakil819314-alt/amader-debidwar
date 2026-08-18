@@ -535,16 +535,27 @@
   },
   {
     "id": 30,
-    "name": "বেবি ড্রেস (ফ্রক, প্রিন্ট)",
+    "name": "মেয়েদের জামা",
     "category": "baby-dress",
-    "shop": "ফ্যামিলি শপ",
-    "price": 380,
-    "originalPrice": null,
-    "stock": 18,
-    "deliveryFee": 50,
-    "image": "",
-    "emoji": "👶",
+    "shop": "ফ্যামিলি শপ দেবিদ্দার",
+    "price": 170,
+    "originalPrice": 200,
+    "stock": 36,
+    "deliveryFee": 40,
+    "description": "তিন থেকে পাঁচ বছরের মেয়ের । ইচ্ছুক হলে ফোন দিয়ে জানতে পারেন",
+    "images": [
+      "https:\/\/res.cloudinary.com\/hkstgbdt\/image\/upload\/v1787059593\/familyshop-products\/xsvptifkl9tzk3q01rej.webp",
+      "https:\/\/res.cloudinary.com\/hkstgbdt\/image\/upload\/v1787059600\/familyshop-products\/s1evro5r5vyw1ncnxv24.webp",
+      "https:\/\/res.cloudinary.com\/hkstgbdt\/image\/upload\/v1787059608\/familyshop-products\/v5erdqzlmgcvxbt8orin.webp"
+    ],
+    "emoji": "👗",
     "sold": 0,
+    "sizes": [
+      "3 থেকে 5 বছর"
+    ],
+    "colors": [
+      "1-2-3-4-5-6"
+    ],
     "freeDelivery": false
   },
   {

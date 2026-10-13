@@ -5,6 +5,11 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>এলাকার বাজার — ফ্যামিলি শপ দেবিদ্বার</title>
 <meta name="theme-color" content="#0F8F5F">
+<link rel="manifest" href="bazar.webmanifest">
+<link rel="apple-touch-icon" href="bazar-icon-192.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="এলাকার বাজার">
 <link rel="icon" type="image/png" href="favicon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Tiro+Bangla:ital@0;1&family=Hind+Siliguri:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -189,6 +194,18 @@
   .starpick{display:flex;gap:6px;font-size:2rem;}
   .starpick button{font-size:2rem;line-height:1;color:#D5DDD9;}
   .starpick button.on{color:#E3A72E;}
+  /* v2: ছাড়, স্টক, রেটিং, ইনস্টল */
+  .prow .disc{position:absolute;top:16px;left:16px;background:var(--red);color:#fff;font-size:.7rem;font-weight:700;padding:3px 8px;border-radius:10px;z-index:1;}
+  .pold{color:var(--muted);text-decoration:line-through;font-weight:500;font-size:.8rem;margin-left:4px;}
+  .stkb{display:inline-block;margin-top:5px;font-size:.7rem;font-weight:700;color:var(--primary-dark);background:var(--primary-soft);padding:2px 9px;border-radius:10px;}
+  .rate{color:#8A5A00;font-size:.78rem;font-weight:700;margin-left:6px;white-space:nowrap;}
+  .act.wa{background:#25D366;color:#fff;}
+  .acts.wrap{flex-wrap:wrap;}
+  .acts.wrap .act{flex:1 1 30%;}
+  .instbox{margin:12px 0 0;padding:11px 14px;border-radius:16px;background:var(--primary-soft);border:1.5px dashed var(--primary);display:flex;align-items:center;gap:10px;font-size:.86rem;font-weight:600;color:var(--primary-dark);}
+  .instbox span{flex:1;line-height:1.35;}
+  .instbox button{background:var(--primary);color:#fff;font-weight:700;padding:8px 14px;border-radius:12px;font-size:.84rem;white-space:nowrap;}
+  .feeline{color:var(--muted);}
 </style>
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
@@ -204,6 +221,7 @@
   <div class="slider-wrap" id="sliderWrap">
     <div class="slider" id="slider"></div>
     <div class="dots" id="dots"></div>
+    <div class="instbox hidden" id="instBox"><span id="instTxt">📲 ফোনে অ্যাপের মতো রাখুন — এক ট্যাপে খুলুন</span><button id="instBtn" type="button">ইনস্টল</button></div>
   </div>
 
   <main id="view"></main>
@@ -212,6 +230,7 @@
     ➕ আপনার দোকান বা নতুন পণ্য যোগ করতে চান?<br>
     <b>এডমিনকে কল বা হোয়াটসঅ্যাপ করুন</b>
     <br><a id="adminCall" href="#">📞 যোগাযোগ করুন</a>
+    <br><a href="vendor.html" style="background:#fff;border:1.5px solid var(--gold);margin-top:8px">🏪 দোকানদার? লগইন / নতুন আবেদন</a>
   </div>
   <div class="disclaimer">
     এই পেজে শুধু এলাকার দোকানের তালিকা দেখানো হয়। পণ্যের মান, দাম ও ডেলিভারির দায়িত্ব সংশ্লিষ্ট দোকানদারের।
@@ -280,16 +299,33 @@
   function catByKey(k){ return DATA.categories.filter(function(c){return c.key===k;})[0] || {key:k,label:k,emoji:"🏪"}; }
   function shopsOfUnion(uid){ return DATA.shops.filter(function(s){return s.union===uid;}); }
 
-  /* দাম (Firestore) — দোকান খোলার সময় একবার আনা হয় */
-  function loadPrices(s){
+  /* ---------- Firestore: পণ্য (অনুমোদিত), দোকানের তথ্য, রেটিং ---------- */
+  var RATINGS = {};
+  function itemById(s,id){ return (s.items||[]).filter(function(p){return p.id===id;})[0]; }
+  function loadShopData(s){
     return new Promise(function(resolve){
-      if(s.prices){ return resolve(); }
-      if(!db){ s.prices = {}; return resolve(); }
-      db.collection("bazar_prices").doc(s.id).get().then(function(doc){
-        s.prices = (doc.exists && doc.data().prices) ? doc.data().prices : {};
+      if(s.items){ return resolve(); }
+      if(!db){ s.items = []; s.profile = {}; return resolve(); }
+      Promise.all([
+        db.collection("bazar_items").where("shopId","==",s.id).where("status","==","approved").get(),
+        db.collection("shop_profiles").doc(s.id).get().catch(function(){ return null; })
+      ]).then(function(r){
+        var list = [];
+        r[0].forEach(function(d){
+          var x = d.data(); x.id = d.id;
+          if(x.name && typeof x.price==="number" && x.price>0 && x.inStock===true) list.push(x);   /* স্টক নেই = দেখানো হবে না */
+        });
+        list.sort(function(a,b){ return String(a.name).localeCompare(String(b.name),"bn"); });
+        s.items = list;
+        s.profile = (r[1] && r[1].exists && r[1].data().live) ? r[1].data().live : {};
         resolve();
-      }).catch(function(){ s.prices = null; resolve(); });
+      }).catch(function(){ s.items = null; resolve(); });
     });
+  }
+  function feeOf(s){ var p=s.profile||{}; return (p.deliveryFree===true || !(p.deliveryFee>0)) ? 0 : p.deliveryFee; }
+  function rateHtml(id){
+    var r = RATINGS[id];
+    return (r && r.count>0) ? '<span class="rate">⭐ '+bn((r.sum/r.count).toFixed(1))+' ('+bn(r.count)+')</span>' : '';
   }
 
   /* ---------- routing ---------- */
@@ -348,7 +384,7 @@
         var c = catByKey(s.cat);
         html += '<button class="scard" data-s="'+esc(s.id)+'" style="text-align:left;width:100%">'
           + '<div class="savatar">'+c.emoji+'</div>'
-          + '<div class="sinfo"><div class="sname">'+esc(s.name)+'</div>'
+          + '<div class="sinfo"><div class="sname">'+esc(s.name)+rateHtml(s.id)+'</div>'
           + (s.place?'<div class="smeta">📍 '+esc(s.place)+'</div>':'')
           + '<div class="tags"><span class="tag">'+esc(c.label)+'</span></div></div>'
           + '<div class="arrow">›</div></button>';
@@ -366,20 +402,19 @@
   }
 
   function productRow(s, p){
-    var st = s.prices && s.prices[p.id];
-    if(!st || typeof st.price!=="number" || !(st.price>0)) return "";
     var qty = (cart.shopId===s.id && cart.items[p.id]) || 0;
     var img = p.image ? '<img src="'+esc(p.image)+'" alt="" loading="lazy" onerror="this.parentNode.classList.add(\'noimg\');this.parentNode.textContent=this.getAttribute(\'data-e\')" data-e="'+esc(p.emoji||"🛒")+'">' : esc(p.emoji||"🛒");
     var right;
-    if(!st.in){ right = '<span class="outtag">আজ নেই</span>'; }
-    else if(qty>0 && s.cat==="mb"){
+    if(qty>0 && s.cat==="mb"){
       right = '<button class="add sel" data-m="'+esc(p.id)+'">✓ নির্বাচিত · বাদ দিন</button>';
     }
     else if(qty>0){
       right = '<div class="step"><button data-m="'+esc(p.id)+'">−</button><span>'+bn(qty)+'</span><button data-p="'+esc(p.id)+'">+</button></div>';
     } else { right = '<button class="add" data-p="'+esc(p.id)+'">🛒 কার্টে যোগ করুন</button>'; }
-    return '<div class="prow '+(st.in?'':'out')+'"><div class="pimg'+(p.image?'':' noimg')+'">'+img+'</div>'
-      + '<div class="pinfo"><div class="pname">'+esc(p.name)+'</div><div class="pprice">'+taka(st.price)+' <small>/ '+esc(p.unit)+'</small></div></div>'
+    var hasOld = typeof p.oldPrice==="number" && p.oldPrice>p.price;
+    var disc = hasOld ? '<span class="disc">−'+bn(Math.round((p.oldPrice-p.price)/p.oldPrice*100))+'%</span>' : '';
+    return '<div class="prow">'+disc+'<div class="pimg'+(p.image?'':' noimg')+'">'+img+'</div>'
+      + '<div class="pinfo"><div class="pname">'+esc(p.name)+'</div><div class="pprice">'+taka(p.price)+(hasOld?'<span class="pold">'+taka(p.oldPrice)+'</span>':'')+' <small>/ '+esc(p.unit)+'</small></div><span class="stkb">🟢 স্টকে আছে</span></div>'
       + '<div class="pact">'+right+'</div></div>';
   }
 
@@ -390,46 +425,51 @@
     $("sliderWrap").classList.add("hidden");
     $("view").innerHTML = '<div class="empty"><div class="big">⏳</div><b>লোড হচ্ছে...</b></div>';
     window.scrollTo(0,0);
-    loadPrices(s).then(function(){
+    loadShopData(s).then(function(){
       if(location.hash !== "#/s/"+sid) return;   // এর মধ্যে অন্য পেজে চলে গেলে আর আঁকা হবে না
       renderShop(s);
-      loadReviews(s);
     });
   }
 
   function renderShop(s){
-    var c = catByKey(s.cat);
-    var mapLink = (s.lat!=null && s.lng!=null && s.lat!=="" && s.lng!=="") ? 'https://www.google.com/maps?q='+s.lat+','+s.lng : "";
-    var html = '<div class="shead"><div class="row"><div class="savatar">'+c.emoji+'</div><div><h3>'+esc(s.name)+'</h3>'
+    var c = catByKey(s.cat), pr = s.profile || {};
+    var la = (pr.lat!=null && pr.lat!=="") ? pr.lat : s.lat, ln = (pr.lng!=null && pr.lng!=="") ? pr.lng : s.lng;
+    var mapLink = (la!=null && ln!=null && la!=="" && ln!=="") ? 'https://www.google.com/maps?q='+la+','+ln : "";
+    var wa = /^01[0-9]{9}$/.test(pr.whatsapp||"") ? 'https://wa.me/88'+pr.whatsapp : "";
+    var notes = [];
+    if(pr.deliveryFree===true) notes.push("🚚 ফ্রি ডেলিভারি");
+    else if(pr.deliveryFee>0) notes.push("🚚 ডেলিভারি চার্জ "+taka(pr.deliveryFee));
+    else if(s.deliveryNote) notes.push("🚚 "+esc(s.deliveryNote));
+    if(pr.note) notes.push("🕐 "+esc(pr.note));
+    var html = '<div class="shead"><div class="row"><div class="savatar">'+c.emoji+'</div><div><h3>'+esc(s.name)+rateHtml(s.id)+'</h3>'
       + '<div class="sub">'+(s.place?'📍 '+esc(s.place):'')+(s.note?' · 🕐 '+esc(s.note):'')+'</div></div></div>'
-      + '<div class="acts"><a class="act call" href="tel:+88'+esc(s.phone)+'">📞 কল করুন</a>'
-      + (mapLink?'<a class="act map" target="_blank" rel="noopener" href="'+esc(mapLink)+'">🗺️ দোকানের লোকেশন</a>':'')+'</div>'
-      + (s.deliveryNote?'<div class="daynote">🚚 '+esc(s.deliveryNote)+'</div>':'')
+      + '<div class="acts wrap">'+(s.phone?'<a class="act call" href="tel:+88'+esc(s.phone)+'">📞 কল</a>':'')
+      + (wa?'<a class="act wa" target="_blank" rel="noopener" href="'+esc(wa)+'">💬 হোয়াটসঅ্যাপ</a>':'')
+      + (mapLink?'<a class="act map" target="_blank" rel="noopener" href="'+esc(mapLink)+'">🗺️ লোকেশন</a>':'')+'</div>'
+      + (notes.length?'<div class="daynote">'+notes.join(" &nbsp;·&nbsp; ")+'</div>':'')
       + '</div>';
 
-    if(s.prices===null){
-      html += '<div class="empty"><div class="big">⚠️</div><b>দাম লোড হয়নি</b>ইন্টারনেট চেক করে পেজ রিফ্রেশ করুন।</div>';
+    if(s.items===null){
+      html += '<div class="empty"><div class="big">⚠️</div><b>পণ্য লোড হয়নি</b>ইন্টারনেট চেক করে পেজ রিফ্রেশ করুন।</div>';
     } else {
-      var prods = DATA.products.filter(function(p){ return p.cat===s.cat && p.active!==false && s.prices[p.id]; });
       var rows = "";
       if(s.cat==="mb"){
         DATA.sims.forEach(function(sim){
-          var g = prods.filter(function(p){return p.sim===sim.key;});
-          var inner = g.map(function(p){ return productRow(s,p); }).join("");
+          var inner = s.items.filter(function(p){return p.sim===sim.key;}).map(function(p){ return productRow(s,p); }).join("");
           if(!inner) return;
           var dot = sim.logo ? '<img src="'+esc(sim.logo)+'" alt="">' : '📶';
           rows += '<div class="simhead"><span class="simbadge" style="--sc:'+esc(sim.color)+'"><span class="dot">'+dot+'</span>'+esc(sim.name)+'</span></div>'+inner;
         });
       } else {
-        rows = prods.map(function(p){ return productRow(s,p); }).join("");
+        rows = s.items.map(function(p){ return productRow(s,p); }).join("");
       }
       if(rows){ html += '<div class="plist">'+rows+'</div>'; }
-      else { html += '<div class="empty"><div class="big">🧺</div><b>এই দোকানে এখনো কোনো পণ্যের দাম দেওয়া হয়নি</b>একটু পরে আবার দেখুন।</div>'; }
+      else { html += '<div class="empty"><div class="big">🧺</div><b>এখন কোনো পণ্য নেই</b>একটু পরে আবার দেখুন।</div>'; }
     }
 
     html += '<div class="rvbox" id="rvBox"></div>';
     $("view").innerHTML = html;
-    renderReviews(s);
+    renderRating(s);
     bindProducts(s);
   }
 
@@ -442,44 +482,28 @@
     });
   }
 
-  /* ---------- reviews ---------- */
-  function loadReviews(s){
-    if(!db){ s._rv = []; return renderReviews(s); }
-    db.collection("bazar_reviews").where("shopId","==",s.id).limit(100).get().then(function(snap){
-      var list = [];
-      snap.forEach(function(d){ var x=d.data(); list.push({name:x.name,rating:x.rating,comment:x.comment,t:(x.createdAt&&x.createdAt.toMillis)?x.createdAt.toMillis():0}); });
-      list.sort(function(a,b){ return b.t-a.t; });
-      s._rv = list; renderReviews(s);
-    }).catch(function(){ s._rv = []; renderReviews(s); });
-  }
+  /* ---------- রেটিং (শুধু তারা) ---------- */
+  function myRatings(){ try{ return JSON.parse(localStorage.getItem("bz_rated")||"{}")||{}; }catch(e){ return {}; } }
+  function saveMyRating(id,v){ try{ var m=myRatings(); m[id]=v; localStorage.setItem("bz_rated",JSON.stringify(m)); }catch(e){} }
   function stars(n){ var o=""; for(var i=1;i<=5;i++) o += (i<=n?"★":"☆"); return o; }
-  function renderReviews(s){
+  function renderRating(s){
     var box = $("rvBox"); if(!box) return;
-    var list = s._rv;
-    var html = '<div class="rvtop"><b>⭐ দোকানের রিভিউ</b>';
-    if(list && list.length){
-      var sum=0; list.forEach(function(r){sum+=r.rating||0;});
-      html += '<span class="rvavg">'+bn((sum/list.length).toFixed(1))+' ('+bn(list.length)+' জন)</span>';
-    }
+    var r = RATINGS[s.id], mine = myRatings()[s.id];
+    var html = '<div class="rvtop"><b>⭐ দোকানের রেটিং</b>';
+    if(r && r.count>0) html += '<span class="rvavg">'+bn((r.sum/r.count).toFixed(1))+' ('+bn(r.count)+' জন)</span>';
     html += '</div>';
-    if(list===undefined){ html += '<p class="rvnone">রিভিউ লোড হচ্ছে...</p>'; }
-    else if(!list.length){ html += '<p class="rvnone">এই দোকানের এখনো কোনো রিভিউ নেই। কিনে থাকলে আপনিই প্রথম রিভিউ দিন।</p>'; }
-    else { list.slice(0,20).forEach(function(r){
-      html += '<div class="rvitem"><div class="h"><b>'+esc(r.name)+'</b><span class="st">'+stars(r.rating)+'</span></div>'+(r.comment?'<p>'+esc(r.comment)+'</p>':'')+'</div>';
-    }); }
-    html += '<button class="rvbtn" id="rvWrite">✍️ রিভিউ লিখুন</button>';
+    if(!(r && r.count>0)) html += '<p class="rvnone">এখনো কেউ রেটিং দেয়নি। কিনে থাকলে আপনিই প্রথম তারা দিন।</p>';
+    html += mine ? '<p class="rvnone">আপনি '+bn(mine)+' তারা দিয়েছেন — ধন্যবাদ 🙏</p>' : '<button class="rvbtn" id="rvWrite">⭐ তারা দিন</button>';
     box.innerHTML = html;
-    $("rvWrite").addEventListener("click", function(){ openReviewSheet(s); });
+    if($("rvWrite")) $("rvWrite").addEventListener("click", function(){ openRatingSheet(s); });
   }
-  function openReviewSheet(s){
+  function openRatingSheet(s){
     var rating = 0;
     $("sheet").innerHTML =
-      '<div class="sheet-head"><b>✍️ রিভিউ লিখুন</b><button class="x" id="sheetX">✕</button></div>'
+      '<div class="sheet-head"><b>⭐ তারা দিন</b><button class="x" id="sheetX">✕</button></div>'
       + '<div style="font-size:.84rem;color:var(--muted)">দোকান: <b style="color:var(--ink)">'+esc(s.name)+'</b></div>'
-      + '<label class="lbl">আপনার নাম *</label><input class="inp" id="rName" maxlength="50" placeholder="আপনার নাম">'
-      + '<label class="lbl">রেটিং *</label><div class="starpick" id="rStars"><button data-v="1">★</button><button data-v="2">★</button><button data-v="3">★</button><button data-v="4">★</button><button data-v="5">★</button></div>'
-      + '<label class="lbl">আপনার কথা <i>(ঐচ্ছিক)</i></label><textarea class="inp" id="rText" maxlength="500" placeholder="দোকান কেমন লাগল?"></textarea>'
-      + '<div class="err" id="rErr"></div><button class="confirm" id="rSend">রিভিউ পাঠান</button>';
+      + '<div class="starpick" id="rStars" style="margin-top:14px;justify-content:center"><button data-v="1">★</button><button data-v="2">★</button><button data-v="3">★</button><button data-v="4">★</button><button data-v="5">★</button></div>'
+      + '<div class="err" id="rErr"></div><button class="confirm" id="rSend">পাঠান</button>';
     $("sheetOv").classList.add("on");
     $("sheetX").addEventListener("click", closeSheet);
     Array.prototype.forEach.call(document.querySelectorAll("#rStars button"),function(b){
@@ -489,19 +513,22 @@
       });
     });
     $("rSend").addEventListener("click", function(){
-      var name=$("rName").value.trim(), text=$("rText").value.trim(), err=$("rErr");
-      if(!name){ err.textContent="আপনার নাম লিখুন"; return; }
-      if(!rating){ err.textContent="তারা (রেটিং) বেছে নিন"; return; }
-      if(!db){ err.textContent="এই মুহূর্তে রিভিউ পাঠানো যাচ্ছে না"; return; }
+      var err=$("rErr");
+      if(!rating){ err.textContent="তারা বেছে নিন"; return; }
+      if(!db){ err.textContent="এই মুহূর্তে পাঠানো যাচ্ছে না"; return; }
       var btn=$("rSend"); btn.disabled=true; btn.textContent="পাঠানো হচ্ছে...";
-      db.collection("bazar_reviews").add({
-        shopId:s.id, name:name.slice(0,50), rating:rating, comment:text.slice(0,500),
-        createdAt: firebase.firestore.FieldValue.serverTimestamp()
-      }).then(function(){
-        (s._rv = s._rv || []).unshift({name:name,rating:rating,comment:text,t:Date.now()});
-        closeSheet(); renderReviews(s); toast("ধন্যবাদ! আপনার রিভিউ যোগ হয়েছে");
+      var ref = db.collection("bazar_rating").doc(s.id), val = rating;
+      db.runTransaction(function(tx){
+        return tx.get(ref).then(function(d){
+          if(!d.exists){ tx.set(ref,{sum:val,count:1}); return {sum:val,count:1}; }
+          var o = d.data(), n = {sum:(o.sum||0)+val, count:(o.count||0)+1};
+          tx.update(ref,n); return n;
+        });
+      }).then(function(n){
+        RATINGS[s.id] = n; saveMyRating(s.id,val);
+        closeSheet(); renderRating(s); toast("ধন্যবাদ! আপনার তারা যোগ হয়েছে");
       }).catch(function(){
-        btn.disabled=false; btn.textContent="রিভিউ পাঠান"; err.textContent="রিভিউ পাঠানো যায়নি, একটু পরে চেষ্টা করুন";
+        btn.disabled=false; btn.textContent="পাঠান"; err.textContent="পাঠানো যায়নি, একটু পরে চেষ্টা করুন";
       });
     });
   }
@@ -522,14 +549,15 @@
     refreshCart();
     var keep = window.scrollY; renderShop(s); window.scrollTo(0,keep);
   }
-  function priceOf(s,pid){ var st=s.prices&&s.prices[pid]; return (st&&typeof st.price==="number")?st.price:0; }
+  function priceOf(s,pid){ var p=itemById(s,pid); return (p&&typeof p.price==="number")?p.price:0; }
   function cartTotals(){
-    var n=0, sum=0;
+    var n=0, sum=0, fee=0;
     if(cart.shopId){
       var s = shopById(cart.shopId);
       Object.keys(cart.items).forEach(function(pid){ n += cart.items[pid]; sum += cart.items[pid]*priceOf(s,pid); });
+      if(n>0) fee = feeOf(s);
     }
-    return {n:n,sum:sum};
+    return {n:n,sum:sum,fee:fee,grand:sum+fee};
   }
   function refreshCart(){
     var t = cartTotals();
@@ -546,20 +574,22 @@
     if(!t.n){ toast("কার্ট খালি আছে"); return; }
     var s = shopById(cart.shopId);
     var lines = Object.keys(cart.items).map(function(pid){
-      var p = prodById(pid), q = cart.items[pid];
+      var p = itemById(s,pid), q = cart.items[pid];
       return '<div class="sumline"><span>'+esc(p.name)+' × '+bn(q)+'</span><span>'+taka(q*priceOf(s,pid))+'</span></div>';
     }).join("");
-    location_link = "";
+    var saved = savedLoc();
+    location_link = saved ? saved.link : "";
     $("sheet").innerHTML =
       '<div class="sheet-head"><b>🧾 অর্ডার ফর্ম</b><button class="x" id="sheetX">✕</button></div>'
       + '<div style="font-size:.84rem;color:var(--muted);margin-bottom:6px">দোকান: <b style="color:var(--ink)">'+esc(s.name)+'</b></div>'
       + lines
-      + '<div class="sumline total"><span>পণ্যের মোট দাম</span><span>'+taka(t.sum)+'</span></div>'
+      + '<div class="sumline"><span class="feeline">🚚 ডেলিভারি চার্জ</span><span class="feeline">'+(t.fee>0?taka(t.fee):'ফ্রি')+'</span></div>'
+      + '<div class="sumline total"><span>সর্বমোট</span><span>'+taka(t.grand)+'</span></div>'
       + '<label class="lbl">আপনার নাম *</label><input class="inp" id="fName" maxlength="100" placeholder="যেমন: করিম উদ্দিন" autocomplete="name">'
       + '<label class="lbl">ফোন নম্বর (১১ ডিজিট) *</label><input class="inp" id="fPhone" type="tel" maxlength="11" placeholder="01XXXXXXXXX" autocomplete="tel">'
       + '<label class="lbl">গ্রামের নাম *</label><input class="inp" id="fVillage" maxlength="100" placeholder="গ্রাম বা পাড়ার নাম">'
       + '<label class="lbl">ডেলিভারি সম্পর্কে কিছু লিখতে চাইলে <i>(ঐচ্ছিক)</i></label><textarea class="inp" id="fNote" maxlength="300" placeholder="'+(s.cat==="mb"?"যে নম্বরে প্যাকেজ লাগবে সেটা এখানে লিখুন":"যেমন: বাড়ির সামনে মসজিদ, বিকেলে দিলে ভালো")+'"></textarea>'
-      + '<button class="locbtn" id="locBtn" type="button">📍 <span id="locTxt">বর্তমান লোকেশন যোগ করুন</span></button><div class="locstat" id="locStat">লোকেশন দিলে ডেলিভারি সহজ হয় (ঐচ্ছিক)</div>'
+      + '<button class="locbtn'+(saved?' ok':'')+'" id="locBtn" type="button">📍 <span id="locTxt">'+(saved?'✅ আপনার লোকেশন দেওয়া আছে':'বর্তমান লোকেশন যোগ করুন')+'</span></button><div class="locstat" id="locStat">'+(saved?'আগে দেওয়া লোকেশনই যাবে। বদলাতে বাটনে চাপুন।':'লোকেশন দিলে ডেলিভারি সহজ হয় (ঐচ্ছিক) — একবার দিলে মনে থাকবে')+'</div>'
       + '<div class="cod">💵 পেমেন্ট: ক্যাশ অন ডেলিভারি (পণ্য হাতে পেয়ে টাকা দিন)</div>'
       + '<div class="err" id="fErr"></div>'
       + '<button class="confirm" id="fConfirm">✅ অর্ডার কনফার্ম করুন</button>';
@@ -570,14 +600,20 @@
   }
   function closeSheet(){ $("sheetOv").classList.remove("on"); }
 
+  function savedLoc(){
+    try{ var o=JSON.parse(localStorage.getItem("bz_loc")||"null"); if(o && typeof o.lat==="number" && typeof o.lng==="number") return {lat:o.lat,lng:o.lng,link:"https://www.google.com/maps?q="+o.lat.toFixed(6)+","+o.lng.toFixed(6)}; }catch(e){}
+    return null;
+  }
   function getLocation(){
     var st = $("locStat"), btn = $("locBtn");
     if(!navigator.geolocation){ st.textContent="আপনার ব্রাউজার লোকেশন সাপোর্ট করে না।"; st.className="locstat err"; return; }
     st.textContent="লোকেশন খোঁজা হচ্ছে..."; st.className="locstat";
     navigator.geolocation.getCurrentPosition(function(pos){
-      location_link = "https://www.google.com/maps?q="+pos.coords.latitude.toFixed(6)+","+pos.coords.longitude.toFixed(6);
+      var la=pos.coords.latitude, ln=pos.coords.longitude;
+      location_link = "https://www.google.com/maps?q="+la.toFixed(6)+","+ln.toFixed(6);
+      try{ localStorage.setItem("bz_loc", JSON.stringify({lat:la,lng:ln})); }catch(e){}
       btn.classList.add("ok"); $("locTxt").textContent="✅ লোকেশন যোগ হয়েছে";
-      st.textContent="আপনার লোকেশন অর্ডারের সাথে যাবে"; st.className="locstat";
+      st.textContent="আপনার লোকেশন অর্ডারের সাথে যাবে (পরের বার আর চাইবে না)"; st.className="locstat";
     }, function(){
       st.textContent="লোকেশনের অনুমতি পাওয়া যায়নি। চাইলে লোকেশন ছাড়াই অর্ডার করতে পারেন।"; st.className="locstat err";
     }, {enableHighAccuracy:true, timeout:12000});
@@ -599,14 +635,14 @@
     err.textContent="";
     var s = shopById(cart.shopId), t = cartTotals();
     var items = Object.keys(cart.items).map(function(pid){
-      var p = prodById(pid);
+      var p = itemById(s,pid);
       return { pid:pid, name:p.name, unit:p.unit||"", qty:cart.items[pid], price:priceOf(s,pid) };
     });
     var orderId = newOrderId();
     var btn = $("fConfirm"); sending = true; btn.disabled = true; btn.textContent = "পাঠানো হচ্ছে...";
     db.collection("bazar_orders").doc(orderId).set({
       orderId:orderId, shopId:s.id, shopName:s.name, customerName:name, phone:phone, village:village,
-      note:note.slice(0,300), location:location_link||"", items:items, total:t.sum, status:"pending",
+      note:note.slice(0,300), location:location_link||"", items:items, total:t.grand, deliveryFee:t.fee, status:"pending",
       createdAt: firebase.firestore.FieldValue.serverTimestamp()
     }).then(function(){
       sending = false;
@@ -651,12 +687,37 @@
   window.addEventListener("hashchange",route);
   $("adminCall").href = "https://wa.me/"+ADMIN_PHONE;
 
-  Promise.all([getJson("bazar_shops.json"), getJson("bazar_products.json"), getJson("bazar_slider.json")]).then(function(r){
+  /* ---------- অ্যাপ হিসেবে ইনস্টল (PWA) ---------- */
+  var deferredInstall = null;
+  var standalone = (window.matchMedia && window.matchMedia("(display-mode: standalone)").matches) || window.navigator.standalone === true;
+  var isIOS = /iphone|ipad|ipod/i.test(navigator.userAgent);
+  window.addEventListener("beforeinstallprompt", function(e){ e.preventDefault(); deferredInstall = e; if(!standalone) $("instBox").classList.remove("hidden"); });
+  window.addEventListener("appinstalled", function(){ $("instBox").classList.add("hidden"); deferredInstall=null; toast("✅ অ্যাপ বসে গেছে"); });
+  if(isIOS && !standalone){
+    $("instTxt").textContent = "📲 অ্যাপের মতো রাখতে: Safari-তে Share (⬆️) চেপে \"Add to Home Screen\" বাছুন";
+    $("instBtn").classList.add("hidden"); $("instBox").classList.remove("hidden");
+  }
+  $("instBtn").addEventListener("click", function(){
+    if(!deferredInstall) return;
+    deferredInstall.prompt();
+    deferredInstall.userChoice.then(function(){ deferredInstall=null; $("instBox").classList.add("hidden"); });
+  });
+  if("serviceWorker" in navigator){
+    window.addEventListener("load", function(){ try{ navigator.serviceWorker.register("bazar-sw.js",{scope:"bazar.html"}).catch(function(){}); }catch(e){} });
+  }
+
+  function loadRatings(){
+    if(!db) return Promise.resolve();
+    return db.collection("bazar_rating").get().then(function(snap){
+      snap.forEach(function(d){ var x=d.data(); if(x && x.count>0) RATINGS[d.id]={sum:x.sum||0,count:x.count}; });
+    }).catch(function(){});
+  }
+
+  Promise.all([getJson("bazar_shops.json"), getJson("bazar_slider.json"), loadRatings()]).then(function(r){
     DATA.shops = (Array.isArray(r[0])?r[0]:[]).filter(function(s){ return s && s.id && s.active!==false; });
-    DATA.products = Array.isArray(r[1])?r[1]:[];
     refreshCart();
     route();
-    initSlider(Array.isArray(r[2])?r[2]:null);
+    initSlider(Array.isArray(r[1])?r[1]:null);
   });
 })();
 </script>

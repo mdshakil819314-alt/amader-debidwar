@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex,nofollow">
+<title>বিক্রেতা প্যানেল — এলাকার বাজার</title>
+<meta name="theme-color" content="#0F8F5F">
+<link rel="icon" type="image/png" href="favicon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Tiro+Bangla:ital@0;1&family=Hind+Siliguri:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{--primary:#0F8F5F;--primary-dark:#0B6E48;--primary-soft:#E4F4EC;--gold:#E3A72E;--red:#D6432E;--bg-soft:#F3F7F5;--ink:#16211C;--muted:#6B7A73;--line:#E3EBE7;--r:18px;--shadow:0 2px 6px rgba(15,50,35,.08);}
+  *{box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+  body{margin:0;background:var(--bg-soft);color:var(--ink);font-family:'Hind Siliguri',sans-serif;}
+  button{font-family:inherit;cursor:pointer;border:0;background:none;color:inherit;}
+  a{color:inherit;text-decoration:none;}
+  .app{max-width:640px;margin:0 auto;min-height:100vh;background:#fff;padding-bottom:90px;}
+  header{background:linear-gradient(135deg,var(--primary),var(--primary-dark));color:#fff;padding:14px 16px;display:flex;align-items:center;gap:10px;position:sticky;top:0;z-index:20;}
+  header b{display:block;font-family:'Tiro Bangla',serif;font-size:1.15rem;}
+  header small{opacity:.85;font-size:.76rem;}
+  header .grow{flex:1;min-width:0;}
+  header .out{background:rgba(255,255,255,.18);border-radius:12px;padding:8px 12px;font-size:.82rem;font-weight:600;}
+  .box{padding:18px 16px;}
+  .lbl{display:block;font-weight:600;font-size:.84rem;margin:12px 0 5px;}
+  .inp{width:100%;border:1.5px solid var(--line);border-radius:14px;padding:12px 14px;font-family:inherit;font-size:1rem;background:#FAFCFB;outline:none;}
+  .inp:focus{border-color:var(--primary);background:#fff;}
+  .btn{width:100%;margin-top:14px;padding:14px;border-radius:16px;background:linear-gradient(135deg,var(--primary),var(--primary-dark));color:#fff;font-weight:700;font-size:1.02rem;box-shadow:0 6px 16px rgba(15,143,95,.3);}
+  .btn:disabled{opacity:.6;}
+  .err{color:var(--red);font-weight:600;font-size:.84rem;margin-top:10px;min-height:1em;}
+  .note{background:var(--primary-soft);border-radius:14px;padding:11px 14px;font-size:.84rem;line-height:1.55;color:var(--primary-dark);margin-top:10px;}
+  .warn{background:#FFF4D6;color:#8A5A00;border-radius:14px;padding:12px 14px;font-size:.88rem;line-height:1.55;margin:14px 16px;}
+  .tabs{display:flex;gap:8px;padding:12px 16px 0;}
+  .tab{flex:1;padding:10px;border-radius:14px;background:var(--bg-soft);border:1.5px solid var(--line);font-weight:700;font-size:.92rem;}
+  .tab.on{background:var(--primary);border-color:var(--primary);color:#fff;}
+  .simh{margin:14px 16px 4px;font-weight:700;color:var(--primary-dark);}
+  .prow{display:flex;align-items:center;gap:10px;margin:8px 16px;padding:10px;border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--shadow);}
+  .pimg{width:52px;height:52px;border-radius:12px;background:var(--primary-soft);display:flex;align-items:center;justify-content:center;font-size:1.7rem;overflow:hidden;flex:0 0 auto;}
+  .pimg img{width:100%;height:100%;object-fit:contain;background:#fff;}
+  .pi{flex:1;min-width:0;}
+  .pn{font-weight:700;font-size:.94rem;line-height:1.25;}
+  .pu{font-size:.74rem;color:var(--muted);}
+  .pin{display:flex;align-items:center;gap:6px;margin-top:6px;}
+  .pin input{width:96px;border:1.5px solid var(--line);border-radius:10px;padding:8px 10px;font-family:inherit;font-size:.98rem;}
+  .pin span{font-size:.8rem;color:var(--muted);}
+  .tg{flex:0 0 auto;display:flex;flex-direction:column;align-items:center;gap:3px;font-size:.7rem;color:var(--muted);}
+  .sw{position:relative;width:46px;height:26px;border-radius:13px;background:#CBD5D0;transition:.2s;}
+  .sw::after{content:"";position:absolute;top:3px;left:3px;width:20px;height:20px;border-radius:50%;background:#fff;transition:.2s;}
+  .sw.on{background:var(--primary);}
+  .sw.on::after{left:23px;}
+  .savebar{position:fixed;left:50%;transform:translateX(-50%);bottom:0;width:100%;max-width:640px;background:#fff;border-top:1px solid var(--line);padding:10px 16px;z-index:30;}
+  .savebar .btn{margin:0;}
+  .ord{margin:10px 16px;padding:12px 14px;border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--shadow);}
+  .ord.new{border-color:var(--gold);background:#FFFBF0;}
+  .ord .h{display:flex;justify-content:space-between;gap:8px;font-size:.8rem;color:var(--muted);}
+  .ord .nm{font-weight:700;font-size:1rem;margin-top:4px;}
+  .ord .ln{font-size:.88rem;display:flex;justify-content:space-between;gap:8px;padding:3px 0;border-bottom:1px dashed var(--line);}
+  .ord .tot{font-weight:700;display:flex;justify-content:space-between;padding-top:6px;}
+  .ord .acts{display:flex;gap:8px;margin-top:10px;}
+  .ord .acts a{flex:1;text-align:center;padding:9px;border-radius:12px;font-weight:700;font-size:.86rem;background:var(--primary);color:#fff;}
+  .ord .acts a.o{background:#fff;border:1.5px solid var(--primary);color:var(--primary-dark);}
+  .ord .nt{margin-top:8px;font-size:.84rem;background:var(--bg-soft);border-radius:10px;padding:7px 10px;}
+  .toast{position:fixed;left:50%;bottom:90px;transform:translateX(-50%);background:#16211C;color:#fff;padding:10px 16px;border-radius:14px;font-size:.88rem;z-index:99;opacity:0;pointer-events:none;transition:.25s;}
+  .toast.on{opacity:1;}
+  .hidden{display:none !important;}
+</style>
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+</head>
+<body>
+<div class="app">
+  <header>
+    <div class="grow"><b id="hT">🏪 বিক্রেতা প্যানেল</b><small id="hS">এলাকার বাজার</small></div>
+    <button class="out hidden" id="logout">বের হোন</button>
+  </header>
+
+  <div id="loginView" class="box">
+    <div class="note">এখানে শুধু এডমিনের দেওয়া ইমেইল ও পাসওয়ার্ড দিয়ে ঢোকা যায়। এখান থেকে আপনি শুধু আপনার দোকানের <b>দাম</b> আর <b>"আজ আছে/নেই"</b> বদলাতে পারবেন।</div>
+    <label class="lbl">ইমেইল</label><input class="inp" id="em" type="email" autocomplete="username">
+    <label class="lbl">পাসওয়ার্ড</label><input class="inp" id="pw" type="password" autocomplete="current-password">
+    <div class="err" id="lerr"></div>
+    <button class="btn" id="loginBtn">ঢুকুন</button>
+    <p style="text-align:center;color:var(--muted);font-size:.8rem;margin-top:16px">একাউন্ট না থাকলে বা পাসওয়ার্ড ভুলে গেলে এডমিনকে জানান।</p>
+  </div>
+
+  <div id="panelView" class="hidden">
+    <div class="tabs"><button class="tab on" id="tabP">💰 দাম ও স্টক</button><button class="tab" id="tabO">📦 অর্ডার <span id="ocnt"></span></button></div>
+    <div id="priceView"></div>
+    <div id="orderView" class="hidden"></div>
+  </div>
+  <div id="msgView" class="hidden"></div>
+</div>
+<div class="savebar hidden" id="saveBar"><button class="btn" id="saveBtn">💾 সেভ করুন</button></div>
+<div class="toast" id="toast"></div>
+
+<script>
+(function(){
+  "use strict";
+  var FIREBASE_CONFIG = {
+    apiKey: "AIzaSyBEpanBa7MiGY_aVQo_S73b5zG-z1n-Dr8",
+    authDomain: "familyshop-reviews.firebaseapp.com",
+    projectId: "familyshop-reviews",
+    storageBucket: "familyshop-reviews.firebasestorage.app",
+    messagingSenderId: "407630802251",
+    appId: "1:407630802251:web:1f17553cb74f1741feccce"
+  };
+  var $ = function(id){ return document.getElementById(id); };
+  var BN = ["০","১","২","৩","৪","৫","৬","৭","৮","৯"];
+  function bn(n){ return String(n).replace(/[0-9]/g,function(d){return BN[d];}); }
+  function esc(s){ var d=document.createElement("div"); d.textContent=(s==null?"":s); return d.innerHTML; }
+  function toast(m){ var t=$("toast"); t.textContent=m; t.classList.add("on"); clearTimeout(toast._t); toast._t=setTimeout(function(){t.classList.remove("on");},2400); }
+  var SIMS = [{key:"gp",name:"গ্রামীণফোন"},{key:"robi",name:"রবি"},{key:"airtel",name:"এয়ারটেল"},{key:"bl",name:"বাংলালিংক"}];
+
+  firebase.initializeApp(FIREBASE_CONFIG);
+  var auth = firebase.auth(), db = firebase.firestore();
+  var shop = null, products = [], state = {}, unsubOrders = null;
+
+  function getJson(f){ return fetch(f,{cache:"no-store"}).then(function(r){return r.ok?r.json():[];}).catch(function(){return [];}); }
+  function showOnly(id){ ["loginView","panelView","msgView"].forEach(function(x){ $(x).classList.toggle("hidden", x!==id); }); $("saveBar").classList.add("hidden"); }
+  function showMsg(html){ showOnly("msgView"); $("msgView").innerHTML = '<div class="warn">'+html+'</div>'; $("logout").classList.remove("hidden"); }
+
+  $("loginBtn").addEventListener("click", function(){
+    var em=$("em").value.trim(), pw=$("pw").value;
+    if(!em||!pw){ $("lerr").textContent="ইমেইল ও পাসওয়ার্ড দিন"; return; }
+    $("lerr").textContent=""; $("loginBtn").disabled=true;
+    auth.signInWithEmailAndPassword(em,pw).catch(function(){
+      $("lerr").textContent="ইমেইল বা পাসওয়ার্ড মেলেনি"; 
+    }).then(function(){ $("loginBtn").disabled=false; });
+  });
+  $("logout").addEventListener("click", function(){ auth.signOut(); });
+
+  auth.onAuthStateChanged(function(user){
+    if(unsubOrders){ unsubOrders(); unsubOrders=null; }
+    if(!user){ shop=null; $("logout").classList.add("hidden"); $("hT").textContent="🏪 বিক্রেতা প্যানেল"; $("hS").textContent="এলাকার বাজার"; showOnly("loginView"); return; }
+    $("logout").classList.remove("hidden");
+    showMsg("লোড হচ্ছে...");
+    db.collection("vendors").doc(user.uid).get().then(function(doc){
+      if(!doc.exists){ return showMsg("এই একাউন্ট কোনো দোকানের সাথে যুক্ত নেই। এডমিনকে জানান।"); }
+      var v = doc.data();
+      if(v.active!==true){ return showMsg("আপনার লগইন এখন বন্ধ আছে। এডমিনের সাথে যোগাযোগ করুন।"); }
+      return Promise.all([getJson("bazar_shops.json"), getJson("bazar_products.json"), db.collection("bazar_prices").doc(v.shopId).get()]).then(function(r){
+        shop = (Array.isArray(r[0])?r[0]:[]).filter(function(s){return s.id===v.shopId;})[0];
+        if(!shop){ return showMsg("আপনার দোকান তালিকায় পাওয়া যায়নি। এডমিনকে জানান।"); }
+        products = (Array.isArray(r[1])?r[1]:[]).filter(function(p){ return p.cat===shop.cat && p.active!==false; });
+        var saved = (r[2].exists && r[2].data().prices) || {};
+        state = {};
+        products.forEach(function(p){ var s=saved[p.id]; state[p.id] = s ? {price:(typeof s.price==="number"?s.price:""), in:s.in!==false} : {price:"", in:true}; });
+        $("hT").textContent = "🏪 "+shop.name; $("hS").textContent = "বিক্রেতা প্যানেল";
+        showOnly("panelView"); selectTab("p"); renderPrices(); listenOrders();
+      });
+    }).catch(function(){ showMsg("লোড করা যায়নি। ইন্টারনেট দেখে পেজ রিফ্রেশ করুন।"); });
+  });
+
+  /* ---------- tabs ---------- */
+  function selectTab(t){
+    $("tabP").classList.toggle("on",t==="p"); $("tabO").classList.toggle("on",t==="o");
+    $("priceView").classList.toggle("hidden",t!=="p"); $("orderView").classList.toggle("hidden",t!=="o");
+    $("saveBar").classList.toggle("hidden",t!=="p");
+  }
+  $("tabP").addEventListener("click",function(){ selectTab("p"); });
+  $("tabO").addEventListener("click",function(){ selectTab("o"); });
+
+  /* ---------- prices ---------- */
+  function rowHtml(p){
+    var st = state[p.id];
+    var img = p.image ? '<img src="'+esc(p.image)+'" alt="">' : esc(p.emoji||"🛒");
+    return '<div class="prow"><div class="pimg">'+img+'</div><div class="pi"><div class="pn">'+esc(p.name)+'</div><div class="pu">প্রতি '+esc(p.unit||"")+'</div>'
+      + '<div class="pin"><span>৳</span><input type="number" inputmode="decimal" min="0" data-pr="'+esc(p.id)+'" value="'+(st.price===""?"":st.price)+'" placeholder="দাম"></div></div>'
+      + '<div class="tg"><div class="sw '+(st.in?'on':'')+'" data-sw="'+esc(p.id)+'"></div><span data-swl="'+esc(p.id)+'">'+(st.in?'আজ আছে':'আজ নেই')+'</span></div></div>';
+  }
+  function renderPrices(){
+    var html = '<div class="note" style="margin:12px 16px 0">দাম খালি রাখলে ওই পণ্য আপনার দোকানে দেখাবে না। সুইচ বন্ধ করলে "আজ নেই" দেখাবে। শেষে <b>সেভ করুন</b> চাপুন।</div>';
+    if(!products.length){ html += '<div class="warn">এই ধরনের কোনো পণ্য এখনো তালিকায় নেই। এডমিনকে বলুন পণ্য যোগ করে দিতে।</div>'; }
+    else if(shop.cat==="mb"){
+      SIMS.forEach(function(sim){ var g=products.filter(function(p){return p.sim===sim.key;}); if(!g.length) return;
+        html += '<div class="simh">📶 '+esc(sim.name)+'</div>'+g.map(rowHtml).join(""); });
+    } else { html += products.map(rowHtml).join(""); }
+    $("priceView").innerHTML = html;
+    Array.prototype.forEach.call(document.querySelectorAll("[data-pr]"),function(i){
+      i.addEventListener("input",function(){ var v=i.value.trim(); state[i.getAttribute("data-pr")].price = v===""?"":parseFloat(v); });
+    });
+    Array.prototype.forEach.call(document.querySelectorAll("[data-sw]"),function(s){
+      s.addEventListener("click",function(){
+        var id=s.getAttribute("data-sw"); state[id].in=!state[id].in;
+        s.classList.toggle("on",state[id].in);
+        document.querySelector('[data-swl="'+id+'"]').textContent = state[id].in?"আজ আছে":"আজ নেই";
+      });
+    });
+  }
+  $("saveBtn").addEventListener("click", function(){
+    var prices={}, bad=false;
+    products.forEach(function(p){
+      var st=state[p.id];
+      if(st.price===""||st.price==null) return;
+      if(typeof st.price!=="number"||!(st.price>0)||st.price>1000000){ bad=true; return; }
+      prices[p.id]={price:st.price,in:!!st.in};
+    });
+    if(bad){ toast("কোনো দামে ভুল আছে — দাম ০-র বেশি সংখ্যা হতে হবে"); return; }
+    var btn=$("saveBtn"); btn.disabled=true; btn.textContent="সেভ হচ্ছে...";
+    db.collection("bazar_prices").doc(shop.id).set({prices:prices, updatedAt:firebase.firestore.FieldValue.serverTimestamp()})
+      .then(function(){ toast("✅ সেভ হয়েছে"); })
+      .catch(function(){ toast("⚠️ সেভ হয়নি — ইন্টারনেট দেখুন বা এডমিনকে জানান"); })
+      .then(function(){ btn.disabled=false; btn.textContent="💾 সেভ করুন"; });
+  });
+
+  /* ---------- orders ---------- */
+  var seen = null;
+  function listenOrders(){
+    seen = null;
+    unsubOrders = db.collection("bazar_orders").where("shopId","==",shop.id).onSnapshot(function(snap){
+      var list=[]; snap.forEach(function(d){ var x=d.data(); x._t=(x.createdAt&&x.createdAt.toMillis)?x.createdAt.toMillis():Date.now(); list.push(x); });
+      list.sort(function(a,b){return b._t-a._t;});
+      var fresh = 0;
+      if(seen===null){ seen={}; list.forEach(function(o){seen[o.orderId]=1;}); }
+      else { list.forEach(function(o){ if(!seen[o.orderId]){ seen[o.orderId]=1; fresh++; } }); }
+      if(fresh){ toast("🔔 নতুন অর্ডার এসেছে!"); }
+      renderOrders(list);
+    }, function(){ $("orderView").innerHTML='<div class="warn">অর্ডার লোড করা যায়নি।</div>'; });
+  }
+  function fmt(ms){ var d=new Date(ms); return d.toLocaleString("bn-BD",{day:"numeric",month:"short",hour:"numeric",minute:"2-digit"}); }
+  function renderOrders(list){
+    $("ocnt").textContent = list.length ? "("+bn(list.length)+")" : "";
+    if(!list.length){ $("orderView").innerHTML='<div class="warn">এখনো কোনো অর্ডার আসেনি। অর্ডার এলে এখানে দেখা যাবে (পেজ খোলা থাকলে নিজে থেকেই আসবে)।</div>'; return; }
+    var cut = Date.now()-6*3600*1000;
+    $("orderView").innerHTML = list.slice(0,60).map(function(o){
+      var lines=(o.items||[]).map(function(i){ return '<div class="ln"><span>'+esc(i.name)+' × '+bn(i.qty)+' '+esc(i.unit||"")+'</span><span>৳ '+bn(i.qty*i.price)+'</span></div>'; }).join("");
+      return '<div class="ord '+(o._t>cut?'new':'')+'"><div class="h"><span>'+esc(o.orderId)+'</span><span>'+fmt(o._t)+'</span></div>'
+        + '<div class="nm">'+esc(o.customerName)+' · '+esc(o.village)+'</div>'+lines
+        + '<div class="tot"><span>মোট (ক্যাশ অন ডেলিভারি)</span><span>৳ '+bn(o.total)+'</span></div>'
+        + (o.note?'<div class="nt">📝 '+esc(o.note)+'</div>':'')
+        + '<div class="acts"><a href="tel:+88'+esc(o.phone)+'">📞 '+esc(o.phone)+'</a>'+(o.location?'<a class="o" target="_blank" rel="noopener" href="'+esc(o.location)+'">📍 লোকেশন</a>':'')+'</div></div>';
+    }).join("");
+  }
+})();
+</script>
+</body>
+</html>

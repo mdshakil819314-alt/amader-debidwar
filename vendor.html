@@ -104,12 +104,34 @@
   </header>
 
   <div id="loginView" class="box">
-    <div class="note">এখানে শুধু এডমিনের দেওয়া ইমেইল ও পাসওয়ার্ড দিয়ে ঢোকা যায়।</div>
+    <div class="note">দোকানদাররা এখান থেকে ঢুকবেন। নতুন হলে নিচের "নতুন একাউন্ট খুলুন" চাপুন।</div>
     <label class="lbl">ইমেইল</label><input class="inp" id="em" type="email" autocomplete="username">
     <label class="lbl">পাসওয়ার্ড</label><input class="inp" id="pw" type="password" autocomplete="current-password">
     <div class="err" id="lerr"></div>
     <button class="btn" id="loginBtn">ঢুকুন</button>
-    <p style="text-align:center;color:var(--muted);font-size:.8rem;margin-top:16px">একাউন্ট না থাকলে বা পাসওয়ার্ড ভুলে গেলে এডমিনকে জানান।</p>
+    <button class="btn o" id="toSignup" type="button">🆕 নতুন একাউন্ট খুলুন</button>
+    <p style="text-align:center;color:var(--muted);font-size:.8rem;margin-top:16px">পাসওয়ার্ড ভুলে গেলে এডমিনকে জানান।</p>
+  </div>
+
+  <div id="signupView" class="box hidden">
+    <div class="note">প্রথমে একটা একাউন্ট খুলুন। তারপর দোকানের তথ্য দিলে এডমিন দেখে অনুমোদন দেবেন। অনুমোদনের আগে দোকান সাইটে দেখাবে না।</div>
+    <label class="lbl">ইমেইল</label><input class="inp" id="suEm" type="email" autocomplete="username">
+    <label class="lbl">পাসওয়ার্ড <i>(কমপক্ষে ৬ অক্ষর)</i></label><input class="inp" id="suPw" type="password" autocomplete="new-password">
+    <label class="lbl">পাসওয়ার্ড আবার</label><input class="inp" id="suPw2" type="password" autocomplete="new-password">
+    <div class="err" id="suErr"></div>
+    <button class="btn" id="suBtn">একাউন্ট খুলুন</button>
+    <button class="btn o" id="toLogin" type="button">← আগেই একাউন্ট আছে, ঢুকব</button>
+  </div>
+
+  <div id="applyView" class="box hidden">
+    <div class="note">আপনার দোকানের তথ্য দিন। এডমিন দেখে অনুমোদন দিলে দোকান চালু হবে। সাবস্ক্রিপশনের বিষয়ে এডমিন হোয়াটসঅ্যাপে জানাবেন।</div>
+    <label class="lbl">দোকানের নাম *</label><input class="inp" id="apName" maxlength="60">
+    <label class="lbl">আপনার নাম *</label><input class="inp" id="apOwner" maxlength="60">
+    <label class="lbl">মোবাইল নম্বর * <i>(১১ সংখ্যা)</i></label><input class="inp" id="apPhone" type="tel" maxlength="11">
+    <label class="lbl">ইউনিয়ন *</label><select class="inp" id="apUnion"></select>
+    <label class="lbl">কী বিক্রি করবেন *</label><select class="inp" id="apCat"></select>
+    <div class="err" id="apErr"></div>
+    <button class="btn" id="apBtn">আবেদন জমা দিন</button>
   </div>
 
   <div id="panelView" class="hidden">
@@ -145,6 +167,8 @@
   function bn(n){ return String(n).replace(/[0-9]/g,function(d){return BN[d];}); }
   function esc(s){ var d=document.createElement("div"); d.textContent=(s==null?"":s); return d.innerHTML; }
   function toast(m){ var t=$("toast"); t.textContent=m; t.classList.add("on"); clearTimeout(toast._t); toast._t=setTimeout(function(){t.classList.remove("on");},2600); }
+  var UNIONS = [["1","বড়শালঘর"],["2","ইউসুফপুর"],["3","রসুলপুর"],["4","সুবিল"],["5","ফতেহাবাদ"],["6","এলাহাবাদ"],["7","জাফরগঞ্জ"],["8","গুনাইঘর উঃ"],["9","গুনাইঘর দঃ"],["10","রাজামেহের"],["11","ভানী"],["12","ধামতী"],["13","সুলতানপুর"],["14","বরকামতা"],["15","মোহনপুর"],["16","পৌরসভা"]];
+  var CATS = [["sobji","🥬 সবজি"],["mudi","🛒 মুদি"],["cosmetic","💄 কসমেটিক"],["gas","🔥 গ্যাস সিলিন্ডার"],["mb","📶 এমবি প্যাকেজ"]];
   var SIMS = [{key:"gp",name:"গ্রামীণফোন"},{key:"robi",name:"রবি"},{key:"airtel",name:"এয়ারটেল"},{key:"bl",name:"বাংলালিংক"}];
   var TS = function(){ return firebase.firestore.FieldValue.serverTimestamp(); };
 
@@ -153,7 +177,7 @@
   var shop = null, items = [], profile = null, unsubOrders = null, unsubItems = null;
 
   function getJson(f){ return fetch(f,{cache:"no-store"}).then(function(r){return r.ok?r.json():[];}).catch(function(){return [];}); }
-  function showOnly(id){ ["loginView","panelView","msgView"].forEach(function(x){ $(x).classList.toggle("hidden", x!==id); }); }
+  function showOnly(id){ ["loginView","signupView","applyView","panelView","msgView"].forEach(function(x){ $(x).classList.toggle("hidden", x!==id); }); }
   function showMsg(html){ showOnly("msgView"); $("msgView").innerHTML = '<div class="warn">'+html+'</div>'; $("logout").classList.remove("hidden"); }
   function closeSheet(){ $("ov").classList.remove("on"); }
   $("ov").addEventListener("click",function(e){ if(e.target===$("ov")) closeSheet(); });
@@ -168,6 +192,46 @@
   });
   $("logout").addEventListener("click", function(){ auth.signOut(); });
 
+  /* ---------- sign up + application ---------- */
+  $("apUnion").innerHTML = UNIONS.map(function(u){ return '<option value="'+u[0]+'">'+u[1]+'</option>'; }).join("");
+  $("apCat").innerHTML = CATS.map(function(c){ return '<option value="'+c[0]+'">'+c[1]+'</option>'; }).join("");
+  $("toSignup").addEventListener("click", function(){ showOnly("signupView"); });
+  $("toLogin").addEventListener("click", function(){ showOnly("loginView"); });
+  $("suBtn").addEventListener("click", function(){
+    var em=$("suEm").value.trim(), p1=$("suPw").value, p2=$("suPw2").value, err=$("suErr");
+    if(em.indexOf("@")<1||em.indexOf(".")<0){ err.textContent="সঠিক ইমেইল দিন"; return; }
+    if(p1.length<6){ err.textContent="পাসওয়ার্ড কমপক্ষে ৬ অক্ষরের হতে হবে"; return; }
+    if(p1!==p2){ err.textContent="দুই পাসওয়ার্ড মেলেনি"; return; }
+    err.textContent=""; $("suBtn").disabled=true;
+    auth.createUserWithEmailAndPassword(em,p1).catch(function(e){
+      var c=e&&e.code||"";
+      err.textContent = c==="auth/email-already-in-use" ? "এই ইমেইলে আগেই একাউন্ট আছে — \"ঢুকব\" চাপুন" : c==="auth/invalid-email" ? "ইমেইল সঠিক নয়" : c==="auth/weak-password" ? "পাসওয়ার্ড আরও শক্ত দিন" : "একাউন্ট খোলা যায়নি। ইন্টারনেট দেখে আবার চেষ্টা করুন।";
+    }).then(function(){ $("suBtn").disabled=false; });
+  });
+  var applyUser = null;
+  $("apBtn").addEventListener("click", function(){
+    var name=$("apName").value.trim(), owner=$("apOwner").value.trim(), phone=$("apPhone").value.trim(), err=$("apErr");
+    if(!name){ err.textContent="দোকানের নাম লিখুন"; return; }
+    if(!owner){ err.textContent="আপনার নাম লিখুন"; return; }
+    if(!/^01[0-9]{9}$/.test(phone)){ err.textContent="মোবাইল নম্বর ১১ সংখ্যার হতে হবে (01XXXXXXXXX)"; return; }
+    if(!applyUser) return;
+    err.textContent=""; $("apBtn").disabled=true;
+    db.collection("shop_applications").doc(applyUser.uid).set({name:name, owner:owner, phone:phone, union:$("apUnion").value, cat:$("apCat").value, email:applyUser.email||"", status:"pending", createdAt:TS()})
+      .then(function(){ showApplyStatus({status:"pending"}); })
+      .catch(function(){ err.textContent="জমা দেওয়া যায়নি। ইন্টারনেট দেখে আবার চেষ্টা করুন।"; })
+      .then(function(){ $("apBtn").disabled=false; });
+  });
+  function showApplyStatus(a){
+    if(a.status==="rejected"){
+      showMsg('❌ আপনার আবেদন বাতিল হয়েছে'+(a.rejectReason?' — '+esc(a.rejectReason):'')+'।<br><br><button class="btn" id="reApply" style="margin-top:6px">আবার আবেদন করুন</button>');
+      $("reApply").addEventListener("click", function(){
+        db.collection("shop_applications").doc(applyUser.uid).delete().then(function(){ showOnly("applyView"); }).catch(function(){ toast("⚠️ এখন করা যাচ্ছে না"); });
+      });
+    } else {
+      showMsg('✅ আপনার আবেদন জমা হয়েছে। এডমিন দেখে অনুমোদন দিলে দোকান চালু হবে। এরপর এই লিংকে ঢুকে পণ্য যোগ করতে পারবেন।');
+    }
+  }
+
   function stopListeners(){ if(unsubOrders){unsubOrders();unsubOrders=null;} if(unsubItems){unsubItems();unsubItems=null;} }
 
   auth.onAuthStateChanged(function(user){
@@ -176,7 +240,12 @@
     $("logout").classList.remove("hidden");
     showMsg("লোড হচ্ছে...");
     db.collection("vendors").doc(user.uid).get().then(function(doc){
-      if(!doc.exists){ return showMsg("এই একাউন্ট কোনো দোকানের সাথে যুক্ত নেই। এডমিনকে জানান।"); }
+      if(!doc.exists){
+        applyUser = user;
+        return db.collection("shop_applications").doc(user.uid).get().then(function(ap){
+          if(ap.exists){ showApplyStatus(ap.data()); } else { showOnly("applyView"); $("logout").classList.remove("hidden"); }
+        });
+      }
       var v = doc.data();
       if(v.active!==true){ return showMsg("আপনার লগইন এখন বন্ধ আছে। এডমিনের সাথে যোগাযোগ করুন।"); }
       return Promise.all([getJson("bazar_shops.json"), db.collection("shop_profiles").doc(v.shopId).get()]).then(function(r){

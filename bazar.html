@@ -40,7 +40,7 @@
   /* header */
   header.top{position:sticky;top:0;z-index:40;background:linear-gradient(135deg,var(--primary),var(--primary-dark));color:#fff;
     display:flex;align-items:center;gap:10px;padding:12px 14px;box-shadow:0 3px 12px rgba(11,110,72,.3);}
-  .hbtn{width:38px;height:38px;border-radius:12px;background:rgba(255,255,255,.16);display:flex;align-items:center;justify-content:center;font-size:1.15rem;flex:0 0 auto;position:relative;}
+  .hbtn{width:30px;height:30px;border-radius:9px;background:rgba(255,255,255,.16);display:flex;align-items:center;justify-content:center;font-size:1rem;flex:0 0 auto;position:relative;}
   .hbtn:active{background:rgba(255,255,255,.28);}
   .htitle{flex:1;min-width:0;}
   .htitle b{display:block;font-family:'Noto Sans Bengali',sans-serif;font-size:1.12rem;line-height:1.2;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
@@ -120,7 +120,12 @@
   .prow{display:flex;flex-direction:column;background:#fff;border:1px solid var(--line);border-radius:20px;padding:10px;box-shadow:var(--shadow);position:relative;min-width:0;}
   .pimg{width:100%;aspect-ratio:1/1;border-radius:14px;background:#fff;display:flex;align-items:center;justify-content:center;font-size:4rem;overflow:hidden;}
   .pimg.noimg{background:linear-gradient(135deg,#F1F8F4,#DCEFE4);aspect-ratio:16/9;font-size:2.6rem;}
-  .pimg img{width:100%;height:100%;object-fit:contain;}
+  .pimg img{width:100%;height:100%;object-fit:contain;cursor:zoom-in;}
+  .lb{position:fixed;inset:0;background:rgba(0,0,0,.88);z-index:150;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:16px;animation:lbin .18s ease;}
+  .lb img{max-width:100%;max-height:78vh;object-fit:contain;border-radius:12px;background:#fff;}
+  .lb .lbc{color:#fff;font-weight:700;margin-top:12px;font-size:1rem;text-align:center;}
+  .lb .lbx{position:absolute;top:14px;right:14px;width:38px;height:38px;border-radius:19px;background:rgba(255,255,255,.2);color:#fff;font-size:1.2rem;display:flex;align-items:center;justify-content:center;}
+  @keyframes lbin{from{opacity:0;}to{opacity:1;}}
   .pinfo{margin-top:8px;flex:1;min-width:0;}
   .pname{font-weight:700;font-size:.95rem;line-height:1.3;}
   .pprice{margin-top:3px;color:var(--primary-dark);font-weight:800;font-size:1.05rem;}
@@ -219,8 +224,8 @@
   .rate{color:#8A5A00;font-size:.78rem;font-weight:700;margin-left:6px;white-space:nowrap;}
   .act.wa{background:#25D366;color:#fff;}
   .acts3{display:grid;grid-template-columns:repeat(var(--n,3),1fr);gap:8px;margin-top:12px;}
-  .act3{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;padding:11px 4px;border-radius:14px;font-weight:700;font-size:.8rem;text-align:center;line-height:1.1;}
-  .act3 svg{width:24px;height:24px;display:block;}
+  .act3{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;padding:6px 4px;border-radius:11px;font-weight:700;font-size:.72rem;text-align:center;line-height:1.1;}
+  .act3 svg{width:16px;height:16px;display:block;}
   .act3.call{background:var(--primary);color:#fff;}
   .act3.call svg{fill:#fff;}
   .act3.wa{background:#25D366;color:#fff;}
@@ -238,7 +243,7 @@
 <body>
 <div class="app">
   <header class="top">
-    <button class="hbtn" id="backBtn" aria-label="পেছনে">←</button>
+    <button class="hbtn" id="backBtn" aria-label="পেছনে"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M11 6l-6 6 6 6"/></svg></button>
     <div class="htitle"><b id="hTitle">🛒 এলাকার বাজার</b><small id="hSub">আপনার ইউনিয়নের দোকান থেকে ঘরে বসে কিনুন</small></div>
     <button class="hbtn" id="cartBtn" aria-label="কার্ট">🛒<span class="cart-count" id="cartCount">0</span></button>
   </header>
@@ -352,7 +357,7 @@
       }).catch(function(){ s.items = null; resolve(); });
     });
   }
-  function feeOf(s){ var p=s.profile||{}; return (p.deliveryFree===true || !(p.deliveryFee>0)) ? 0 : p.deliveryFee; }
+  function feeOf(s){ if(s.cat==="mb") return 0; var p=s.profile||{}; return (p.deliveryFree===true || !(p.deliveryFee>0)) ? 0 : p.deliveryFee; }
   function rateHtml(id){
     var r = RATINGS[id];
     return (r && r.count>0) ? '<span class="rate">⭐ '+bn((r.sum/r.count).toFixed(1))+' ('+bn(r.count)+')</span>' : '';
@@ -433,7 +438,7 @@
 
   function productRow(s, p){
     var qty = (cart.shopId===s.id && cart.items[p.id]) || 0;
-    var img = p.image ? '<img src="'+esc(thumb(p.image))+'" alt="" loading="lazy" decoding="async" onerror="this.parentNode.classList.add(\'noimg\');this.parentNode.textContent=this.getAttribute(\'data-e\')" data-e="'+esc(p.emoji||"🛒")+'">' : esc(p.emoji||"🛒");
+    var img = p.image ? '<img src="'+esc(thumb(p.image))+'" data-full="'+esc(p.image)+'" data-cap="'+esc(p.name)+'" alt="" loading="lazy" decoding="async" onerror="this.parentNode.classList.add(\'noimg\');this.parentNode.textContent=this.getAttribute(\'data-e\')" data-e="'+esc(p.emoji||"🛒")+'">' : esc(p.emoji||"🛒");
     var right;
     if(qty>0 && s.cat==="mb"){
       right = '<button class="add sel" data-m="'+esc(p.id)+'">✓ নির্বাচিত · বাদ দিন</button>';
@@ -468,7 +473,8 @@
     var waNo = /^01[0-9]{9}$/.test(pr.whatsapp||"") ? pr.whatsapp : (/^01[0-9]{9}$/.test(s.phone||"") ? s.phone : "");
     var wa = waNo ? 'https://wa.me/88'+waNo : "";
     var notes = [];
-    if(pr.deliveryFree===true) notes.push("🚚 ফ্রি ডেলিভারি");
+    if(s.cat==="mb"){}
+    else if(pr.deliveryFree===true) notes.push("🚚 ফ্রি ডেলিভারি");
     else if(pr.deliveryFee>0) notes.push("🚚 ডেলিভারি চার্জ "+taka(pr.deliveryFee));
     else if(s.deliveryNote) notes.push("🚚 "+esc(s.deliveryNote));
     if(pr.note) notes.push("🕐 "+esc(pr.note));
@@ -615,12 +621,12 @@
       '<div class="sheet-head"><b>🧾 অর্ডার ফর্ম</b><button class="x" id="sheetX">✕</button></div>'
       + '<div style="font-size:.84rem;color:var(--muted);margin-bottom:6px">দোকান: <b style="color:var(--ink)">'+esc(s.name)+'</b></div>'
       + lines
-      + '<div class="sumline"><span class="feeline">🚚 ডেলিভারি চার্জ</span><span class="feeline">'+(t.fee>0?taka(t.fee):'ফ্রি')+'</span></div>'
+      + (s.cat==="mb"?'':'<div class="sumline"><span class="feeline">🚚 ডেলিভারি চার্জ</span><span class="feeline">'+(t.fee>0?taka(t.fee):'ফ্রি')+'</span></div>')
       + '<div class="sumline total"><span>সর্বমোট</span><span>'+taka(t.grand)+'</span></div>'
       + '<label class="lbl">আপনার নাম *</label><input class="inp" id="fName" maxlength="100" placeholder="যেমন: করিম উদ্দিন" autocomplete="name">'
       + '<label class="lbl">ফোন নম্বর (১১ ডিজিট) *</label><input class="inp" id="fPhone" type="tel" maxlength="11" placeholder="01XXXXXXXXX" autocomplete="tel">'
       + '<label class="lbl">গ্রামের নাম *</label><input class="inp" id="fVillage" maxlength="100" placeholder="গ্রাম বা পাড়ার নাম">'
-      + '<label class="lbl">ডেলিভারি সম্পর্কে কিছু লিখতে চাইলে <i>(ঐচ্ছিক)</i></label><textarea class="inp" id="fNote" maxlength="300" placeholder="'+(s.cat==="mb"?"যে নম্বরে প্যাকেজ লাগবে সেটা এখানে লিখুন":"যেমন: বাড়ির সামনে মসজিদ, বিকেলে দিলে ভালো")+'"></textarea>'
+      + '<label class="lbl">'+(s.cat==="mb"?"নোট":"ডেলিভারি সম্পর্কে কিছু লিখতে চাইলে")+' <i>(ঐচ্ছিক)</i></label><textarea class="inp" id="fNote" maxlength="300" placeholder="'+(s.cat==="mb"?"যে নম্বরে প্যাকেজ লাগবে সেটা এখানে লিখুন":"যেমন: বাড়ির সামনে মসজিদ, বিকেলে দিলে ভালো")+'"></textarea>'
       + '<button class="locbtn'+(saved?' ok':'')+'" id="locBtn" type="button">📍 <span id="locTxt">'+(saved?'✅ আপনার লোকেশন দেওয়া আছে':'বর্তমান লোকেশন যোগ করুন')+'</span></button><div class="locstat" id="locStat">'+(saved?'আগে দেওয়া লোকেশনই যাবে। বদলাতে বাটনে চাপুন।':'লোকেশন দিলে ডেলিভারি সহজ হয় (ঐচ্ছিক) — একবার দিলে মনে থাকবে')+'</div>'
       + '<div class="cod">💵 পেমেন্ট: ক্যাশ অন ডেলিভারি (পণ্য হাতে পেয়ে টাকা দিন)</div>'
       + '<div class="err" id="fErr"></div>'
@@ -697,7 +703,7 @@
       var waNum = (s.profile && /^01[0-9]{9}$/.test(s.profile.whatsapp||"")) ? s.profile.whatsapp : (/^01[0-9]{9}$/.test(s.phone||"") ? s.phone : "");
       var msg = "🛒 *নতুন অর্ডার* ("+orderId+")\nদোকান: "+s.name+"\n\n"
         + items.map(function(i){ return "• "+i.name+" × "+bn(i.qty)+" "+(i.unit||"")+" = "+taka(i.qty*i.price); }).join("\n")
-        + "\n"+(t.fee>0?"ডেলিভারি চার্জ: "+taka(t.fee)+"\n":"ডেলিভারি: ফ্রি\n")
+        + "\n"+(s.cat==="mb"?"":(t.fee>0?"ডেলিভারি চার্জ: "+taka(t.fee)+"\n":"ডেলিভারি: ফ্রি\n"))
         + "*সর্বমোট: "+taka(t.grand)+"* (ক্যাশ অন ডেলিভারি)\n\n"
         + "নাম: "+name+"\nফোন: "+phone+"\nগ্রাম: "+village
         + (note?"\nনোট: "+note:"")
@@ -743,6 +749,17 @@
   function getJson(file){
     return fetch(file,{cache:"no-store"}).then(function(r){ if(!r.ok) return []; return r.json(); }).catch(function(){ return []; });
   }
+  /* ছবিতে ট্যাপ করলে বড় করে দেখানো */
+  document.addEventListener("click", function(e){
+    var im = e.target && e.target.closest ? e.target.closest(".pimg img") : null;
+    if(!im) return;
+    var full = im.getAttribute("data-full"); if(!full) return;
+    var big = (full.indexOf("res.cloudinary.com")>-1 && full.indexOf("/upload/")>-1 && full.indexOf("/upload/w_")<0) ? full.replace("/upload/","/upload/w_1000,c_limit,q_auto,f_auto/") : full;
+    var d = document.createElement("div"); d.className="lb";
+    d.innerHTML = '<button class="lbx" aria-label="বন্ধ">✕</button><img src="'+esc(big)+'" alt=""><div class="lbc">'+esc(im.getAttribute("data-cap")||"")+'</div>';
+    d.addEventListener("click", function(){ if(d.parentNode) d.parentNode.removeChild(d); });
+    document.body.appendChild(d);
+  });
   $("backBtn").addEventListener("click",function(){ if(history.length>1) history.back(); else go("#/"); });
   $("cartBtn").addEventListener("click",openSheet);
   $("cbGo").addEventListener("click",openSheet);
